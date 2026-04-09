@@ -6,6 +6,42 @@ on:
     branches: [main]
 
 jobs:
+  validate:
+    name: Validate branch & commits
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Check branch name
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if ! echo "$BRANCH" | grep -qE '^(feature|fix|chore|hotfix)/.+'; then
+            echo "Branch name '$BRANCH' does not follow the naming convention."
+            echo "Expected: feature/, fix/, chore/, or hotfix/ prefix"
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit messages
+        run: |
+          COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --format="%s")
+          PATTERN="^(feat|fix|chore|hotfix|docs|refactor|test|style|ci)(\(.+\))?: .+"
+          FAILED=0
+          while IFS= read -r msg; do
+            if ! echo "$msg" | grep -qE "$PATTERN"; then
+              echo "Invalid commit message: '$msg'"
+              FAILED=1
+            fi
+          done <<< "$COMMITS"
+          if [ $FAILED -eq 1 ]; then
+            echo ""
+            echo "Commit messages must follow: type(scope): description"
+            echo "Valid types: feat, fix, chore, hotfix, docs, refactor, test, style, ci"
+            exit 1
+          fi
+
   web:
     name: Web
     runs-on: ubuntu-latest
