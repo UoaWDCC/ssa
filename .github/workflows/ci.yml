@@ -26,10 +26,11 @@ jobs:
 
       - name: Check commit messages
         run: |
-          COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --format="%s")
+          COMMITS=$(git log origin/${{ github.base_ref }}..HEAD --format="%s" --no-merges)
           PATTERN="^(feat|fix|chore|hotfix|docs|refactor|test|style|ci)(\(.+\))?: .+"
           FAILED=0
           while IFS= read -r msg; do
+            if [ -z "$msg" ]; then continue; fi
             if ! echo "$msg" | grep -qE "$PATTERN"; then
               echo "Invalid commit message: '$msg'"
               FAILED=1
