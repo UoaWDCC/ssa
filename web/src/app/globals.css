@@ -8,12 +8,12 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-SSA-red: #f85b76;
-  --color-SSA-red-light: #FF879C;
-  --color-SSA-yellow: #ffe6b6;
-  --color-SSA-yellow-light: #FFF7E9;
-  --color-SSA-white: #fefcf9;
-  --color-SSA-black: #0A0805;
+  --color-ssa-red: #f85b76;
+  --color-ssa-red-light: #ff879c;
+  --color-ssa-yellow: #ffe6b6;
+  --color-ssa-yellow-light: #fff7e9;
+  --color-ssa-white: #fefcf9;
+  --color-ssa-black: #0a0805;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
