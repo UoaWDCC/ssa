@@ -9,22 +9,22 @@ export const Sponsors: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      required: true
+      required: true,
     },
     {
       name: 'logo',
       type: 'upload',
       relationTo: 'media',
-      required: true
+      required: true,
     },
     {
-      name: 'websiteURL',
+      name: 'websiteUrl',
       type: 'text',
     },
     {
       name: 'isSponsorOfTheWeek',
       type: 'checkbox',
-      defaultValue: false
+      defaultValue: false,
     },
     {
       name: 'description',

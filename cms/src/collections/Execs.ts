@@ -9,17 +9,17 @@ export const Execs: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      required: true
+      required: true,
     },
     {
       name: 'role',
       type: 'text',
-      required: true
+      required: true,
     },
     {
       name: 'photo',
       type: 'upload',
-      relationTo: 'media'
+      relationTo: 'media',
     },
     {
       name: 'bio',

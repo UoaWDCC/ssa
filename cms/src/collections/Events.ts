@@ -21,9 +21,9 @@ export const Events: CollectionConfig = {
       type: 'textarea',
     },
     {
-      name: 'cover image',
+      name: 'coverImage',
       type: 'upload',
-      relationTo: 'media'
+      relationTo: 'media',
     },
     {
       name: 'isUpcoming',

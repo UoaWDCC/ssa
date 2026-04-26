@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Members: CollectionConfig = {
   slug: 'members',
+  auth: true,
   admin: {
     useAsTitle: 'name',
   },
@@ -9,22 +10,12 @@ export const Members: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      required: true
-    },
-    {
-      name: 'email',
-      type: 'email',
-      required: true
-    },
-    {
-      name: 'password',
-      type: 'text',
-      required: true
+      required: true,
     },
     {
       name: 'phone',
       type: 'text',
-      required: true
+      required: true,
     },
     {
       name: 'status',
@@ -44,23 +35,23 @@ export const Members: CollectionConfig = {
         },
       ],
       required: true,
-      defaultValue: 'pending'
+      defaultValue: 'pending',
     },
     {
-      name: 'membership expiry date',
+      name: 'membershipExpiryDate',
       type: 'date',
     },
     {
-      name: 'stripe customer id',
-      type: 'text'
+      name: 'stripeCustomerId',
+      type: 'text',
     },
     {
-      name: 'emergency contact name',
-      type: 'text'
+      name: 'emergencyContactName',
+      type: 'text',
     },
     {
-      name: 'emergency contact phone',
-      type: 'text'
+      name: 'emergencyContactPhone',
+      type: 'text',
     }
   ]
 }

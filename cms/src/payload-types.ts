@@ -64,6 +64,7 @@ export type SupportedTimezones =
 export interface Config {
   auth: {
     users: UserAuthOperations;
+    members: MemberAuthOperations;
   };
   blocks: {};
   collections: {
@@ -101,13 +102,31 @@ export interface Config {
   widgets: {
     collections: CollectionsWidget;
   };
-  user: User;
+  user: User | Member;
   jobs: {
     tasks: unknown;
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
+}
+export interface MemberAuthOperations {
   forgotPassword: {
     email: string;
     password: string;
@@ -178,7 +197,7 @@ export interface Event {
   title: string;
   date: string;
   description?: string | null;
-  'cover image'?: (number | null) | Media;
+  coverImage?: (number | null) | Media;
   isUpcoming?: boolean | null;
   images?:
     | {
@@ -197,7 +216,7 @@ export interface Sponsor {
   id: number;
   name: string;
   logo: number | Media;
-  websiteURL?: string | null;
+  websiteUrl?: string | null;
   isSponsorOfTheWeek?: boolean | null;
   description?: string | null;
   updatedAt: string;
@@ -224,16 +243,30 @@ export interface Exec {
 export interface Member {
   id: number;
   name: string;
-  email: string;
-  password: string;
   phone: string;
   status: 'active' | 'expired' | 'pending';
-  'membership expiry date'?: string | null;
-  'stripe customer id'?: string | null;
-  'emergency contact name'?: string | null;
-  'emergency contact phone'?: string | null;
+  membershipExpiryDate?: string | null;
+  stripeCustomerId?: string | null;
+  emergencyContactName?: string | null;
+  emergencyContactPhone?: string | null;
   updatedAt: string;
   createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'members';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -284,10 +317,15 @@ export interface PayloadLockedDocument {
         value: number | Member;
       } | null);
   globalSlug?: string | null;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      };
   updatedAt: string;
   createdAt: string;
 }
@@ -297,10 +335,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: number;
-  user: {
-    relationTo: 'users';
-    value: number | User;
-  };
+  user:
+    | {
+        relationTo: 'users';
+        value: number | User;
+      }
+    | {
+        relationTo: 'members';
+        value: number | Member;
+      };
   key?: string | null;
   value?:
     | {
@@ -373,7 +416,7 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   date?: T;
   description?: T;
-  'cover image'?: T;
+  coverImage?: T;
   isUpcoming?: T;
   images?:
     | T
@@ -391,7 +434,7 @@ export interface EventsSelect<T extends boolean = true> {
 export interface SponsorsSelect<T extends boolean = true> {
   name?: T;
   logo?: T;
-  websiteURL?: T;
+  websiteUrl?: T;
   isSponsorOfTheWeek?: T;
   description?: T;
   updatedAt?: T;
@@ -416,16 +459,28 @@ export interface ExecsSelect<T extends boolean = true> {
  */
 export interface MembersSelect<T extends boolean = true> {
   name?: T;
-  email?: T;
-  password?: T;
   phone?: T;
   status?: T;
-  'membership expiry date'?: T;
-  'stripe customer id'?: T;
-  'emergency contact name'?: T;
-  'emergency contact phone'?: T;
+  membershipExpiryDate?: T;
+  stripeCustomerId?: T;
+  emergencyContactName?: T;
+  emergencyContactPhone?: T;
   updatedAt?: T;
   createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
