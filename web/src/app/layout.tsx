@@ -33,9 +33,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} antialiased`}
-        style={{ paddingTop: '72px' }}      
+        style={{ paddingTop: '72px' }}
       >
-        <Navbar /> 
+        <Navbar />
         {children}
       </body>
     </html>

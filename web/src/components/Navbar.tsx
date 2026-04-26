@@ -1,41 +1,41 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Navbar() {
-  const [hidden, setHidden] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [hidden, setHidden] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    let lastY = window.scrollY;
+    let lastY = window.scrollY
     const handleScroll = () => {
-      const y = window.scrollY;
-      setHidden(y > lastY && y > 80);
-      setScrolled(y > 10);
-      lastY = y;
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      const y = window.scrollY
+      setHidden(y > lastY && y > 80)
+      setScrolled(y > 10)
+      lastY = y
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) setMenuOpen(false);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+      if (window.innerWidth >= 768) setMenuOpen(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const links = [
-    { label: "Home",      href: "/" },
-    { label: "About Us",  href: "/about" },
-    { label: "Events",    href: "/events" },
-    { label: "Sponsors",  href: "/sponsors" },
-    { label: "Join SSA!", href: "/contact" },
-  ];
+    { label: 'Home', href: '/' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Events', href: '/events' },
+    { label: 'Sponsors', href: '/sponsors' },
+    { label: 'Join SSA!', href: '/contact' },
+  ]
 
   return (
     <>
@@ -47,12 +47,11 @@ export default function Navbar() {
           flex items-center
           px-4 sm:px-6 lg:px-10
           transition-all duration-400
-          ${hidden ? "-translate-y-full" : "translate-y-0"}
-          ${scrolled ? "shadow-lg" : ""}
+          ${hidden ? '-translate-y-full' : 'translate-y-0'}
+          ${scrolled ? 'shadow-lg' : ''}
         `}
       >
         <div className="w-full flex items-center gap-4">
-
           {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="SSA Home">
             <Image
@@ -95,11 +94,16 @@ export default function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
-            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "translate-y-[8px] rotate-45" : ""}`} />
-            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "opacity-0 scale-x-0" : ""}`} />
-            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
+            <span
+              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
+            />
+            <span
+              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
+            />
+            <span
+              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
+            />
           </button>
-
         </div>
       </nav>
 
@@ -111,9 +115,10 @@ export default function Navbar() {
           border-t border-white/20
           transition-all duration-300 ease-in-out
           md:hidden
-          ${menuOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto"
-            : "opacity-0 -translate-y-2 pointer-events-none"
+          ${
+            menuOpen
+              ? 'opacity-100 translate-y-0 pointer-events-auto'
+              : 'opacity-0 -translate-y-2 pointer-events-none'
           }
         `}
       >
@@ -140,5 +145,5 @@ export default function Navbar() {
         />
       )}
     </>
-  );
+  )
 }
