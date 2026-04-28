@@ -4,14 +4,26 @@ import { getPayload } from 'payload'
 import Stripe from 'stripe'
 
 export const POST = async (request: NextRequest) => {
-  let body: { name?: string; email?: string; password?: string; phone?: string }
+  let body: {
+    name?: string
+    email?: string
+    password?: string
+    phone?: string
+    upi?: string
+    studentId?: string
+    areaOfStudy?: string
+    yearOfUniversity?: '1' | '2' | '3' | '4' | '5+' | 'postgrad'
+    gender?: 'male' | 'female' | 'non-binary' | 'prefer-not-to-say'
+    ethnicity?: 'chinese' | 'malay' | 'indian' | 'eurasian' | 'other'
+    returningMember?: boolean
+  }
   try {
     body = await request.json()
   } catch {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { name, email, password, phone } = body
+  const { name, email, password, phone, upi, studentId, areaOfStudy, yearOfUniversity, gender, ethnicity, returningMember } = body
   if (!name || !email || !password || !phone) {
     return Response.json({ error: 'Missing required fields: name, email, password, phone' }, { status: 400 })
   }
@@ -35,6 +47,13 @@ export const POST = async (request: NextRequest) => {
         email,
         password,
         phone,
+        upi,
+        studentId,
+        areaOfStudy,
+        yearOfUniversity,
+        gender,
+        ethnicity,
+        returningMember: returningMember ?? false,
         status: 'pending',
       },
     })
