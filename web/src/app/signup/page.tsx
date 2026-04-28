@@ -23,8 +23,10 @@ function SignupForm() {
     if (!data.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
       errors.email = 'Valid email is required'
     }
-    if (data.password.length < 8) errors.password = 'Password must be at least 8 characters'
-    if (data.password !== data.confirmPassword) errors.confirmPassword = 'Passwords do not match'
+    if (data.password.length < 8)
+      errors.password = 'Password must be at least 8 characters'
+    if (data.password !== data.confirmPassword)
+      errors.confirmPassword = 'Passwords do not match'
     if (!data.phone.trim()) errors.phone = 'Phone number is required'
     return errors
   }
@@ -39,7 +41,9 @@ function SignupForm() {
       name: (form.elements.namedItem('name') as HTMLInputElement).value,
       email: (form.elements.namedItem('email') as HTMLInputElement).value,
       password: (form.elements.namedItem('password') as HTMLInputElement).value,
-      confirmPassword: (form.elements.namedItem('confirmPassword') as HTMLInputElement).value,
+      confirmPassword: (
+        form.elements.namedItem('confirmPassword') as HTMLInputElement
+      ).value,
       phone: (form.elements.namedItem('phone') as HTMLInputElement).value,
     }
 
@@ -84,7 +88,9 @@ function SignupForm() {
     <main className="flex min-h-screen items-center justify-center p-8">
       <div className="w-full max-w-md">
         <h1 className="font-averia font-bold text-3xl mb-2">Become a Member</h1>
-        <p className="text-sm text-gray-600 mb-6">Join the Singapore Students&apos; Association</p>
+        <p className="text-sm text-gray-600 mb-6">
+          Join the Singapore Students&apos; Association
+        </p>
 
         {wasCancelled && (
           <div className="mb-4 rounded-lg bg-yellow-50 border border-yellow-200 p-3 text-yellow-800 text-sm">
@@ -98,36 +104,98 @@ function SignupForm() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="flex flex-col gap-4"
+        >
           <div>
-            <label htmlFor="name" className="block text-sm font-medium mb-1">Full Name</label>
-            <input id="name" name="name" type="text" autoComplete="name" className={inputClass} />
-            {fieldErrors.name && <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>}
+            <label htmlFor="name" className="block text-sm font-medium mb-1">
+              Full Name
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              autoComplete="name"
+              className={inputClass}
+            />
+            {fieldErrors.name && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">Email</label>
-            <input id="email" name="email" type="email" autoComplete="email" className={inputClass} />
-            {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
+            <label htmlFor="email" className="block text-sm font-medium mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              className={inputClass}
+            />
+            {fieldErrors.email && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium mb-1">Phone Number</label>
-            <input id="phone" name="phone" type="tel" autoComplete="tel" className={inputClass} />
-            {fieldErrors.phone && <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>}
+            <label htmlFor="phone" className="block text-sm font-medium mb-1">
+              Phone Number
+            </label>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autoComplete="tel"
+              className={inputClass}
+            />
+            {fieldErrors.phone && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.phone}</p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
-            <input id="password" name="password" type="password" autoComplete="new-password" className={inputClass} />
-            {fieldErrors.password && <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>}
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium mb-1"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="new-password"
+              className={inputClass}
+            />
+            {fieldErrors.password && (
+              <p className="mt-1 text-xs text-red-600">
+                {fieldErrors.password}
+              </p>
+            )}
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input id="confirmPassword" name="confirmPassword" type="password" autoComplete="new-password" className={inputClass} />
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium mb-1"
+            >
+              Confirm Password
+            </label>
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              className={inputClass}
+            />
             {fieldErrors.confirmPassword && (
-              <p className="mt-1 text-xs text-red-600">{fieldErrors.confirmPassword}</p>
+              <p className="mt-1 text-xs text-red-600">
+                {fieldErrors.confirmPassword}
+              </p>
             )}
           </div>
 
@@ -146,7 +214,13 @@ function SignupForm() {
 
 export default function SignupPage() {
   return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          Loading...
+        </div>
+      }
+    >
       <SignupForm />
     </Suspense>
   )
