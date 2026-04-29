@@ -40,7 +40,10 @@ const initialFormData: FormData = {
 function ProgressBar({ step }: { step: number }) {
   const progress = (step / TOTAL_STEPS) * 100
   return (
-    <div className="w-full h-3 rounded-full overflow-hidden" style={{ backgroundColor: '#ffb3bf' }}>
+    <div
+      className="w-full h-3 rounded-full overflow-hidden"
+      style={{ backgroundColor: '#ffb3bf' }}
+    >
       <div
         className="h-full rounded-full transition-all duration-300"
         style={{ width: `${progress}%`, backgroundColor: '#f85b76' }}
@@ -124,9 +127,18 @@ function SelectField({
   )
 }
 
-function CardSection({ title, children }: { title: string; children: React.ReactNode }) {
+function CardSection({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
   return (
-    <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ backgroundColor: '#ffe6b6' }}>
+    <div
+      className="rounded-2xl p-6 flex flex-col gap-5"
+      style={{ backgroundColor: '#ffe6b6' }}
+    >
       <div>
         <h2 className="font-[family-name:var(--font-averia)] font-bold text-xl text-ssa-black">
           {title}
@@ -307,7 +319,13 @@ function Step3({
   )
 }
 
-function Step4({ onPay, isLoading }: { onPay: () => void; isLoading: boolean }) {
+function Step4({
+  onPay,
+  isLoading,
+}: {
+  onPay: () => void
+  isLoading: boolean
+}) {
   return (
     <CardSection title="Payment">
       <div className="flex flex-col gap-3">
@@ -315,7 +333,10 @@ function Step4({ onPay, isLoading }: { onPay: () => void; isLoading: boolean }) 
           $6 is required to be a SSA member, the fee includes:
         </p>
         <ul className="list-disc list-inside text-sm text-ssa-black space-y-1 ml-1">
-          <li>Goodies and discounts from SSA sponsors when you show them your membership sticker</li>
+          <li>
+            Goodies and discounts from SSA sponsors when you show them your
+            membership sticker
+          </li>
           <li>Please be sure to collect your MEMBERSHIP CARD from the team.</li>
         </ul>
         <div className="flex flex-col gap-2 mt-2">
@@ -362,12 +383,17 @@ function SignupForm() {
     const errors: Record<string, string> = {}
     if (!formData.firstName.trim()) errors.firstName = 'First name is required'
     if (!formData.lastName.trim()) errors.lastName = 'Last name is required'
-    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (
+      !formData.email.trim() ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    ) {
       errors.email = 'Valid email is required'
     }
     if (!formData.phone.trim()) errors.phone = 'Phone number is required'
-    if (formData.password.length < 8) errors.password = 'Password must be at least 8 characters'
-    if (formData.password !== formData.confirmPassword) errors.confirmPassword = 'Passwords do not match'
+    if (formData.password.length < 8)
+      errors.password = 'Password must be at least 8 characters'
+    if (formData.password !== formData.confirmPassword)
+      errors.confirmPassword = 'Passwords do not match'
     return errors
   }
 
@@ -418,10 +444,12 @@ function SignupForm() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#fff7e9' }}>
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ backgroundColor: '#fff7e9' }}
+    >
       <div className="flex-1 flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-xl flex flex-col gap-6">
-
           {wasCancelled && (
             <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-3 text-yellow-800 text-sm">
               Payment was cancelled. You can try again below.
@@ -436,7 +464,13 @@ function SignupForm() {
 
           <ProgressBar step={step} />
 
-          {step === 1 && <Step1 data={formData} onChange={handleChange} fieldErrors={fieldErrors} />}
+          {step === 1 && (
+            <Step1
+              data={formData}
+              onChange={handleChange}
+              fieldErrors={fieldErrors}
+            />
+          )}
           {step === 2 && <Step2 data={formData} onChange={handleChange} />}
           {step === 3 && <Step3 data={formData} onChange={handleChange} />}
           {step === 4 && <Step4 onPay={handlePay} isLoading={isLoading} />}
@@ -462,7 +496,6 @@ function SignupForm() {
               </button>
             )}
           </div>
-
         </div>
       </div>
     </div>
