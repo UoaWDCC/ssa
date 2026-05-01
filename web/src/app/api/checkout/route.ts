@@ -26,6 +26,18 @@ export const POST = async (request: NextRequest) => {
     return Response.json({ error: message }, { status: 502 })
   }
 
-  const data = await cmsResponse.json()
+  const cmsBody = await cmsResponse.text()
+  let data: unknown
+
+  if (!cmsBody) {
+    data = { error: 'Empty CMS response' }
+  } else {
+    try {
+      data = JSON.parse(cmsBody)
+    } catch {
+      data = { error: cmsBody }
+    }
+  }
+
   return Response.json(data, { status: cmsResponse.status })
 }
