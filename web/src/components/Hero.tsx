@@ -4,7 +4,7 @@ interface HeroProps {
   title: string
   subtitle: string
   mascotImage?: string
-}
+} 
 
 export default function Hero({ title, subtitle, mascotImage }: HeroProps) {
   return (
