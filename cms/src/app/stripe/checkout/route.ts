@@ -37,42 +37,59 @@ export const POST = async (request: NextRequest) => {
   }
 
   const payload = await getPayload({ config: configPromise })
-
-  let memberId: number
-  try {
-    const member = await payload.create({
-      collection: 'members',
-      data: {
-        name,
-        email,
-        password,
-        phone,
-        upi,
-        studentId,
-        areaOfStudy,
-        yearOfUniversity,
-        gender,
-        ethnicity,
-        returningMember: returningMember ?? false,
-        status: 'pending',
-      },
-    })
-    memberId = member.id
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to create member'
-    if (message.toLowerCase().includes('duplicate') || message.toLowerCase().includes('unique')) {
-      return Response.json({ error: 'An account with this email already exists' }, { status: 409 })
-    }
-    return Response.json({ error: message }, { status: 400 })
-  }
-
   const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
+
+  // Reuse an existing pending member so a transient Stripe failure doesn't
+  // permanently block the email from retrying.
+  let memberId: number
+  let memberCreatedHere = false
+
+  const existing = await payload.find({
+    collection: 'members',
+    where: { and: [{ email: { equals: email } }, { status: { equals: 'pending' } }] },
+    limit: 1,
+  })
+
+  if (existing.docs.length > 0) {
+    memberId = existing.docs[0].id
+  } else {
+    try {
+      const member = await payload.create({
+        collection: 'members',
+        data: {
+          name,
+          email,
+          password,
+          phone,
+          upi,
+          studentId,
+          areaOfStudy,
+          yearOfUniversity,
+          gender,
+          ethnicity,
+          returningMember: returningMember ?? false,
+          status: 'pending',
+        },
+      })
+      memberId = member.id
+      memberCreatedHere = true
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to create member'
+      if (message.toLowerCase().includes('duplicate') || message.toLowerCase().includes('unique')) {
+        return Response.json({ error: 'An account with this email already exists' }, { status: 409 })
+      }
+      return Response.json({ error: message }, { status: 400 })
+    }
+  }
 
   let customerId: string
   try {
     const customer = await stripe.customers.create({ email, name })
     customerId = customer.id
   } catch (err: unknown) {
+    if (memberCreatedHere) {
+      await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+    }
     const message = err instanceof Error ? err.message : 'Failed to create Stripe customer'
     return Response.json({ error: message }, { status: 502 })
   }
@@ -88,6 +105,9 @@ export const POST = async (request: NextRequest) => {
     })
 
     if (!session.url) {
+      if (memberCreatedHere) {
+        await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+      }
       return Response.json(
         { error: 'Stripe did not provide a checkout URL for the created session' },
         { status: 502 },
@@ -96,6 +116,9 @@ export const POST = async (request: NextRequest) => {
 
     return Response.json({ checkoutUrl: session.url })
   } catch (err: unknown) {
+    if (memberCreatedHere) {
+      await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+    }
     const message = err instanceof Error ? err.message : 'Failed to create Stripe checkout session'
     return Response.json({ error: message }, { status: 502 })
   }
