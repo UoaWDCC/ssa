@@ -4,7 +4,7 @@ export const Members: CollectionConfig = {
   slug: 'members',
   auth: true,
   access: {
-    create: () => true,
+    create: () => false,
   },
   admin: {
     useAsTitle: 'name',

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, useId, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 const TOTAL_STEPS = 4
@@ -69,18 +69,22 @@ function InputField({
   type?: string
   error?: string
 }) {
+  const id = useId()
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-ssa-black">
+      <label htmlFor={id} className="text-sm font-medium text-ssa-black">
         {label}
         {required && <span className="text-ssa-red ml-0.5">*</span>}
       </label>
       <input
+        id={id}
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg px-3 py-2 text-sm outline-none border border-transparent focus:border-ssa-red bg-white placeholder:text-gray-400"
+        required={required}
+        aria-invalid={!!error}
+        className="w-full rounded-lg px-3 py-2 text-sm text-gray-900 outline-none border border-transparent focus:border-ssa-red bg-white placeholder:text-gray-400"
       />
       {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
@@ -94,6 +98,7 @@ function SelectField({
   value,
   onChange,
   options,
+  error,
 }: {
   label: string
   required?: boolean
@@ -101,16 +106,21 @@ function SelectField({
   value: string
   onChange: (v: string) => void
   options: { value: string; label: string }[]
+  error?: string
 }) {
+  const id = useId()
   return (
     <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-ssa-black">
+      <label htmlFor={id} className="text-sm font-medium text-ssa-black">
         {label}
         {required && <span className="text-ssa-red ml-0.5">*</span>}
       </label>
       <select
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        required={required}
+        aria-invalid={!!error}
         className="w-full rounded-lg px-3 py-2 text-sm outline-none border border-transparent focus:border-ssa-red bg-white appearance-none"
         style={{ color: value ? '#0a0805' : '#9ca3af' }}
       >
@@ -123,6 +133,7 @@ function SelectField({
           </option>
         ))}
       </select>
+      {error && <p className="text-xs text-red-600">{error}</p>}
     </div>
   )
 }
@@ -222,9 +233,11 @@ function Step1({
 function Step2({
   data,
   onChange,
+  fieldErrors,
 }: {
   data: FormData
   onChange: (field: keyof FormData, value: string) => void
+  fieldErrors: Record<string, string>
 }) {
   return (
     <CardSection title="University Information">
@@ -235,6 +248,7 @@ function Step2({
           placeholder="abcd123"
           value={data.upi}
           onChange={(v) => onChange('upi', v)}
+          error={fieldErrors.upi}
         />
         <InputField
           label="Student ID"
@@ -242,6 +256,7 @@ function Step2({
           placeholder="00000000"
           value={data.studentId}
           onChange={(v) => onChange('studentId', v)}
+          error={fieldErrors.studentId}
         />
       </div>
       <InputField
@@ -250,12 +265,14 @@ function Step2({
         placeholder="Enter Degree(s) here"
         value={data.areaOfStudy}
         onChange={(v) => onChange('areaOfStudy', v)}
+        error={fieldErrors.areaOfStudy}
       />
       <SelectField
         label="What Year of University are you in?"
         required
         value={data.yearOfUniversity}
         onChange={(v) => onChange('yearOfUniversity', v)}
+        error={fieldErrors.yearOfUniversity}
         options={[
           { value: '1', label: 'Year 1' },
           { value: '2', label: 'Year 2' },
@@ -272,9 +289,11 @@ function Step2({
 function Step3({
   data,
   onChange,
+  fieldErrors,
 }: {
   data: FormData
   onChange: (field: keyof FormData, value: string) => void
+  fieldErrors: Record<string, string>
 }) {
   return (
     <CardSection title="Additional Information">
@@ -284,6 +303,7 @@ function Step3({
           required
           value={data.gender}
           onChange={(v) => onChange('gender', v)}
+          error={fieldErrors.gender}
           options={[
             { value: 'male', label: 'Male' },
             { value: 'female', label: 'Female' },
@@ -296,6 +316,7 @@ function Step3({
           required
           value={data.ethnicity}
           onChange={(v) => onChange('ethnicity', v)}
+          error={fieldErrors.ethnicity}
           options={[
             { value: 'chinese', label: 'Chinese' },
             { value: 'malay', label: 'Malay' },
@@ -310,6 +331,7 @@ function Step3({
         required
         value={data.returningMember}
         onChange={(v) => onChange('returningMember', v)}
+        error={fieldErrors.returningMember}
         options={[
           { value: 'yes', label: 'Yes' },
           { value: 'no', label: 'No' },
@@ -371,7 +393,42 @@ function SignupForm() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
+  function validateStep(s: number): Record<string, string> {
+    const errors: Record<string, string> = {}
+    if (s === 1) {
+      if (!formData.firstName.trim()) errors.firstName = 'First name is required'
+      if (!formData.lastName.trim()) errors.lastName = 'Last name is required'
+      if (
+        !formData.email.trim() ||
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+      ) {
+        errors.email = 'Valid email is required'
+      }
+      if (!formData.phone.trim()) errors.phone = 'Phone number is required'
+      if (formData.password.length < 8)
+        errors.password = 'Password must be at least 8 characters'
+      if (formData.password !== formData.confirmPassword)
+        errors.confirmPassword = 'Passwords do not match'
+    } else if (s === 2) {
+      if (!formData.upi.trim()) errors.upi = 'UPI is required'
+      if (!formData.studentId.trim()) errors.studentId = 'Student ID is required'
+      if (!formData.areaOfStudy.trim()) errors.areaOfStudy = 'Area of study is required'
+      if (!formData.yearOfUniversity) errors.yearOfUniversity = 'Year of university is required'
+    } else if (s === 3) {
+      if (!formData.gender) errors.gender = 'Gender is required'
+      if (!formData.ethnicity) errors.ethnicity = 'Ethnicity is required'
+      if (!formData.returningMember) errors.returningMember = 'This field is required'
+    }
+    return errors
+  }
+
   function handleNext() {
+    const errors = validateStep(step)
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      return
+    }
+    setFieldErrors({})
     if (step < TOTAL_STEPS) setStep((s) => s + 1)
   }
 
@@ -379,31 +436,16 @@ function SignupForm() {
     if (step > 1) setStep((s) => s - 1)
   }
 
-  const validate = () => {
-    const errors: Record<string, string> = {}
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required'
-    if (!formData.lastName.trim()) errors.lastName = 'Last name is required'
-    if (
-      !formData.email.trim() ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
-    ) {
-      errors.email = 'Valid email is required'
-    }
-    if (!formData.phone.trim()) errors.phone = 'Phone number is required'
-    if (formData.password.length < 8)
-      errors.password = 'Password must be at least 8 characters'
-    if (formData.password !== formData.confirmPassword)
-      errors.confirmPassword = 'Passwords do not match'
-    return errors
-  }
-
   const handlePay = async () => {
     setError(null)
-    setFieldErrors({})
 
-    const errors = validate()
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors)
+    const allErrors = {
+      ...validateStep(1),
+      ...validateStep(2),
+      ...validateStep(3),
+    }
+    if (Object.keys(allErrors).length > 0) {
+      setFieldErrors(allErrors)
       setStep(1)
       return
     }
@@ -471,8 +513,8 @@ function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
-          {step === 2 && <Step2 data={formData} onChange={handleChange} />}
-          {step === 3 && <Step3 data={formData} onChange={handleChange} />}
+          {step === 2 && <Step2 data={formData} onChange={handleChange} fieldErrors={fieldErrors} />}
+          {step === 3 && <Step3 data={formData} onChange={handleChange} fieldErrors={fieldErrors} />}
           {step === 4 && <Step4 onPay={handlePay} isLoading={isLoading} />}
 
           <div className="flex justify-between items-center">
