@@ -71,6 +71,10 @@ export const POST = async (request: NextRequest) => {
     try {
       const member = await payload.create({
         collection: 'members',
+        // This is a trusted server-side route that creates only a pending
+        // member record for the Stripe checkout flow, so bypass collection
+        // create access here explicitly.
+        overrideAccess: true,
         data: {
           name,
           email,
