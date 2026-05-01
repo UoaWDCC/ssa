@@ -396,7 +396,8 @@ function SignupForm() {
   function validateStep(s: number): Record<string, string> {
     const errors: Record<string, string> = {}
     if (s === 1) {
-      if (!formData.firstName.trim()) errors.firstName = 'First name is required'
+      if (!formData.firstName.trim())
+        errors.firstName = 'First name is required'
       if (!formData.lastName.trim()) errors.lastName = 'Last name is required'
       if (
         !formData.email.trim() ||
@@ -411,13 +412,17 @@ function SignupForm() {
         errors.confirmPassword = 'Passwords do not match'
     } else if (s === 2) {
       if (!formData.upi.trim()) errors.upi = 'UPI is required'
-      if (!formData.studentId.trim()) errors.studentId = 'Student ID is required'
-      if (!formData.areaOfStudy.trim()) errors.areaOfStudy = 'Area of study is required'
-      if (!formData.yearOfUniversity) errors.yearOfUniversity = 'Year of university is required'
+      if (!formData.studentId.trim())
+        errors.studentId = 'Student ID is required'
+      if (!formData.areaOfStudy.trim())
+        errors.areaOfStudy = 'Area of study is required'
+      if (!formData.yearOfUniversity)
+        errors.yearOfUniversity = 'Year of university is required'
     } else if (s === 3) {
       if (!formData.gender) errors.gender = 'Gender is required'
       if (!formData.ethnicity) errors.ethnicity = 'Ethnicity is required'
-      if (!formData.returningMember) errors.returningMember = 'This field is required'
+      if (!formData.returningMember)
+        errors.returningMember = 'This field is required'
     }
     return errors
   }
@@ -513,8 +518,20 @@ function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
-          {step === 2 && <Step2 data={formData} onChange={handleChange} fieldErrors={fieldErrors} />}
-          {step === 3 && <Step3 data={formData} onChange={handleChange} fieldErrors={fieldErrors} />}
+          {step === 2 && (
+            <Step2
+              data={formData}
+              onChange={handleChange}
+              fieldErrors={fieldErrors}
+            />
+          )}
+          {step === 3 && (
+            <Step3
+              data={formData}
+              onChange={handleChange}
+              fieldErrors={fieldErrors}
+            />
+          )}
           {step === 4 && <Step4 onPay={handlePay} isLoading={isLoading} />}
 
           <div className="flex justify-between items-center">
