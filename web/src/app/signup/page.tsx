@@ -444,14 +444,25 @@ function SignupForm() {
   const handlePay = async () => {
     setError(null)
 
+    const step1Errors = validateStep(1)
+    const step2Errors = validateStep(2)
+    const step3Errors = validateStep(3)
     const allErrors = {
-      ...validateStep(1),
-      ...validateStep(2),
-      ...validateStep(3),
+      ...step1Errors,
+      ...step2Errors,
+      ...step3Errors,
     }
     if (Object.keys(allErrors).length > 0) {
       setFieldErrors(allErrors)
-      setStep(1)
+
+      if (Object.keys(step1Errors).length > 0) {
+        setStep(1)
+      } else if (Object.keys(step2Errors).length > 0) {
+        setStep(2)
+      } else {
+        setStep(3)
+      }
+
       return
     }
 
