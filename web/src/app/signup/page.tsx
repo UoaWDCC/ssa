@@ -142,7 +142,13 @@ function SelectField({
           fill="none"
           aria-hidden="true"
         >
-          <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M4 6l4 4 4-4"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </div>
       {error && <p className="text-xs text-red-600">{error}</p>}
@@ -555,7 +561,9 @@ function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
-          {step === 4 && <PaymentStep onPay={handlePay} isLoading={isLoading} />}
+          {step === 4 && (
+            <PaymentStep onPay={handlePay} isLoading={isLoading} />
+          )}
 
           <div className="flex justify-between items-center">
             {step > 1 ? (
