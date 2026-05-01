@@ -36,9 +36,24 @@ export const POST = async (request: NextRequest) => {
     ethnicity,
     returningMember,
   } = body
-  if (!name || !email || !password || !phone) {
+  if (
+    !name ||
+    !email ||
+    !password ||
+    !phone ||
+    !upi ||
+    !studentId ||
+    !areaOfStudy ||
+    !yearOfUniversity ||
+    !gender ||
+    !ethnicity ||
+    returningMember === undefined
+  ) {
     return Response.json(
-      { error: 'Missing required fields: name, email, password, phone' },
+      {
+        error:
+          'Missing required fields: name, email, password, phone, upi, studentId, areaOfStudy, yearOfUniversity, gender, ethnicity, returningMember',
+      },
       { status: 400 },
     )
   }
@@ -67,6 +82,24 @@ export const POST = async (request: NextRequest) => {
 
   if (existing.docs.length > 0) {
     memberId = existing.docs[0].id
+    // Update the existing pending member with the latest submitted details
+    // so a retry after correcting input always uses the most recent data.
+    await payload.update({
+      collection: 'members',
+      id: memberId,
+      overrideAccess: true,
+      data: {
+        name,
+        phone,
+        upi,
+        studentId,
+        areaOfStudy,
+        yearOfUniversity,
+        gender,
+        ethnicity,
+        returningMember,
+      },
+    })
   } else {
     try {
       const member = await payload.create({
@@ -86,7 +119,7 @@ export const POST = async (request: NextRequest) => {
           yearOfUniversity,
           gender,
           ethnicity,
-          returningMember: returningMember ?? false,
+          returningMember,
           status: 'pending',
         },
       })

@@ -370,9 +370,9 @@ function Step4({
           >
             {isLoading ? 'Processing...' : 'Pay'}
           </button>
-          <button className="mx-auto text-xs border rounded-md px-3 py-1.5 text-gray-500 border-gray-300 hover:bg-gray-50">
+          <p className="mx-auto text-xs border rounded-md px-3 py-1.5 text-gray-500 border-gray-300">
             Powered by Stripe
-          </button>
+          </p>
         </div>
       </div>
     </CardSection>
