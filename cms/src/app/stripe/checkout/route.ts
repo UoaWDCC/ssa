@@ -23,9 +23,24 @@ export const POST = async (request: NextRequest) => {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { name, email, password, phone, upi, studentId, areaOfStudy, yearOfUniversity, gender, ethnicity, returningMember } = body
+  const {
+    name,
+    email,
+    password,
+    phone,
+    upi,
+    studentId,
+    areaOfStudy,
+    yearOfUniversity,
+    gender,
+    ethnicity,
+    returningMember,
+  } = body
   if (!name || !email || !password || !phone) {
-    return Response.json({ error: 'Missing required fields: name, email, password, phone' }, { status: 400 })
+    return Response.json(
+      { error: 'Missing required fields: name, email, password, phone' },
+      { status: 400 },
+    )
   }
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
