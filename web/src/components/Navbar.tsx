@@ -1,41 +1,43 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const [hidden, setHidden] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [hidden, setHidden] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    let lastY = window.scrollY
+    let lastY = window.scrollY;
     const handleScroll = () => {
-      const y = window.scrollY
-      setHidden(y > lastY && y > 80)
-      setScrolled(y > 10)
-      lastY = y
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+      const y = window.scrollY;
+      setHidden(y > lastY && y > 80);
+      setScrolled(y > 10);
+      lastY = y;
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) setMenuOpen(false)
-    }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+      if (window.innerWidth >= 768) setMenuOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const links = [
-    { label: 'Home', href: '/' },
-    { label: 'About Us', href: '/about' },
-    { label: 'Events', href: '/events' },
-    { label: 'Sponsors', href: '/sponsors' },
-    { label: 'Join SSA!', href: '/contact' },
-  ]
+    { label: "Home",      href: "/" },
+    { label: "About Us",  href: "/about" },
+    { label: "Events",    href: "/events" },
+    { label: "Sponsors",  href: "/sponsors" },
+    { label: "Join SSA!", href: "/contact" },
+  ];
 
   return (
     <>
@@ -43,41 +45,59 @@ export default function Navbar() {
       <nav
         className={`
           fixed top-0 left-0 right-0 z-50
-          h-[72px] bg-ssa-red
+          h-[100px] bg-ssa-red
+          border-b border-white/20
           flex items-center
           px-4 sm:px-6 lg:px-10
-          transition-all duration-400
-          ${hidden ? '-translate-y-full' : 'translate-y-0'}
-          ${scrolled ? 'shadow-lg' : ''}
+          transition-all duration-300
+          ${hidden ? "-translate-y-full" : "translate-y-0"}
+          ${scrolled ? "shadow-lg" : ""}
         `}
       >
         <div className="w-full flex items-center gap-4">
+
           {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="SSA Home">
             <Image
               src="/mascot.png"
               alt="SSA Mascot"
-              width={50}
-              height={50}
-              className="object-contain w-[40px] h-[40px] sm:w-[50px] sm:h-[50px]"
+              width={56}
+              height={56}
+              className="object-contain w-[46px] h-[46px] sm:w-[56px] sm:h-[56px]"
             />
           </Link>
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-1">
-            {links.slice(0, 4).map(({ label, href }) => (
-              <li key={href}>
-                <Link
-                  href={href}
-                  className="font-[family-name:var(--font-averia)] text-ssa-black font-bold text-xl px-4 py-2 rounded hover:bg-white/20 hover:text-ssa-yellow transition-colors whitespace-nowrap"
-                >
-                  {label}
-                </Link>
-              </li>
-            ))}
+            {links.slice(0, 4).map(({ label, href }) => {
+              const isActive = pathname === href;
+              return (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className={`
+                      relative font-[family-name:var(--font-averia)] font-bold text-xl
+                      px-4 py-2 transition-colors whitespace-nowrap
+                      hover:text-ssa-yellow
+                      ${isActive ? "text-ssa-yellow" : "text-ssa-black"}
+                    `}
+                  >
+                    {label}
+
+                    <span
+                      className={`
+                        absolute bottom-0 left-4 right-4 h-[2px] bg-ssa-yellow
+                        transition-transform duration-200
+                        ${isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"}
+                      `}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
-          {/* Desktop Join SSA Button */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center ml-auto">
             <Link
               href="/contact"
@@ -94,46 +114,48 @@ export default function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
           >
-            <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
-            />
-            <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
-            />
-            <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
-            />
+            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "translate-y-[8px] rotate-45" : ""}`} />
+            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "opacity-0 scale-x-0" : ""}`} />
+            <span className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? "-translate-y-[8px] -rotate-45" : ""}`} />
           </button>
+
         </div>
       </nav>
 
       {/* ── MOBILE MENU ── */}
       <div
         className={`
-          fixed top-[72px] left-0 right-0 z-40
+          fixed top-[88px] left-0 right-0 z-40
           bg-ssa-red
           border-t border-white/20
           transition-all duration-300 ease-in-out
           md:hidden
-          ${
-            menuOpen
-              ? 'opacity-100 translate-y-0 pointer-events-auto'
-              : 'opacity-0 -translate-y-2 pointer-events-none'
+          ${menuOpen
+            ? "opacity-100 translate-y-0 pointer-events-auto"
+            : "opacity-0 -translate-y-2 pointer-events-none"
           }
         `}
       >
         <ul className="flex flex-col">
-          {links.map(({ label, href }) => (
-            <li key={href}>
-              <Link
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className="block font-[family-name:var(--font-averia)] font-bold text-lg text-ssa-black px-6 py-4 border-b border-white/10 hover:text-ssa-yellow hover:bg-white/10 transition-colors"
-              >
-                {label}
-              </Link>
-            </li>
-          ))}
+          {links.map(({ label, href }) => {
+            const isActive = pathname === href;
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`
+                    block font-[family-name:var(--font-averia)] font-bold text-lg
+                    px-6 py-4 border-b border-white/10
+                    hover:text-ssa-yellow transition-colors
+                    ${isActive ? "text-ssa-yellow border-l-4 border-l-ssa-yellow" : "text-ssa-black"}
+                  `}
+                >
+                  {label}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </div>
 
@@ -145,5 +167,5 @@ export default function Navbar() {
         />
       )}
     </>
-  )
+  );
 }
