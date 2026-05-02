@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
@@ -18,18 +18,29 @@ export default function Navbar() {
   const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const menuOpenRef = useRef(false)
+
+  // Keep ref in sync with menuOpen state
+  useEffect(() => {
+    menuOpenRef.current = menuOpen
+  }, [menuOpen])
 
   // Half-sticky scroll behaviour
   useEffect(() => {
     let lastY = window.scrollY
-    setHidden(lastY > 80)
 
     const handleScroll = () => {
+      if (menuOpenRef.current) return
       const y = window.scrollY
-      setHidden(y > lastY && y > 80)
+      if (y > lastY && y > 80) {
+        setHidden(true)
+      } else if (y <= lastY) {
+        setHidden(false)
+      }
       lastY = y
     }
 
+    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -42,11 +53,6 @@ export default function Navbar() {
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
-
-  // Freeze navbar hide when menu is open
-  useEffect(() => {
-    if (menuOpen) setHidden(false)
-  }, [menuOpen])
 
   // Lock body scroll when menu is open
   useEffect(() => {
