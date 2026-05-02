@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} antialiased`}
-        style={{ paddingTop: '100px' }}
+        style={{ paddingTop: '88px' }}
       >
         <Navbar />
         {children}

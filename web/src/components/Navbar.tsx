@@ -45,7 +45,7 @@ export default function Navbar() {
       <nav
         className={`
           fixed top-0 left-0 right-0 z-50
-          h-[100px] bg-ssa-red
+          h-[88px] bg-ssa-red
           border-b border-white/20
           flex items-center
           px-4 sm:px-6 lg:px-10
@@ -150,11 +150,15 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   className={`
-                    block font-[family-name:var(--font-averia)] font-bold text-lg
-                    px-6 py-4 border-b border-white/10
-                    hover:text-ssa-yellow transition-colors
-                    ${isActive ? 'text-ssa-yellow border-l-4 border-l-ssa-yellow' : 'text-ssa-black'}
-                  `}
+                      block font-[family-name:var(--font-averia)] font-bold text-lg
+                      px-6 py-4 border-b border-white/10
+                      hover:text-ssa-yellow transition-colors
+                      ${
+                        isActive
+                          ? 'text-ssa-yellow border-l-4 border-l-ssa-yellow pl-[20px]'
+                          : 'text-ssa-black border-l-4 border-l-transparent'
+                      }
+`}
                 >
                   {label}
                 </Link>
