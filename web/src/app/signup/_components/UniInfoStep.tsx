@@ -1,7 +1,7 @@
 import type { FormData } from './types'
-import CardSection from './CardSection'
-import InputField from './InputField'
-import SelectField from './SelectField'
+import CardSection from '@/components/CardSection'
+import InputField from '@/components/InputField'
+import SelectField from '@/components/SelectField'
 
 export default function UniInfoStep({
   data,

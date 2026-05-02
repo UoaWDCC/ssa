@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { TOTAL_STEPS, initialFormData, type FormData } from './types'
-import ProgressBar from './ProgressBar'
+import ProgressBar from '@/components/ProgressBar'
 import ContactStep from './ContactStep'
 import UniInfoStep from './UniInfoStep'
 import AdditionalInfoStep from './AdditionalInfoStep'
-import PaymentStep from './PaymentStep'
+import PaymentStep from '@/components/PaymentStep'
 
 export default function SignupForm() {
   const searchParams = useSearchParams()
@@ -126,10 +126,7 @@ export default function SignupForm() {
   }
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ backgroundColor: '#fff7e9' }}
-    >
+    <div className="bg-ssa-yellow-light min-h-screen flex flex-col">
       <div className="flex-1 flex flex-col items-center px-4 py-8">
         <div className="w-full max-w-xl flex flex-col gap-6">
           {wasCancelled && (
@@ -144,7 +141,7 @@ export default function SignupForm() {
             </div>
           )}
 
-          <ProgressBar step={step} />
+          <ProgressBar step={step} total={TOTAL_STEPS} />
 
           {step === 1 && (
             <ContactStep
@@ -185,8 +182,7 @@ export default function SignupForm() {
             {step < TOTAL_STEPS && (
               <button
                 onClick={handleNext}
-                className="px-6 py-2 rounded-full text-sm font-medium text-white"
-                style={{ backgroundColor: '#f85b76' }}
+                className="px-6 py-2 rounded-full bg-ssa-red text-sm font-medium text-white"
               >
                 Next
               </button>

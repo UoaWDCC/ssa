@@ -1,6 +1,6 @@
 import type { FormData } from './types'
-import CardSection from './CardSection'
-import InputField from './InputField'
+import CardSection from '@/components/CardSection'
+import InputField from '@/components/InputField'
 
 export default function ContactStep({
   data,

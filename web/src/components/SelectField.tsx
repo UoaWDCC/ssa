@@ -33,8 +33,7 @@ export default function SelectField({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           aria-invalid={!!error}
-          className="w-full rounded-lg px-3 py-2 pr-8 text-sm outline-none border border-transparent focus:border-ssa-red bg-white appearance-none"
-          style={{ color: value ? '#0a0805' : '#9ca3af' }}
+          className={`w-full rounded-lg px-3 py-2 pr-8 text-sm outline-none border border-transparent focus:border-ssa-red bg-white appearance-none ${value ? 'text-ssa-black' : 'text-gray-400'}`}
         >
           <option value="" disabled hidden>
             {placeholder ?? 'Select an option'}

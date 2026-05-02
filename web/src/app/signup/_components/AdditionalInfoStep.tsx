@@ -1,6 +1,6 @@
 import type { FormData } from './types'
-import CardSection from './CardSection'
-import SelectField from './SelectField'
+import CardSection from '@/components/CardSection'
+import SelectField from '@/components/SelectField'
 
 export default function AdditionalInfoStep({
   data,
