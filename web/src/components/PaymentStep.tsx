@@ -15,7 +15,8 @@ export default function PaymentStep({
         </p>
         <ul className="list-disc list-inside text-sm text-ssa-black space-y-1 ml-1">
           <li>
-            Goodies and discounts from SSA sponsors when you show them your membership sticker
+            Goodies and discounts from SSA sponsors when you show them your
+            membership sticker
           </li>
           <li>Please be sure to collect your MEMBERSHIP CARD from the team.</li>
         </ul>

@@ -1,4 +1,10 @@
-export default function ProgressBar({ step, total }: { step: number; total: number }) {
+export default function ProgressBar({
+  step,
+  total,
+}: {
+  step: number
+  total: number
+}) {
   const progress = (step / total) * 100
   return (
     <div className="w-full h-3 rounded-full overflow-hidden bg-ssa-red-pale">
