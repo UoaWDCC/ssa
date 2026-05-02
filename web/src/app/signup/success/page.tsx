@@ -1,11 +1,12 @@
 import Link from 'next/link'
 
 interface Props {
-  searchParams: { session_id?: string }
+  searchParams: Promise<{ session_id?: string }>
 }
 
-export default function SignupSuccessPage({ searchParams }: Props) {
-  const hasSession = Boolean(searchParams.session_id)
+export default async function SignupSuccessPage({ searchParams }: Props) {
+  const params = await searchParams
+  const hasSession = Boolean(params.session_id)
 
   return (
     <main className="flex min-h-screen items-center justify-center p-8">
