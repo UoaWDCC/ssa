@@ -3,6 +3,9 @@ import type { CollectionConfig } from 'payload'
 export const Members: CollectionConfig = {
   slug: 'members',
   auth: true,
+  access: {
+    create: () => true,
+  },
   admin: {
     useAsTitle: 'name',
   },
