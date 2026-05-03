@@ -21,6 +21,12 @@ export default function SignupForm() {
 
   function handleChange(field: keyof FormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }))
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
   }
 
   function validateStep(s: number): Record<string, string> {
@@ -36,8 +42,13 @@ export default function SignupForm() {
         errors.email = 'Valid email is required'
       }
       if (!formData.phone.trim()) errors.phone = 'Phone number is required'
-      if (formData.password.length < 8)
-        errors.password = 'Password must be at least 8 characters'
+      if (
+        formData.password.length < 8 ||
+        !/[a-zA-Z]/.test(formData.password) ||
+        !/[0-9]/.test(formData.password)
+      )
+        errors.password =
+          'Password must be at least 8 characters and include a letter and a number'
       if (formData.password !== formData.confirmPassword)
         errors.confirmPassword = 'Passwords do not match'
     } else if (s === 2) {

@@ -24,7 +24,7 @@ export default function PaymentStep({
           <button
             onClick={onPay}
             disabled={isLoading}
-            className="w-full py-2.5 rounded-lg bg-[#635bff] text-white text-sm font-medium disabled:opacity-60"
+            className="w-full py-2.5 rounded-lg bg-stripe-purple text-white text-sm font-medium disabled:opacity-60"
           >
             {isLoading ? 'Processing...' : 'Pay'}
           </button>

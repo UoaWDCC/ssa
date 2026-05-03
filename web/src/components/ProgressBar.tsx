@@ -7,7 +7,7 @@ export default function ProgressBar({
 }) {
   const progress = (step / total) * 100
   return (
-    <div className="w-full h-3 rounded-full overflow-hidden bg-ssa-red-pale">
+    <div className="w-full h-3 rounded-full overflow-hidden bg-ssa-red-lighter">
       <div
         className="h-full rounded-full transition-all duration-300 bg-ssa-red"
         style={{ width: `${progress}%` }}

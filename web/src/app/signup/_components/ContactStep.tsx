@@ -17,6 +17,8 @@ export default function ContactStep({
         <InputField
           label="First Name"
           required
+          name="firstName"
+          autoComplete="given-name"
           placeholder="Enter Name here"
           value={data.firstName}
           onChange={(v) => onChange('firstName', v)}
@@ -25,6 +27,8 @@ export default function ContactStep({
         <InputField
           label="Last Name"
           required
+          name="lastName"
+          autoComplete="family-name"
           placeholder="Enter Last Name here"
           value={data.lastName}
           onChange={(v) => onChange('lastName', v)}
@@ -34,6 +38,8 @@ export default function ContactStep({
       <InputField
         label="Email Address"
         required
+        name="email"
+        autoComplete="email"
         placeholder="hello@gmail.com"
         type="email"
         value={data.email}
@@ -43,6 +49,8 @@ export default function ContactStep({
       <InputField
         label="Phone Number"
         required
+        name="phone"
+        autoComplete="tel"
         placeholder="+64 21 000 0000"
         type="tel"
         value={data.phone}
@@ -52,7 +60,9 @@ export default function ContactStep({
       <InputField
         label="Password"
         required
-        placeholder="Min. 8 characters"
+        name="password"
+        autoComplete="new-password"
+        placeholder="Min. 8 characters, include a letter and number"
         type="password"
         value={data.password}
         onChange={(v) => onChange('password', v)}
@@ -61,6 +71,8 @@ export default function ContactStep({
       <InputField
         label="Confirm Password"
         required
+        name="confirmPassword"
+        autoComplete="new-password"
         placeholder="Re-enter password"
         type="password"
         value={data.confirmPassword}
