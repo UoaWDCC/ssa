@@ -14,8 +14,9 @@ export default async function SignupSuccessPage({ searchParams }: Props) {
         <h1 className="font-averia font-bold text-3xl mb-3">Welcome to SSA!</h1>
         {hasSession ? (
           <p className="text-gray-600 mb-6">
-            Your payment was successful and your membership is now active. Check
-            your email for a confirmation.
+            We received your signup and are confirming your payment details.
+            Your membership will be activated once confirmation is complete.
+            Check your email for updates.
           </p>
         ) : (
           <p className="text-gray-600 mb-6">

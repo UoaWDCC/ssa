@@ -2,66 +2,170 @@ import { NextRequest } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import Stripe from 'stripe'
-import { createCipheriv, randomBytes } from 'crypto'
-
-function encryptPassword(password: string, hexKey: string): string {
-  const key = Buffer.from(hexKey, 'hex')
-  const iv = randomBytes(12)
-  const cipher = createCipheriv('aes-256-gcm', key, iv)
-  const encrypted = Buffer.concat([cipher.update(password, 'utf8'), cipher.final()])
-  const tag = cipher.getAuthTag()
-  return Buffer.concat([iv, tag, encrypted]).toString('base64')
-}
 
 export const POST = async (request: NextRequest) => {
-  let body: { name?: string; email?: string; password?: string; phone?: string }
+  let body: {
+    name?: string
+    email?: string
+    password?: string
+    phone?: string
+    upi?: string
+    studentId?: string
+    areaOfStudy?: string
+    yearOfUniversity?: '1' | '2' | '3' | '4' | '5+' | 'postgrad'
+    gender?: 'male' | 'female' | 'non-binary' | 'prefer-not-to-say'
+    ethnicity?: 'chinese' | 'malay' | 'indian' | 'eurasian' | 'other'
+    returningMember?: boolean
+  }
   try {
     body = await request.json()
   } catch {
     return Response.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { name, email, password, phone } = body
-  if (!name || !email || !password || !phone) {
-    return Response.json({ error: 'Missing required fields: name, email, password, phone' }, { status: 400 })
+  const {
+    name,
+    email,
+    password,
+    phone,
+    upi,
+    studentId,
+    areaOfStudy,
+    yearOfUniversity,
+    gender,
+    ethnicity,
+    returningMember,
+  } = body
+  if (
+    !name ||
+    !email ||
+    !password ||
+    !phone ||
+    !upi ||
+    !studentId ||
+    !areaOfStudy ||
+    !yearOfUniversity ||
+    !gender ||
+    !ethnicity ||
+    returningMember === undefined
+  ) {
+    return Response.json(
+      {
+        error:
+          'Missing required fields: name, email, password, phone, upi, studentId, areaOfStudy, yearOfUniversity, gender, ethnicity, returningMember',
+      },
+      { status: 400 },
+    )
   }
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   const priceId = process.env.STRIPE_PRICE_ID
   const webUrl = process.env.WEB_URL || 'http://localhost:3000'
-  const encryptionKey = process.env.SIGNUP_ENCRYPTION_KEY
 
   if (!stripeSecretKey || !priceId) {
     return Response.json({ error: 'Stripe not configured' }, { status: 500 })
   }
-  if (!encryptionKey || encryptionKey.length !== 64) {
-    return Response.json({ error: 'Signup encryption not configured' }, { status: 500 })
-  }
 
   const payload = await getPayload({ config: configPromise })
-
-  // Check for duplicate email before sending the user to Stripe
-  const existing = await payload.find({
-    collection: 'members',
-    where: { email: { equals: email } },
-    limit: 1,
-  })
-  if (existing.totalDocs > 0) {
-    return Response.json({ error: 'An account with this email already exists' }, { status: 409 })
-  }
-
   const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
 
-  let customerId: string
-  try {
-    const customer = await stripe.customers.create({ email, name })
-    customerId = customer.id
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Failed to create Stripe customer'
-    return Response.json({ error: message }, { status: 502 })
+  // Reuse an existing pending member so a transient Stripe failure doesn't
+  // permanently block the email from retrying.
+  let memberId: number
+  let memberCreatedHere = false
+  let existingStripeCustomerId: string | null | undefined
+
+  const existing = await payload.find({
+    collection: 'members',
+    where: { and: [{ email: { equals: email } }, { status: { equals: 'pending' } }] },
+    limit: 1,
+  })
+
+  if (existing.docs.length > 0) {
+    const existingDoc = existing.docs[0]
+    memberId = existingDoc.id
+    existingStripeCustomerId = existingDoc.stripeCustomerId
+    // Update the existing pending member with the latest submitted details,
+    // including password so a retry after correcting credentials works correctly.
+    await payload.update({
+      collection: 'members',
+      id: memberId,
+      overrideAccess: true,
+      data: {
+        name,
+        phone,
+        password,
+        upi,
+        studentId,
+        areaOfStudy,
+        yearOfUniversity,
+        gender,
+        ethnicity,
+        returningMember,
+      },
+    })
+  } else {
+    try {
+      const member = await payload.create({
+        collection: 'members',
+        // This is a trusted server-side route that creates only a pending
+        // member record for the Stripe checkout flow, so bypass collection
+        // create access here explicitly.
+        overrideAccess: true,
+        data: {
+          name,
+          email,
+          password,
+          phone,
+          upi,
+          studentId,
+          areaOfStudy,
+          yearOfUniversity,
+          gender,
+          ethnicity,
+          returningMember,
+          status: 'pending',
+        },
+      })
+      memberId = member.id
+      memberCreatedHere = true
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to create member'
+      if (message.toLowerCase().includes('duplicate') || message.toLowerCase().includes('unique')) {
+        return Response.json({ error: 'An account with this email already exists' }, { status: 409 })
+      }
+      return Response.json({ error: message }, { status: 400 })
+    }
   }
 
-  const encryptedPassword = encryptPassword(password, encryptionKey)
+  // Reuse the existing Stripe customer if this pending member already has one.
+  // This prevents orphaned customers from accumulating on retries.
+  let customerId: string
+  let customerCreatedHere = false
+  if (existingStripeCustomerId) {
+    customerId = existingStripeCustomerId
+  } else {
+    try {
+      const customer = await stripe.customers.create({ email, name })
+      customerId = customer.id
+      customerCreatedHere = true
+      // Persist the customer ID so future retries can reuse it.
+      await payload
+        .update({
+          collection: 'members',
+          id: memberId,
+          overrideAccess: true,
+          data: { stripeCustomerId: customerId },
+        })
+        .catch(() => {})
+    } catch (err: unknown) {
+      if (memberCreatedHere) {
+        await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+      }
+      const message = err instanceof Error ? err.message : 'Failed to create Stripe customer'
+      return Response.json({ error: message }, { status: 502 })
+    }
+  }
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -70,10 +174,30 @@ export const POST = async (request: NextRequest) => {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${webUrl}/signup/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${webUrl}/signup?cancelled=true`,
-      metadata: { name, email, phone, encryptedPassword },
+      metadata: { memberId: String(memberId) },
     })
+
+    if (!session.url) {
+      if (memberCreatedHere) {
+        await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+        if (customerCreatedHere) {
+          await stripe.customers.del(customerId).catch(() => {})
+        }
+      }
+      return Response.json(
+        { error: 'Stripe did not provide a checkout URL for the created session' },
+        { status: 502 },
+      )
+    }
+
     return Response.json({ checkoutUrl: session.url })
   } catch (err: unknown) {
+    if (memberCreatedHere) {
+      await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+      if (customerCreatedHere) {
+        await stripe.customers.del(customerId).catch(() => {})
+      }
+    }
     const message = err instanceof Error ? err.message : 'Failed to create Stripe checkout session'
     return Response.json({ error: message }, { status: 502 })
   }

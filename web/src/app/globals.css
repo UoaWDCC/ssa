@@ -10,6 +10,8 @@
   --color-foreground: var(--foreground);
   --color-ssa-red: #f85b76;
   --color-ssa-red-light: #ff879c;
+  --color-ssa-red-lighter: #ffb3bf;
+  --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
   --color-ssa-white: #fefcf9;
