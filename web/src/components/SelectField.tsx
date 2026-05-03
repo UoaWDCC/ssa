@@ -20,6 +20,7 @@ export default function SelectField({
   error?: string
 }) {
   const id = useId()
+  const errorId = useId()
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor={id} className="text-sm font-medium text-ssa-black">
@@ -33,6 +34,7 @@ export default function SelectField({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
           className={`w-full rounded-lg px-3 py-2 pr-8 text-sm outline-none border border-transparent focus:border-ssa-red bg-white appearance-none ${value ? 'text-ssa-black' : 'text-gray-400'}`}
         >
           <option value="" disabled hidden>
@@ -61,7 +63,11 @@ export default function SelectField({
           />
         </svg>
       </div>
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && (
+        <p id={errorId} className="text-xs text-red-600">
+          {error}
+        </p>
+      )}
     </div>
   )
 }

@@ -35,7 +35,8 @@ export const POST = async (request: NextRequest) => {
     try {
       data = JSON.parse(cmsBody)
     } catch {
-      data = { error: cmsBody }
+      console.error('[api/checkout] CMS returned non-JSON body:', cmsBody)
+      data = { error: 'Checkout service error. Please try again.' }
     }
   }
 

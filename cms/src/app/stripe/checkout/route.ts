@@ -73,6 +73,7 @@ export const POST = async (request: NextRequest) => {
   // permanently block the email from retrying.
   let memberId: number
   let memberCreatedHere = false
+  let existingStripeCustomerId: string | null | undefined
 
   const existing = await payload.find({
     collection: 'members',
@@ -81,9 +82,11 @@ export const POST = async (request: NextRequest) => {
   })
 
   if (existing.docs.length > 0) {
-    memberId = existing.docs[0].id
-    // Update the existing pending member with the latest submitted details
-    // so a retry after correcting input always uses the most recent data.
+    const existingDoc = existing.docs[0]
+    memberId = existingDoc.id
+    existingStripeCustomerId = existingDoc.stripeCustomerId
+    // Update the existing pending member with the latest submitted details,
+    // including password so a retry after correcting credentials works correctly.
     await payload.update({
       collection: 'members',
       id: memberId,
@@ -91,6 +94,7 @@ export const POST = async (request: NextRequest) => {
       data: {
         name,
         phone,
+        password,
         upi,
         studentId,
         areaOfStudy,
@@ -134,16 +138,33 @@ export const POST = async (request: NextRequest) => {
     }
   }
 
+  // Reuse the existing Stripe customer if this pending member already has one.
+  // This prevents orphaned customers from accumulating on retries.
   let customerId: string
-  try {
-    const customer = await stripe.customers.create({ email, name })
-    customerId = customer.id
-  } catch (err: unknown) {
-    if (memberCreatedHere) {
-      await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+  let customerCreatedHere = false
+  if (existingStripeCustomerId) {
+    customerId = existingStripeCustomerId
+  } else {
+    try {
+      const customer = await stripe.customers.create({ email, name })
+      customerId = customer.id
+      customerCreatedHere = true
+      // Persist the customer ID so future retries can reuse it.
+      await payload
+        .update({
+          collection: 'members',
+          id: memberId,
+          overrideAccess: true,
+          data: { stripeCustomerId: customerId },
+        })
+        .catch(() => {})
+    } catch (err: unknown) {
+      if (memberCreatedHere) {
+        await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+      }
+      const message = err instanceof Error ? err.message : 'Failed to create Stripe customer'
+      return Response.json({ error: message }, { status: 502 })
     }
-    const message = err instanceof Error ? err.message : 'Failed to create Stripe customer'
-    return Response.json({ error: message }, { status: 502 })
   }
 
   try {
@@ -159,6 +180,9 @@ export const POST = async (request: NextRequest) => {
     if (!session.url) {
       if (memberCreatedHere) {
         await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+        if (customerCreatedHere) {
+          await stripe.customers.del(customerId).catch(() => {})
+        }
       }
       return Response.json(
         { error: 'Stripe did not provide a checkout URL for the created session' },
@@ -170,6 +194,9 @@ export const POST = async (request: NextRequest) => {
   } catch (err: unknown) {
     if (memberCreatedHere) {
       await payload.delete({ collection: 'members', id: memberId }).catch(() => {})
+      if (customerCreatedHere) {
+        await stripe.customers.del(customerId).catch(() => {})
+      }
     }
     const message = err instanceof Error ? err.message : 'Failed to create Stripe checkout session'
     return Response.json({ error: message }, { status: 502 })

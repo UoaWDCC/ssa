@@ -11,7 +11,7 @@ export default function PaymentStep({
     <CardSection title="Payment">
       <div className="flex flex-col gap-3">
         <p className="text-sm text-ssa-black">
-          $6 is required to be a SSA member, the fee includes:
+          $6 is required to be an SSA member, the fee includes:
         </p>
         <ul className="list-disc list-inside text-sm text-ssa-black space-y-1 ml-1">
           <li>
