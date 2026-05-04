@@ -29,10 +29,7 @@ export default function Hero({
     } rounded-b-2xl md:rounded-b-3xl bg-ssa-red overflow-hidden w-full ${isFullscreen
       ? 'min-h-[350px] md:min-h-[500px] lg:min-h-[600px]'
       : 'min-h-48 sm:min-h-56 md:min-h-72 lg:min-h-96'
-    } ${isFullscreen
-      ? 'px-4 sm:px-8 md:px-12 lg:px-16'
-      : 'px-4 sm:px-8 md:px-12 lg:px-16'
-    } ${isFullscreen
+    } px-4 sm:px-8 md:px-12 lg:px-16 ${isFullscreen
       ? 'pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-10 md:pb-12'
       : 'py-6 sm:py-8 md:py-12 pb-8 sm:pb-10 md:pb-12'
     }`
