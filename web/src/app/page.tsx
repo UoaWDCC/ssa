@@ -6,7 +6,7 @@ export default function Home() {
       <Hero
         title="Singapore Students' Association"
         subtitle="A home for people from the Little Red Dot."
-        mascotImage="/mascot.png"
+        mascotImage="/ssa_merlion_full_body 2.svg"
       />
     </main>
   )
