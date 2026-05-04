@@ -27,6 +27,8 @@ export default function Navbar() {
 
   // Half-sticky scroll behaviour
   useEffect(() => {
+    setHidden(window.scrollY > 80)
+
     let lastY = window.scrollY
 
     const handleScroll = () => {
@@ -40,7 +42,6 @@ export default function Navbar() {
       lastY = y
     }
 
-    handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
