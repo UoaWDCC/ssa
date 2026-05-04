@@ -6,7 +6,7 @@ export default function AboutPage() {
       <Hero
         title="About Us"
         subtitle="Learn more about our mission and team"
-        mascotImage="ssa_nerd_merlion.svg"
+        mascotImage="/ssa_nerd_merlion.svg"
       />
       <div className="p-8">{/* Content coming soon */}</div>
     </main>
