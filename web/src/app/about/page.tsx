@@ -8,9 +8,7 @@ export default function AboutPage() {
         subtitle="Learn more about our mission and team"
         mascotImage="ssa_nerd_merlion.svg"
       />
-      <div className="p-8">
-        {/* Content coming soon */}
-      </div>
+      <div className="p-8">{/* Content coming soon */}</div>
     </main>
   )
 }
