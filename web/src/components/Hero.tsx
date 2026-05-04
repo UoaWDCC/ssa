@@ -29,8 +29,8 @@ export default function Hero({
     isFullscreen ? 'items-start justify-between' : 'items-end justify-between'
   } rounded-b-2xl md:rounded-b-3xl bg-ssa-red overflow-hidden w-full ${
     isFullscreen
-      ? 'min-h-[400px] md:min-h-[500px] lg:min-h-[600px]'
-      : 'min-h-72 sm:min-h-80 md:min-h-96 lg:min-h-screen'
+      ? 'min-h-[350px] md:min-h-[500px] lg:min-h-[600px]'
+      : 'min-h-48 sm:min-h-56 md:min-h-72 lg:min-h-96'
   } ${
     isFullscreen
       ? 'px-4 sm:px-8 md:px-12 lg:px-16'
@@ -66,7 +66,7 @@ export default function Hero({
   const mascotContainerClasses = `hidden sm:block absolute bottom-0 right-0 sm:right-8 md:right-12 lg:right-16 xl:right-20 ${
     isFullscreen
       ? 'h-48 sm:h-56 md:h-80 lg:h-96'
-      : 'h-40 sm:h-48 md:h-64 lg:h-80'
+      : 'h-36 sm:h-40 md:h-48 lg:h-56'
   }`
 
   return (
