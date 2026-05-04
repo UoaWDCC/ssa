@@ -20,13 +20,12 @@ export default function Navbar() {
   const pathname = usePathname()
   const menuOpenRef = useRef(false)
 
-  // Keep ref in sync with menuOpen state
   useEffect(() => {
     menuOpenRef.current = menuOpen
   }, [menuOpen])
 
-  // Half-sticky scroll behaviour
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     setHidden(window.scrollY > 80)
 
     let lastY = window.scrollY
@@ -46,7 +45,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close menu on desktop resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) setMenuOpen(false)
@@ -55,7 +53,6 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = 'hidden'
@@ -69,12 +66,10 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── NAVBAR ── */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0 shadow-lg'}`}
       >
         <div className="w-full flex items-center gap-4">
-          {/* Logo */}
           <Link href="/" className="shrink-0" aria-label="SSA Home">
             <Image
               src="/mascot.png"
@@ -85,7 +80,6 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-1">
             {navLinks.map(({ label, href }) => {
               const isActive = pathname === href
@@ -106,7 +100,6 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* Desktop CTA */}
           <div className="hidden md:flex items-center ml-auto">
             <Link
               href={ctaLink.href}
@@ -116,7 +109,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Hamburger */}
           <button
             className="md:hidden ml-auto flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -137,7 +129,6 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* ── MOBILE MENU ── */}
       <div
         id="mobile-menu"
         className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
@@ -161,7 +152,6 @@ export default function Navbar() {
         </ul>
       </div>
 
-      {/* Overlay */}
       {menuOpen && (
         <div
           className="fixed inset-0 z-30 md:hidden"
