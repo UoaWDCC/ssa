@@ -109,7 +109,7 @@ export default function EventsPage() {
 
               <button
                 type="button"
-                className="inline-flex min-h-10 w-full items-center justify-between rounded-full border-2 border-ssa-red bg-ssa-pink px-4 py-2 text-left font-averia text-xs font-bold uppercase tracking-[0.04em] text-ssa-red transition-colors duration-200 hover:bg-ssa-red hover:text-ssa-pink md:min-h-14 md:px-8 md:text-2xl"
+                className="inline-flex min-h-10 w-full items-center justify-between rounded-full border-2 border-ssa-red bg-ssa-red px-4 py-2 text-left font-averia text-xs font-bold uppercase tracking-[0.04em] text-ssa-yellow-light transition-colors duration-200 hover:bg-ssa-pink hover:text-ssa-red md:min-h-14 md:px-8 md:text-2xl"
               >
                 <span>RSVP Now</span>
                 <span
@@ -131,6 +131,7 @@ export default function EventsPage() {
               <div className="flex flex-col gap-3 md:gap-4">
                 <input
                   type="search"
+                  aria-label="Search events"
                   placeholder="Search events..."
                   className="h-10 w-full rounded-full border border-ssa-pink-light bg-white px-4 py-1.5 font-averia text-base text-ssa-grey placeholder:text-ssa-pink-light focus:border-ssa-red focus:outline-none md:h-14 md:max-w-[1215px] md:px-5 md:text-xl"
                 />
@@ -144,7 +145,7 @@ export default function EventsPage() {
                       className={`rounded-full border-2 px-3 py-1 font-averia text-[10px] font-bold transition-colors duration-200 md:min-h-[62px] md:px-8 md:text-[25px] ${
                         selectedPastEventCategory === category
                           ? 'border-ssa-red bg-ssa-pink text-ssa-red'
-                          : 'border-ssa-red bg-ssa-red text-ssa-yellow-light hover:bg-ssa-pink hover:text-ssa-red'
+                          : 'border-ssa-red bg-ssa-red text-ssa-yellow-light hover:bg-ssa-red hover:text-white'
                       }`}
                     >
                       {category}
