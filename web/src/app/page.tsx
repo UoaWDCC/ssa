@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
         subtitle="A home for people from the Little Red Dot."
         mascotImage="/mascot.png"
       />
+      <Footer />
     </main>
   )
 }
