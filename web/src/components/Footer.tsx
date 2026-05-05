@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function Footer() {
   const socialLinks = [
@@ -39,9 +40,11 @@ export default function Footer() {
 
   return (
     <footer className="w-full">
-      <div className="rounded-t-3xl px-30 py-12 w-full bg-ssa-red">
+      <div className="rounded-t-3xl px-6 md:px-12 lg:px-30 py-12 w-full bg-ssa-red">
+
         {/* Main content */}
-        <div className="flex justify-between">
+        <div className="flex flex-col gap-10 md:flex-row md:justify-between">
+
           {/* Social links */}
           <div className="flex flex-col gap-1">
             <p className="text-ssa-black font-averia font-bold text-xl tracking-tight">
@@ -56,9 +59,9 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="
-                    w-11 h-11 rounded-xl flex items-center justify-center 
-                    text-white bg-transparent 
-                    hover:bg-[#FFE6B6] hover:text-[#f2627e] 
+                    w-11 h-11 rounded-xl flex items-center justify-center
+                    text-white bg-transparent
+                    hover:bg-ssa-yellow hover:text-ssa-red
                     transition-all duration-300 ease-in-out
                   "
                 >
@@ -69,25 +72,26 @@ export default function Footer() {
           </div>
 
           {/* Nav links */}
-          <div className="flex gap-30">
+          <div className="flex flex-col gap-6 sm:flex-row sm:gap-10 lg:gap-30">
+
             {/* About Us */}
             <div className="flex flex-col gap-3">
               <p className="text-ssa-black font-averia font-bold text-lg tracking-tight">
                 About Us
               </p>
               <nav className="flex flex-col gap-2">
-                <a
-                  href="/team"
-                  className="text-ssa-black/54 font-averia hover:text-[#FFE6B6] text-m font-bold transition-colors duration-500"
+                <Link
+                  href="/about"
+                  className="text-ssa-black/60 font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300"
                 >
                   Our Team
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/sponsors"
-                  className="text-ssa-black/54 font-averia hover:text-[#FFE6B6] text-m font-bold transition-colors duration-500"
+                  className="text-ssa-black/60 font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300"
                 >
                   Our Sponsors
-                </a>
+                </Link>
               </nav>
             </div>
 
@@ -97,18 +101,18 @@ export default function Footer() {
                 Explore
               </p>
               <nav className="flex flex-col gap-2">
-                <a
+                <Link
                   href="/events"
-                  className="text-ssa-black/54 font-averia hover:text-[#FFE6B6] text-m font-bold transition-colors duration-500"
+                  className="text-ssa-black/60 font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300"
                 >
                   Events
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/defunct"
-                  className="text-ssa-black/54 font-averia hover:text-[#FFE6B6] text-m font-bold transition-colors duration-500"
+                  className="text-ssa-black/60 font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300"
                 >
                   Defunct
-                </a>
+                </Link>
               </nav>
             </div>
 
@@ -119,18 +123,20 @@ export default function Footer() {
               </p>
               <a
                 href="mailto:ssa.auckland@gmail.com"
-                className="text-ssa-black/54 font-averia hover:text-[#FFE6B6] text-m font-bold transition-colors duration-500 break-all"
+                className="text-ssa-black/60 font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300 break-all"
               >
                 ssa.auckland@gmail.com
               </a>
             </div>
+
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+
           {/* Copyright */}
-          <div className="flex items-center gap-2 text-ssa-black/54 text-sm font-averia">
+          <div className="flex items-center gap-2 text-ssa-black/60 text-sm font-averia">
             <span className="text-base leading-none">©</span>
             <span>Singaporean Students&apos; Association</span>
           </div>
@@ -144,12 +150,13 @@ export default function Footer() {
               height={48}
               className="rounded-full object-cover border-2 border-white/40"
             />
-            <span className="text-ssa-black/54 font-averia font-semibold text-sm leading-tight">
+            <span className="text-ssa-black/60 font-averia font-semibold text-sm leading-tight">
               Singaporean Students&apos;
               <br />
               Association Auckland
             </span>
           </div>
+
         </div>
       </div>
     </footer>
