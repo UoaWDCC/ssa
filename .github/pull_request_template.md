@@ -14,3 +14,8 @@
 - [ ] My branch follows the naming convention (`feature/`, `fix/`, `chore/`, `hotfix/`)
 - [ ] My commit messages follow the conventional commits format
 - [ ] CI checks pass
+
+## Linked Issues
+Closes #
+Addresses #
+Related to #
