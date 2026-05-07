@@ -10,16 +10,10 @@ export default function Hero({ title, subtitle, mascotImage }: HeroProps) {
   return (
     <div className="relative flex items-center justify-between rounded-3xl bg-ssa-red px-16 overflow-hidden w-full aspect-[12/7]">
       <div className="flex flex-col gap-4 max-w-xl z-10">
-        <h1
-          className="font-[family-name:var(--font-averia)] font-bold text-ssa-black"
-          style={{ fontSize: '98px', lineHeight: '100px' }}
-        >
+        <h1 className="font-[family-name:var(--font-averia)] font-bold text-ssa-black text-[98px] leading-[100px]">
           {title}
         </h1>
-        <p
-          className="font-[family-name:var(--font-averia)] font-light text-ssa-black"
-          style={{ fontSize: '30px', lineHeight: '30.5px' }}
-        >
+        <p className="font-[family-name:var(--font-averia)] font-light text-ssa-black text-[30px] leading-[30.5px]">
           {subtitle}
         </p>
       </div>
