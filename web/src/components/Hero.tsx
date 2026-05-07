@@ -12,7 +12,7 @@ interface HeroProps {
 
 const containerStyles: Record<HeroVariant, string> = {
   fullscreen:
-    'items-start min-h-[350px] md:min-h-[500px] lg:min-h-[600px] pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-10 md:pb-12',
+    'items-start min-h-screen pt-16 sm:pt-20 md:pt-24 pb-8 sm:pb-10 md:pb-12',
   compact:
     'items-end min-h-48 sm:min-h-56 md:min-h-72 lg:min-h-96 py-6 sm:py-8 md:py-12 pb-8 sm:pb-10 md:pb-12',
 }
