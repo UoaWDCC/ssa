@@ -20,13 +20,9 @@ jobs:
             exit 1
           fi
 
-
   web:
     name: Web
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
@@ -36,19 +32,16 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: web/pnpm-lock.yaml
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm format:check
-      - run: pnpm exec tsc --noEmit
-      - run: pnpm build
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter web lint
+      - run: pnpm --filter web format:check
+      - run: pnpm --filter web exec tsc --noEmit
+      - run: pnpm --filter web build
 
   cms:
     name: CMS
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: cms
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
@@ -58,11 +51,11 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: cms/pnpm-lock.yaml
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm exec tsc --noEmit
-      - run: pnpm build
+          cache-dependency-path: pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter cms lint
+      - run: pnpm --filter cms exec tsc --noEmit
+      - run: pnpm --filter cms build
         env:
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
