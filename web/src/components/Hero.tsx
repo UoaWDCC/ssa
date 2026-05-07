@@ -6,6 +6,7 @@ interface HeroProps {
   title: string
   subtitle: string
   mascotImage?: string
+  mascotAlt?: string
   variant?: HeroVariant
 }
 
@@ -41,8 +42,9 @@ export default function Hero({
   title,
   subtitle,
   mascotImage,
+  mascotAlt = 'Mascot',
   variant = 'compact',
-}: HeroProps) {
+}: Readonly<HeroProps>) {
   return (
     <div
       className={`relative flex justify-between rounded-b-2xl md:rounded-b-3xl bg-ssa-red overflow-hidden w-full px-4 sm:px-8 md:px-12 lg:px-16 ${containerStyles[variant]}`}
@@ -67,9 +69,9 @@ export default function Hero({
         >
           <Image
             src={mascotImage}
-            alt="mascot"
-            width={470.92}
-            height={433.92}
+            alt={mascotAlt}
+            width={471}
+            height={434}
             className="h-full w-auto object-contain"
             priority
           />
