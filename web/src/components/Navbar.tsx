@@ -25,7 +25,11 @@ export default function Navbar() {
   }, [menuOpen])
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Initial hidden state must be derived from window.scrollY at mount
+    // (page may load mid-scroll on refresh / deep link / back navigation),
+    // and window is unavailable during SSR so it can't go in a useState
+    // lazy initializer.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHidden(window.scrollY > 80)
 
     let lastY = window.scrollY
