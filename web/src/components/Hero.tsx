@@ -22,8 +22,8 @@ export default function Hero({ title, subtitle, mascotImage }: HeroProps) {
           <Image
             src={mascotImage}
             alt="mascot"
-            width={470.92}
-            height={433.92}
+            width={471}
+            height={434}
             className="object-contain opacity-70"
             priority
           />
