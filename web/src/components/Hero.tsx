@@ -1,7 +1,4 @@
-'use client'
-
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 
 type HeroVariant = 'fullscreen' | 'compact'
 
@@ -16,12 +13,9 @@ export default function Hero({
   title,
   subtitle,
   mascotImage,
-  variant,
+  variant = 'compact',
 }: HeroProps) {
-  const pathname = usePathname()
-
-  // if `variant` is explicitly provided, it wins; otherwise fullscreen only on '/'
-  const isFullscreen = variant ? variant === 'fullscreen' : pathname === '/'
+  const isFullscreen = variant === 'fullscreen'
 
   // Container classes
   const containerClasses = `relative flex ${
