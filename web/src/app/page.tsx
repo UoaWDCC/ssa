@@ -4,9 +4,11 @@ export default function Home() {
   return (
     <main>
       <Hero
+        variant="fullscreen"
         title="Singapore Students' Association"
         subtitle="A home for people from the Little Red Dot."
-        mascotImage="/mascot.png"
+        mascotImage="/ssa_merlion_full_body.svg"
+        mascotAlt="SSA Merlion mascot"
       />
     </main>
   )

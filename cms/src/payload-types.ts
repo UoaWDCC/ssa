@@ -249,6 +249,13 @@ export interface Member {
   stripeCustomerId?: string | null;
   emergencyContactName?: string | null;
   emergencyContactPhone?: string | null;
+  upi?: string | null;
+  studentId?: string | null;
+  areaOfStudy?: string | null;
+  yearOfUniversity?: ('1' | '2' | '3' | '4' | '5+' | 'postgrad') | null;
+  gender?: ('male' | 'female' | 'non-binary' | 'prefer-not-to-say') | null;
+  ethnicity?: ('chinese' | 'malay' | 'indian' | 'eurasian' | 'other') | null;
+  returningMember?: boolean | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -465,6 +472,13 @@ export interface MembersSelect<T extends boolean = true> {
   stripeCustomerId?: T;
   emergencyContactName?: T;
   emergencyContactPhone?: T;
+  upi?: T;
+  studentId?: T;
+  areaOfStudy?: T;
+  yearOfUniversity?: T;
+  gender?: T;
+  ethnicity?: T;
+  returningMember?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
