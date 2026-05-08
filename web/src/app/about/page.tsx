@@ -1,21 +1,4 @@
-<<<<<<< HEAD
-import Hero from '@/components/Hero'
-
-export default function AboutPage() {
-  return (
-    <main>
-      <Hero
-        title="About Us"
-        subtitle="Learn more about our mission and team"
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
-      />
-      <div className="p-8">{/* Content coming soon */}</div>
-    </main>
-  )
-}
-=======
-"use client";
+'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
@@ -55,6 +38,14 @@ export default function AboutPage() {
     [startTimer],
   )
 
+  const goPrev = useCallback(() => {
+    goTo((current - 1 + carouselImages.length) % carouselImages.length)
+  }, [current, goTo])
+
+  const goNext = useCallback(() => {
+    goTo((current + 1) % carouselImages.length)
+  }, [current, goTo])
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
   }
@@ -64,46 +55,94 @@ export default function AboutPage() {
     const diff = touchStartX.current - e.changedTouches[0].clientX
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        goTo((current + 1) % carouselImages.length)
+        goNext()
       } else {
-        goTo((current - 1 + carouselImages.length) % carouselImages.length)
+        goPrev()
       }
     }
     touchStartX.current = null
   }
 
   return (
-    <main className="flex flex-col gap-8 bg-ssa-yellow-light pb-16 text-ssa-grey pt-[88px] md:gap-14 md:pb-24">
-      <Hero
-        title="About Us"
-        subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
-        mascotImage="/nerdy-merlion.png"
-      />
+    <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-grey md:pb-24">
+      <div className="-mt-[88px]">
+        <Hero
+          title="About Us"
+          subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
+          mascotImage="/ssa_nerd_merlion.svg"
+          mascotAlt="SSA Nerd Merlion mascot"
+        />
+      </div>
+
+      {/* Gap between hero and carousel */}
+      <div className="h-10 md:h-16" />
 
       {/* Image carousel */}
       <section className="px-4 sm:px-6 md:px-10 lg:px-20">
-        <div
-          className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          {/* Sliding track */}
+        <div className="relative">
           <div
-            className="flex h-full transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${current * 100}%)` }}
+            className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
-            {carouselImages.map((image, index) => (
-              <div key={index} className="relative h-full w-full shrink-0">
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  fill
-                  className="object-cover"
-                  priority={index === 0}
-                />
-              </div>
-            ))}
+            {/* Sliding track */}
+            <div
+              className="flex h-full transition-transform duration-500 ease-in-out"
+              style={{ transform: `translateX(-${current * 100}%)` }}
+            >
+              {carouselImages.map((image, index) => (
+                <div key={index} className="relative h-full w-full shrink-0">
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    fill
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Prev arrow */}
+          <button
+            onClick={goPrev}
+            aria-label="Previous slide"
+            className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 text-ssa-grey"
+            >
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+
+          {/* Next arrow */}
+          <button
+            onClick={goNext}
+            aria-label="Next slide"
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 text-ssa-grey"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
         </div>
 
         {/* Dot navigation */}
