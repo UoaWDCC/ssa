@@ -41,10 +41,8 @@ export default function Footer() {
   return (
     <footer className="w-full">
       <div className="rounded-t-3xl px-6 md:px-12 lg:px-30 py-12 w-full bg-ssa-red">
-
         {/* Main content */}
         <div className="flex flex-col gap-10 md:flex-row md:justify-between">
-
           {/* Social links */}
           <div className="flex flex-col gap-1">
             <p className="text-ssa-black font-averia font-bold text-xl tracking-tight">
@@ -73,7 +71,6 @@ export default function Footer() {
 
           {/* Nav links */}
           <div className="flex flex-col gap-6 sm:flex-row sm:gap-10 lg:gap-30">
-
             {/* About Us */}
             <div className="flex flex-col gap-3">
               <p className="text-ssa-black font-averia font-bold text-lg tracking-tight">
@@ -128,13 +125,11 @@ export default function Footer() {
                 ssa.auckland@gmail.com
               </a>
             </div>
-
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-
           {/* Copyright */}
           <div className="flex items-center gap-2 text-ssa-black/60 text-sm font-averia">
             <span className="text-base leading-none">©</span>
@@ -156,7 +151,6 @@ export default function Footer() {
               Association Auckland
             </span>
           </div>
-
         </div>
       </div>
     </footer>
