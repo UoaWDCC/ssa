@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import type React from 'react'
 
 export type HighlightCardDetail = {
@@ -31,6 +32,8 @@ export function HighlightCard({
   imageAlt,
 }: HighlightCardProps) {
   return (
+    // Custom shadow values are taken directly from the Figma card effect
+    // to match the shared highlight card design.
     <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] lg:grid-cols-2">
       <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 lg:py-11 lg:pl-14 lg:pr-8">
         <div className="space-y-3">
@@ -88,13 +91,13 @@ export function HighlightCard({
           {description}
         </div>
 
-        <a
+        <Link
           href={ctaHref}
           className="mt-8 inline-flex min-h-14 w-full max-w-[553px] items-center justify-between gap-4 rounded-full bg-ssa-card-cta px-6 font-averia text-xl font-bold text-ssa-muted-gold transition-colors hover:bg-ssa-card-cta-hover focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px]"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>
-        </a>
+        </Link>
       </div>
 
       <div className="flex p-6 pt-0 sm:p-8 sm:pt-0 lg:py-11 lg:pl-8 lg:pr-[68px]">

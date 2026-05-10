@@ -31,11 +31,11 @@ export default function EventsPage() {
             title="Ice Kachang"
             details={[
               {
-                iconSrc: '/events/clockicon.svg',
+                iconSrc: '/icons/clockicon.svg',
                 text: '2nd April - 6PM',
               },
               {
-                iconSrc: '/events/locationicon.svg',
+                iconSrc: '/icons/locationicon.svg',
                 text: '401-318 Engineering Atrium (Level 3)',
               },
             ]}

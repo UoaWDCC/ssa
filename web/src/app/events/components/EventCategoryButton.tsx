@@ -5,6 +5,8 @@ interface EventCategoryButtonProps {
 }
 
 const categoryButtonBaseClassName = [
+  // TODO: Review these Figma-derived category pill values
+  // (text-[10px], md:text-[25px], md:min-h-[62px]) with the design team.
   'rounded-full border-2 px-3 py-1 font-averia text-[10px] font-bold',
   'transition-colors duration-200',
   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red',
