@@ -15,6 +15,9 @@ RUN pnpm install --frozen-lockfile
 # ========== CMS ==========
 FROM base AS cms-builder
 WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY web/package.json ./web/
+COPY cms/package.json ./cms/
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/cms/node_modules ./cms/node_modules
 COPY cms/ ./cms/
@@ -25,6 +28,9 @@ RUN pnpm build
 # ========== WEB ==========
 FROM base AS web-builder
 WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY web/package.json ./web/
+COPY cms/package.json ./cms/
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/web/node_modules ./web/node_modules
 COPY web/ ./web/
