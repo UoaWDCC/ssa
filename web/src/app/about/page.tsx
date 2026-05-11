@@ -27,6 +27,23 @@ export default function AboutPage() {
     if (intervalRef.current) clearInterval(intervalRef.current)
   }, [])
 
+  // goTo declared BEFORE the keyboard useEffect
+  const goTo = useCallback(
+    (index: number) => {
+      setCurrent(index)
+      startTimer()
+    },
+    [startTimer],
+  )
+
+  const goPrev = useCallback(() => {
+    goTo((current - 1 + carouselImages.length) % carouselImages.length)
+  }, [current, goTo])
+
+  const goNext = useCallback(() => {
+    goTo((current + 1) % carouselImages.length)
+  }, [current, goTo])
+
   useEffect(() => {
     startTimer()
     return () => {
@@ -45,22 +62,6 @@ export default function AboutPage() {
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [current])
-
-  const goTo = useCallback(
-    (index: number) => {
-      setCurrent(index)
-      startTimer()
-    },
-    [startTimer],
-  )
-
-  const goPrev = useCallback(() => {
-    goTo((current - 1 + carouselImages.length) % carouselImages.length)
-  }, [current, goTo])
-
-  const goNext = useCallback(() => {
-    goTo((current + 1) % carouselImages.length)
   }, [current, goTo])
 
   const handleTouchStart = (e: React.TouchEvent) => {
