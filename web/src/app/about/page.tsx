@@ -6,9 +6,9 @@ import Hero from '@/components/Hero'
 
 // TODO: replace with CMS data matching field requirements
 const carouselImages = [
-  { src: '/carousel_two.png', alt: 'SSA Event 1' },
-  { src: '/carousel_one.png', alt: 'SSA Event 2' },
-  { src: '/carousel_two.png', alt: 'SSA Event 3' },
+  { src: '/carousel_two.jpg', alt: 'SSA Event 1' },
+  { src: '/carousel_one.jpg', alt: 'SSA Event 2' },
+  { src: '/carousel_two.jpg', alt: 'SSA Event 3' },
 ]
 
 export default function AboutPage() {
@@ -23,12 +23,29 @@ export default function AboutPage() {
     }, 6000)
   }, [])
 
+  const stopTimer = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current)
+  }, [])
+
   useEffect(() => {
     startTimer()
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [startTimer])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        goTo((current - 1 + carouselImages.length) % carouselImages.length)
+      } else if (e.key === 'ArrowRight') {
+        goTo((current + 1) % carouselImages.length)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [current])
 
   const goTo = useCallback(
     (index: number) => {
@@ -64,8 +81,8 @@ export default function AboutPage() {
   }
 
   return (
-    <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-grey md:pb-24">
-      <div className="-mt-[88px]">
+    <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
+      <div className="-mt-[88px] bg-ssa-red">
         <Hero
           title="About Us"
           subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
@@ -74,16 +91,18 @@ export default function AboutPage() {
         />
       </div>
 
-      {/* Gap between hero and carousel */}
-      <div className="h-10 md:h-16" />
-
       {/* Image carousel */}
-      <section className="px-4 sm:px-6 md:px-10 lg:px-20">
+      <section
+        style={{ paddingTop: '40px' }}
+        className="px-4 sm:px-6 md:px-10 lg:px-20"
+      >
         <div className="relative">
           <div
             className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onMouseEnter={stopTimer}
+            onMouseLeave={startTimer}
           >
             {/* Sliding track */}
             <div
@@ -118,7 +137,7 @@ export default function AboutPage() {
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-5 h-5 text-ssa-grey"
+              className="w-5 h-5 text-ssa-black"
             >
               <path d="M15 18l-6-6 6-6" />
             </svg>
@@ -138,7 +157,7 @@ export default function AboutPage() {
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-5 h-5 text-ssa-grey"
+              className="w-5 h-5 text-ssa-black"
             >
               <path d="M9 18l6-6-6-6" />
             </svg>
