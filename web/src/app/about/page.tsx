@@ -27,7 +27,6 @@ export default function AboutPage() {
     if (intervalRef.current) clearInterval(intervalRef.current)
   }, [])
 
-  // goTo declared BEFORE the keyboard useEffect
   const goTo = useCallback(
     (index: number) => {
       setCurrent(index)
@@ -128,7 +127,7 @@ export default function AboutPage() {
           <button
             onClick={goPrev}
             aria-label="Previous slide"
-            className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors"
+            className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -148,7 +147,7 @@ export default function AboutPage() {
           <button
             onClick={goNext}
             aria-label="Next slide"
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +171,7 @@ export default function AboutPage() {
               key={index}
               onClick={() => goTo(index)}
               aria-label={`Go to slide ${index + 1}`}
-              className="flex items-center justify-center w-6 h-6"
+              className="flex items-center justify-center w-6 h-6 cursor-pointer"
             >
               <span
                 className={`block w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === current ? 'bg-ssa-red scale-125' : 'bg-ssa-red/30'}`}
