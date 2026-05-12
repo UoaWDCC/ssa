@@ -1,8 +1,9 @@
 import Hero from '@/components/Hero'
+import InstagramFeed from '@/components/InstagramFeed'
 
 export default function Home() {
   return (
-    <main>
+    <main className="flex flex-col bg-ssa-yellow-light pb-16 md:pb-24">
       <Hero
         variant="fullscreen"
         title="Singapore Students' Association"
@@ -10,6 +11,7 @@ export default function Home() {
         mascotImage="/ssa_merlion_full_body.svg"
         mascotAlt="SSA Merlion mascot"
       />
+      <InstagramFeed />
     </main>
   )
 }
