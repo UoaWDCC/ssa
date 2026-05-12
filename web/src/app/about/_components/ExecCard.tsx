@@ -2,16 +2,20 @@
 
 import Image from 'next/image'
 import { useState } from 'react'
-import type { ExecMember } from './execData'
 
 // TODO: Confirm with design whether tapping a tile on mobile should trigger the hover overlay.
-// Current behaviour: tap toggles the overlay; mouse-leave resets it on desktop.
+
+interface ExecCardProps {
+  name: string
+  role: string
+  photo: string
+}
 
 export default function ExecCard({
   name,
   role,
   photo,
-}: Omit<ExecMember, 'year'>) {
+}: Readonly<ExecCardProps>) {
   const [isActive, setIsActive] = useState(false)
 
   return (

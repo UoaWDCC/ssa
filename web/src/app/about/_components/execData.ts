@@ -5,7 +5,6 @@ export type ExecMember = {
   year: string
 }
 
-// Replace photo paths with real exec photos when the backend endpoint is ready
 export const execMembers: ExecMember[] = [
   {
     name: 'Omar Youssef',
