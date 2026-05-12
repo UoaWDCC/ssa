@@ -63,22 +63,25 @@ export default function AboutPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [current, goTo])
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
-  }
+  }, [])
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return
-    const diff = touchStartX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        goNext()
-      } else {
-        goPrev()
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartX.current === null) return
+      const diff = touchStartX.current - e.changedTouches[0].clientX
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          goNext()
+        } else {
+          goPrev()
+        }
       }
-    }
-    touchStartX.current = null
-  }
+      touchStartX.current = null
+    },
+    [goNext, goPrev],
+  )
 
   return (
     <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
@@ -91,10 +94,7 @@ export default function AboutPage() {
         />
       </div>
 
-      <section
-        style={{ paddingTop: '40px' }}
-        className="px-4 sm:px-6 md:px-10 lg:px-20"
-      >
+      <section className="pt-10 px-4 sm:px-6 md:px-10 lg:px-20">
         <div className="relative">
           <div
             className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"

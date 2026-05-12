@@ -66,7 +66,7 @@ export const execMembers: ExecMember[] = [
   },
   {
     name: 'Jing Chun Chung',
-    role: 'Singaporian Rep',
+    role: 'Singaporean Rep',
     photo: '/mascot.png',
     year: '2024',
   },

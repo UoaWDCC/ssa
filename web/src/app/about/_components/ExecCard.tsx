@@ -1,7 +1,7 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
+import Image from 'next/image'
 
 // TODO: Confirm with design whether tapping a tile on mobile should trigger the hover overlay.
 
