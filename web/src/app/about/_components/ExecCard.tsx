@@ -19,28 +19,21 @@ export default function ExecCard({
   const [isActive, setIsActive] = useState(false)
 
   return (
-    <div
-      className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-[3px] hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red ${
-        isActive ? 'ring-4 ring-ssa-red' : 'ring-ssa-red-lighter'
-      }`}
-      role="button"
-      tabIndex={0}
+    <button
+      type="button"
       aria-label={`${name}, ${role}`}
       aria-pressed={isActive}
       onClick={() => setIsActive((v) => !v)}
       onMouseLeave={() => setIsActive(false)}
       onBlur={() => setIsActive(false)}
       onKeyDown={(e) => {
-        if (e.repeat) return
         if (e.key === 'Escape') {
           setIsActive(false)
-          return
-        }
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          setIsActive((v) => !v)
         }
       }}
+      className={`relative aspect-square w-full rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-[3px] hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red ${
+        isActive ? 'ring-4 ring-ssa-red' : 'ring-ssa-red-lighter'
+      }`}
     >
       <Image
         src={photo}
@@ -56,13 +49,13 @@ export default function ExecCard({
           isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}
       >
-        <p className="font-averia font-bold text-lg sm:text-xl md:text-2xl text-ssa-red leading-snug">
+        <p className="font-averia font-bold text-lg sm:text-xl md:text-2xl text-ssa-red leading-snug text-left">
           {name}
         </p>
-        <p className="font-averia font-bold text-lg sm:text-xl md:text-2xl text-white uppercase leading-snug tracking-wide">
+        <p className="font-averia font-bold text-lg sm:text-xl md:text-2xl text-white uppercase leading-snug tracking-wide text-left">
           {role}
         </p>
       </div>
-    </div>
+    </button>
   )
 }
