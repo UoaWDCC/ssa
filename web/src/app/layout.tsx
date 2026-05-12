@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono, Averia_Serif_Libre } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
+import { QueryProvider } from '@/providers/QueryProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -36,7 +37,7 @@ export default function RootLayout({
         style={{ paddingTop: '88px' }}
       >
         <Navbar />
-        {children}
+        <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
   )
