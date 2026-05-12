@@ -10,7 +10,7 @@ export default function ExecGrid() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
         {execMembers.map((exec) => (
           <ExecCard
-            key={exec.name}
+            key={`${exec.name}-${exec.role}`}
             name={exec.name}
             role={exec.role}
             photo={exec.photo}

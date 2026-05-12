@@ -29,8 +29,13 @@ export default function ExecCard({
       aria-pressed={isActive}
       onClick={() => setIsActive((v) => !v)}
       onMouseLeave={() => setIsActive(false)}
+      onBlur={() => setIsActive(false)}
       onKeyDown={(e) => {
         if (e.repeat) return
+        if (e.key === 'Escape') {
+          setIsActive(false)
+          return
+        }
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
           setIsActive((v) => !v)
@@ -39,7 +44,8 @@ export default function ExecCard({
     >
       <Image
         src={photo}
-        alt={`${name}, ${role}`}
+        alt=""
+        aria-hidden="true"
         fill
         className="object-cover"
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
