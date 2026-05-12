@@ -92,12 +92,6 @@ export default function Footer() {
                 >
                   Events
                 </Link>
-                <Link
-                  href="/defunct"
-                  className="text-ssa-white font-averia hover:text-ssa-yellow text-base font-bold transition-colors duration-300"
-                >
-                  Defunct
-                </Link>
               </nav>
             </div>
 
