@@ -1,5 +1,6 @@
 import Hero from '@/components/Hero'
 import InstagramFeed from '@/components/InstagramFeed'
+import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
         mascotAlt="SSA Merlion mascot"
       />
       <InstagramFeed />
+      <Footer />
     </main>
   )
 }
