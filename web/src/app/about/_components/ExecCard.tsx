@@ -20,8 +20,8 @@ export default function ExecCard({
 
   return (
     <div
-      className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-2 hover:ring-[3px] hover:ring-ssa-red ${
-        isActive ? 'ring-[3px] ring-ssa-red' : 'ring-ssa-red/40'
+      className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-[3px] hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red ${
+        isActive ? 'ring-4 ring-ssa-red' : 'ring-ssa-red-lighter'
       }`}
       role="button"
       tabIndex={0}
@@ -46,7 +46,7 @@ export default function ExecCard({
       />
       <div
         aria-hidden="true"
-        className={`absolute inset-0 bg-black/60 flex flex-col justify-end pb-6 pl-5 pr-3 pt-3 sm:pb-8 sm:pl-6 transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-black/60 flex flex-col justify-end pb-6 pl-5 pr-3 pt-3 sm:pb-8 sm:pl-6 transition-opacity duration-500 ${
           isActive ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         }`}
       >
