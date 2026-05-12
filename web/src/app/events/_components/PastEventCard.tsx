@@ -25,6 +25,9 @@ function formatEventDate(iso: string): string {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
+    // ISO date-only strings are parsed as UTC; pin formatting to UTC so the
+    // displayed day doesn't shift based on the user's local timezone.
+    timeZone: 'UTC',
   })
 }
 

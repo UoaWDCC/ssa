@@ -13,13 +13,13 @@ export default function PastEventsSection() {
   const [activeFilter, setActiveFilter] = useState<EventFilter>('All')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE)
 
-  // Track which filter+query the current `visibleCount` belongs to so we can
-  // reset pagination when the user changes the search input or filter.
-  // See: https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
-  const filterKey = `${activeFilter}|${query.trim().toLowerCase()}`
-  const [lastFilterKey, setLastFilterKey] = useState(filterKey)
-  if (lastFilterKey !== filterKey) {
-    setLastFilterKey(filterKey)
+  const handleQueryChange = (next: string) => {
+    setQuery(next)
+    setVisibleCount(INITIAL_VISIBLE)
+  }
+
+  const handleFilterChange = (next: EventFilter) => {
+    setActiveFilter(next)
     setVisibleCount(INITIAL_VISIBLE)
   }
 
@@ -66,7 +66,7 @@ export default function PastEventsSection() {
         <input
           type="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Search event..."
           className="w-full rounded-full border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
         />
@@ -74,7 +74,7 @@ export default function PastEventsSection() {
 
       {/* Filter chips */}
       <div
-        role="radiogroup"
+        role="group"
         aria-label="Filter past events by category"
         className="mt-5 flex flex-wrap gap-3"
       >
@@ -84,9 +84,8 @@ export default function PastEventsSection() {
             <button
               key={filter}
               type="button"
-              role="radio"
-              aria-checked={isActive}
-              onClick={() => setActiveFilter(filter)}
+              aria-pressed={isActive}
+              onClick={() => handleFilterChange(filter)}
               className={`rounded-full px-5 py-1.5 font-averia text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
                 isActive
                   ? 'bg-ssa-red text-white'
