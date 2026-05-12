@@ -86,10 +86,10 @@ export default function PastEventsSection() {
               type="button"
               aria-pressed={isActive}
               onClick={() => handleFilterChange(filter)}
-              className={`rounded-full px-5 py-1.5 font-averia text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
+              className={`rounded-full px-10 py-3 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
                 isActive
                   ? 'bg-ssa-red text-white'
-                  : 'bg-ssa-red-lighter text-ssa-red hover:bg-ssa-red-light hover:text-white'
+                  : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
               }`}
             >
               {filter}

@@ -12,10 +12,10 @@ interface PastEventCardProps {
  * (defined in globals.css). Keeps a tag's colour stable across cards.
  */
 const TAG_COLOURS: Record<PastEventTag, string> = {
-  Food: 'bg-ssa-red',
-  Community: 'bg-ssa-red-light',
-  Games: 'bg-ssa-red',
-  AGM: 'bg-ssa-red-light',
+  Food: 'bg-ssa-red/80',
+  Community: 'bg-ssa-red-light/80',
+  Games: 'bg-ssa-red/80',
+  AGM: 'bg-ssa-red-light/80',
 }
 
 function formatEventDate(iso: string): string {
@@ -39,57 +39,92 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
     <Link
       href={`/events/${slug}/gallery`}
       aria-label={`See photos for ${name} on ${formattedDate} at ${location}`}
-      className="group block overflow-hidden rounded-2xl bg-ssa-yellow-light ring-[3px] ring-ssa-red-lighter transition-all duration-300 hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red"
+      className="group relative block aspect-[5/6] overflow-hidden rounded-2xl ring-[3px] ring-ssa-red-lighter transition-all duration-300 hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red"
     >
-      {/* Image area */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden">
-        <Image
-          src={thumbnail}
-          alt={thumbnailAlt}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-all duration-300 group-hover:scale-105 group-hover:brightness-75 group-hover:saturate-50"
-        />
+      <Image
+        src={thumbnail}
+        alt={thumbnailAlt}
+        fill
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-[2px] group-hover:brightness-75"
+      />
 
-        {/* Date pill (top-right) */}
-        <div className="absolute right-3 top-3">
+      {/* Top gradient + location */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent"
+      />
+      <div className="absolute left-5 top-5 flex items-center gap-2 text-white">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="h-5 w-5"
+          aria-hidden="true"
+        >
+          <path d="M12 21s-7-7.5-7-12a7 7 0 1 1 14 0c0 4.5-7 12-7 12z" />
+          <circle cx="12" cy="9" r="2.5" />
+        </svg>
+        <span className="font-averia text-base font-bold uppercase tracking-wide">
+          {location}
+        </span>
+      </div>
+
+      {/* Bottom gradient + info */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+      />
+      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6">
+        <div className="flex items-center gap-2 text-white/90">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-5 w-5"
+            aria-hidden="true"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <path d="M16 2v4M8 2v4M3 10h18" />
+          </svg>
           <time
             dateTime={date}
-            className="rounded-full bg-ssa-yellow/90 px-3 py-1 font-averia text-xs font-bold text-ssa-black shadow-sm"
+            className="font-averia text-base font-bold tracking-wide"
           >
             {formattedDate}
           </time>
         </div>
-
-        {/* Hover overlay: See Photos */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
-          <span className="flex items-center gap-2 rounded-full bg-ssa-red/90 px-6 py-2.5 font-averia text-base font-bold text-white shadow-lg">
-            See Photos
-            <ArrowRightIcon />
-          </span>
-        </div>
-      </div>
-
-      {/* Info area */}
-      <div className="flex flex-col gap-2 p-4">
-        <h3 className="font-averia text-xl font-bold leading-tight text-ssa-black">
+        <h3 className="font-averia text-3xl font-bold leading-tight text-white">
           {name}
         </h3>
-        <p className="font-averia text-sm uppercase tracking-wide text-ssa-black/70">
-          {location}
-        </p>
         {tags.length > 0 && (
           <ul className="mt-1 flex flex-wrap gap-2">
             {tags.map((tag) => (
               <li
                 key={tag}
-                className={`rounded-full px-3 py-0.5 font-averia text-xs font-bold text-white ${TAG_COLOURS[tag]}`}
+                className={`rounded-full px-4 py-1 font-averia text-base font-bold text-white ${TAG_COLOURS[tag]}`}
               >
                 {tag}
               </li>
             ))}
           </ul>
         )}
+      </div>
+
+      {/* Hover overlay: See Photos */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
+        <span className="flex items-center gap-2.5 rounded-full bg-ssa-red px-8 py-3.5 font-averia text-xl font-bold text-white shadow-lg">
+          See Photos
+          <ArrowRightIcon className="h-6 w-6" />
+        </span>
       </div>
     </Link>
   )
