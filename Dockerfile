@@ -3,29 +3,38 @@ FROM node:22-alpine AS base
 RUN apk add --no-cache libc6-compat nginx
 RUN npm install -g pnpm
 
-# ========== CMS ==========
-FROM base AS cms-deps
-WORKDIR /app/cms
-COPY cms/package.json cms/pnpm-lock.yaml* ./
+# ========== DEPS ==========
+# Install all workspace deps in one stage using the root lockfile
+FROM base AS deps
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY web/package.json ./web/
+COPY cms/package.json ./cms/
 RUN pnpm install --frozen-lockfile
 
+# ========== CMS ==========
 FROM base AS cms-builder
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY web/package.json ./web/
+COPY cms/package.json ./cms/
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/cms/node_modules ./cms/node_modules
+COPY cms/ ./cms/
 WORKDIR /app/cms
-COPY --from=cms-deps /app/cms/node_modules ./node_modules
-COPY cms/ .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 
 # ========== WEB ==========
-FROM base AS web-deps
-WORKDIR /app/web
-COPY web/package.json web/pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
-
 FROM base AS web-builder
+WORKDIR /app
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY web/package.json ./web/
+COPY cms/package.json ./cms/
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/web/node_modules ./web/node_modules
+COPY web/ ./web/
 WORKDIR /app/web
-COPY --from=web-deps /app/web/node_modules ./node_modules
-COPY web/ .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
 
