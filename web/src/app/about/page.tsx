@@ -1,4 +1,5 @@
 import Hero from '@/components/Hero'
+import ExecGrid from './_components/ExecGrid'
 
 export default function AboutPage() {
   return (
@@ -9,7 +10,7 @@ export default function AboutPage() {
         mascotImage="/ssa_nerd_merlion.svg"
         mascotAlt="SSA Nerd Merlion mascot"
       />
-      <div className="p-8">{/* Content coming soon */}</div>
+      <ExecGrid />
     </main>
   )
 }
