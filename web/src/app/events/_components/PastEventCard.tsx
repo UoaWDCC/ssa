@@ -36,7 +36,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
     <Link
       href={`/events/${slug}/gallery`}
       aria-label={`See photos for ${name} on ${formattedDate} at ${location}`}
-      className="group block overflow-hidden rounded-2xl bg-ssa-red-lighter/40 ring-2 ring-ssa-red-lighter transition-all duration-300 hover:ring-[3px] hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-[3px] focus-visible:ring-ssa-red"
+      className="group block overflow-hidden rounded-2xl bg-ssa-yellow-light ring-[3px] ring-ssa-red-lighter transition-all duration-300 hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red"
     >
       {/* Image area */}
       <div className="relative aspect-[4/3] w-full overflow-hidden">
