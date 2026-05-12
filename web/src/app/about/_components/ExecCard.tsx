@@ -20,15 +20,17 @@ export default function ExecCard({
 
   return (
     <div
-      className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-2 hover:ring-3 hover:ring-ssa-red ${
-        isActive ? 'ring-3 ring-ssa-red' : 'ring-ssa-red/40'
+      className={`relative aspect-square rounded-xl overflow-hidden cursor-pointer group select-none transition-all duration-300 ring-2 hover:ring-[3px] hover:ring-ssa-red ${
+        isActive ? 'ring-[3px] ring-ssa-red' : 'ring-ssa-red/40'
       }`}
       role="button"
       tabIndex={0}
       aria-label={`${name}, ${role}`}
+      aria-pressed={isActive}
       onClick={() => setIsActive((v) => !v)}
       onMouseLeave={() => setIsActive(false)}
       onKeyDown={(e) => {
+        if (e.repeat) return
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
           setIsActive((v) => !v)
