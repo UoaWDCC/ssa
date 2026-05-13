@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Hero from '@/components/Hero'
+import ExecGrid from './_components/ExecGrid'
 
 // TODO: replace with CMS data matching field requirements
 const carouselImages = [
@@ -50,7 +51,6 @@ export default function AboutPage() {
     }
   }, [startTimer])
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft') {
@@ -63,22 +63,25 @@ export default function AboutPage() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [current, goTo])
 
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX
-  }
+  }, [])
 
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX.current === null) return
-    const diff = touchStartX.current - e.changedTouches[0].clientX
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        goNext()
-      } else {
-        goPrev()
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartX.current === null) return
+      const diff = touchStartX.current - e.changedTouches[0].clientX
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          goNext()
+        } else {
+          goPrev()
+        }
       }
-    }
-    touchStartX.current = null
-  }
+      touchStartX.current = null
+    },
+    [goNext, goPrev],
+  )
 
   return (
     <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
@@ -91,11 +94,7 @@ export default function AboutPage() {
         />
       </div>
 
-      {/* Image carousel */}
-      <section
-        style={{ paddingTop: '40px' }}
-        className="px-4 sm:px-6 md:px-10 lg:px-20"
-      >
+      <section className="pt-10 px-4 sm:px-6 md:px-10 lg:px-20">
         <div className="relative">
           <div
             className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"
@@ -104,7 +103,6 @@ export default function AboutPage() {
             onMouseEnter={stopTimer}
             onMouseLeave={startTimer}
           >
-            {/* Sliding track */}
             <div
               className="flex h-full transition-transform duration-500 ease-in-out"
               style={{ transform: `translateX(-${current * 100}%)` }}
@@ -123,7 +121,6 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* Prev arrow */}
           <button
             onClick={goPrev}
             aria-label="Previous slide"
@@ -143,7 +140,6 @@ export default function AboutPage() {
             </svg>
           </button>
 
-          {/* Next arrow */}
           <button
             onClick={goNext}
             aria-label="Next slide"
@@ -164,7 +160,6 @@ export default function AboutPage() {
           </button>
         </div>
 
-        {/* Dot navigation */}
         <div className="flex justify-center gap-2 pt-4">
           {carouselImages.map((_, index) => (
             <button
@@ -180,6 +175,8 @@ export default function AboutPage() {
           ))}
         </div>
       </section>
+
+      <ExecGrid />
     </main>
   )
 }
