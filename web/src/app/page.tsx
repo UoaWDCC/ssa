@@ -6,8 +6,7 @@ import { HighlightCard } from '@/components/HighlightCard'
 
 export default function Home() {
   return (
-    // Figma desktop spacing between the Hero and highlight card is 121px.
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light md:gap-14 lg:gap-[121px]">
+    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
       <Hero
         variant="fullscreen"
         title="Singapore Students' Association"
@@ -17,35 +16,32 @@ export default function Home() {
       />
 
       <section className="px-6 md:px-10 lg:px-16">
-        <div className="mx-auto w-full max-w-[1214px]">
-          <HighlightCard
-            eyebrow="Upcoming Event"
-            title="Ice Kachang"
-            details={[
-              {
-                icon: FaClock,
-                text: '2nd April - 6PM',
-              },
-              {
-                icon: FaLocationDot,
-                text: '401-318 Engineering Atrium (Level 3)',
-              },
-            ]}
-            badges={['$5 Members', '$11 Non-Members']}
-            description={
-              <>
-                Hot, stressed and over Uni already? Say less... we&apos;ve got
-                the perfect cooldown for you. Come chill with SSA at our Ice
-                Kachang Night. Sweet, icy, colourful... but there&apos;s a twist
-                👀
-              </>
-            }
-            ctaLabel="RSVP"
-            ctaHref="/events"
-            imageSrc="/events/highlight_mascot.png"
-            imageAlt="Ice Kachang event artwork"
-          />
-        </div>
+        <HighlightCard
+          eyebrow="Upcoming Event"
+          title="Ice Kachang"
+          details={[
+            {
+              icon: FaClock,
+              text: '2nd April - 6PM',
+            },
+            {
+              icon: FaLocationDot,
+              text: '401-318 Engineering Atrium (Level 3)',
+            },
+          ]}
+          badges={['$5 Members', '$11 Non-Members']}
+          description={
+            <>
+              Hot, stressed and over Uni already? Say less... we&apos;ve got the
+              perfect cooldown for you. Come chill with SSA at our Ice Kachang
+              Night. Sweet, icy, colourful... but there&apos;s a twist 👀
+            </>
+          }
+          ctaLabel="RSVP"
+          ctaHref="/events"
+          imageSrc="/events/highlight_mascot.png"
+          imageAlt="Ice Kachang event artwork"
+        />
       </section>
 
       <Footer />

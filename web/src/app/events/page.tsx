@@ -17,7 +17,6 @@ export default function EventsPage() {
   const [eventSearchQuery, setEventSearchQuery] = useState('')
 
   return (
-    // Figma desktop spacing between the Hero and highlight card is 121px.
     <main className="flex flex-col gap-10 bg-ssa-yellow-light pb-16 text-ssa-grey md:gap-14 md:pb-24 lg:gap-[121px]">
       <Hero
         title="Events"
