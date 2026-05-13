@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { FaClock, FaLocationDot } from 'react-icons/fa6'
 
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
@@ -16,7 +17,8 @@ export default function EventsPage() {
   const [eventSearchQuery, setEventSearchQuery] = useState('')
 
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light pb-16 text-ssa-grey md:gap-14 md:pb-24">
+    // Figma desktop spacing between the Hero and highlight card is 121px.
+    <main className="flex flex-col gap-10 bg-ssa-yellow-light pb-16 text-ssa-grey md:gap-14 md:pb-24 lg:gap-[121px]">
       <Hero
         title="Events"
         subtitle="Join us for exciting events, cultural celebrations, and community gatherings throughout the year."
@@ -31,24 +33,21 @@ export default function EventsPage() {
             title="Ice Kachang"
             details={[
               {
-                iconSrc: '/icons/clockicon.svg',
+                icon: FaClock,
                 text: '2nd April - 6PM',
               },
               {
-                iconSrc: '/icons/locationicon.svg',
+                icon: FaLocationDot,
                 text: '401-318 Engineering Atrium (Level 3)',
               },
             ]}
             badges={['$5 Members', '$11 Non-Members']}
             description={
               <>
-                Hot, stressed and over Uni already?
-                <br />
-                Say less... we&apos;ve got the perfect cooldown for you.
-                <br />
-                Come chill with SSA at our Ice Kachang Night.
-                <br />
-                Sweet, icy, colourful... but there&apos;s a twist 👀
+                Hot, stressed and over Uni already? Say less... we&apos;ve got
+                the perfect cooldown for you. Come chill with SSA at our Ice
+                Kachang Night. Sweet, icy, colourful... but there&apos;s a twist
+                👀
               </>
             }
             ctaLabel="RSVP"
