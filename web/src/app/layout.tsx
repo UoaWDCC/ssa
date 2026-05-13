@@ -20,8 +20,8 @@ const averiaSerif = Averia_Serif_Libre({
 })
 
 export const metadata: Metadata = {
-  title: "Singaporean Students' Association",
-  description: "Singaporean Students' Association",
+  title: "SSA | Singaporean Students' Association",
+  description: "SSA | Singaporean Students' Association",
 }
 
 export default function RootLayout({
