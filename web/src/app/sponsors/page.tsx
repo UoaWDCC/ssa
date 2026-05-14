@@ -1,5 +1,10 @@
+import { FaLocationDot } from 'react-icons/fa6'
+
 import Hero from '@/components/Hero'
-import { HighlightCard } from '@/components/HighlightCard'
+import {
+  HighlightCard,
+  type HighlightCardDetail,
+} from '@/components/HighlightCard'
 
 type Sponsor = {
   name: string
@@ -11,7 +16,7 @@ type Sponsor = {
 
 type SponsorCardContent = Sponsor & {
   eyebrow: string
-  details: { text: string }[]
+  details: HighlightCardDetail[]
   badges: string[]
   ctaLabel: string
   imageAlt: string
@@ -26,14 +31,11 @@ const mockSponsorOfTheWeek: SponsorCardContent = {
   websiteURL: '/sponsors', // Temporary placeholder link until the CMS provides a sponsor URL.
   isSponsorOfTheWeek: true,
   description:
-    'This week we are highlighting a local spot for catching up over drinks, desserts, and a little breathing room between classes.',
+    'Sip n Chill offers icy desserts , refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
   eyebrow: 'Sponsor of the Week',
-  details: [
-    { text: 'Student-friendly drinks and desserts' },
-    { text: 'Exclusive SSA member deals' },
-  ],
-  badges: ['10% off', 'Show your SSA membership'],
-  ctaLabel: 'Check us out!',
+  details: [{ icon: FaLocationDot, text: 'Newmarket 432 Khyber Pass Road' }],
+  badges: ['10% OFF for SSA Members'],
+  ctaLabel: 'CHECK US OUT!',
   imageAlt: 'Sip n Chill sponsor photo',
 }
 
