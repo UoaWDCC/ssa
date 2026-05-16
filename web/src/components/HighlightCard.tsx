@@ -112,7 +112,7 @@ export function HighlightCard({
 
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full bg-ssa-card-cta px-6 font-averia text-xl font-bold leading-tight text-ssa-muted-gold transition-colors hover:bg-ssa-card-cta-hover focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
+          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full bg-ssa-card-cta px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-card-cta-hover focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>

@@ -24,11 +24,13 @@
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
   --color-ssa-card-cta-hover: #ffdfab;
+  --color-ssa-cta-text: #633c3c;
   --color-ssa-muted-gold: #9f7d32;
   --color-ssa-category-text: #968055;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
+  --font-alegreya: var(--font-alegreya);
 }
 
 @media (prefers-color-scheme: dark) {
