@@ -1,17 +1,55 @@
 'use client'
+
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import ProgressBar from '@/components/ProgressBar'
-// import GoogleFormStep from './GoogleFormStep'
+import GoogleFormStep from './GoogleFormStep'
 import EventPaymentStep from './EventPaymentStep'
 
-export default function SignupForm() {
-  const step = 0
+const EventSignupForm = () => {
+  const searchParams = useSearchParams()
+  const hasSession = Boolean(searchParams.get('session_id'))
+
+  const step = hasSession ? 1 : 0
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handlePay() {
-    setIsLoading(true)
+  const handlePay = async () => {
     setError(null)
+
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: 'First Last',
+          email: 'example@email.com',
+          password: '123456',
+          phone: '1234567890',
+          upi: 'upi@example.com',
+          studentId: 'STUDENT123',
+          areaOfStudy: 'Computer Science',
+          yearOfUniversity: '4',
+          gender: 'male',
+          ethnicity: 'chinese',
+          returningMember: true,
+        }),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok || !result.checkoutUrl) {
+        setError(result.error ?? 'Something went wrong. Please try again.')
+        return
+      }
+
+      window.location.href = result.checkoutUrl
+    } catch {
+      setError('Network error. Please check your connection and try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -33,11 +71,11 @@ export default function SignupForm() {
               isLoading={isLoading}
             />
           )}
-          {/* {step === 1 && (
-            <GoogleFormStep />
-          )} */}
+          {step === 1 && <GoogleFormStep />}
         </div>
       </div>
     </div>
   )
 }
+
+export default EventSignupForm
