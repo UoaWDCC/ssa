@@ -1,8 +1,8 @@
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
-
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
+import InstagramFeed from '@/components/InstagramFeed'
 
 export default function Home() {
   return (
@@ -14,7 +14,6 @@ export default function Home() {
         mascotImage="/ssa_merlion_full_body.svg"
         mascotAlt="SSA Merlion mascot"
       />
-
       <section className="px-6 md:px-10 lg:px-16">
         <HighlightCard
           eyebrow="Upcoming Event"
@@ -43,7 +42,7 @@ export default function Home() {
           imageAlt="Ice Kachang event artwork"
         />
       </section>
-
+      <InstagramFeed />
       <Footer />
     </main>
   )
