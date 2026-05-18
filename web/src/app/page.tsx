@@ -28,7 +28,7 @@ export default function Home() {
               text: '401-318 Engineering Atrium (Level 3)',
             },
           ]}
-          badges={['$5 Members', '$11 Non-Members']}
+          badges={['$5 Members', { text: '$11 Non-Members', variant: 'light' }]}
           description={
             <>
               Hot, stressed and over Uni already? Say less... we&apos;ve got the

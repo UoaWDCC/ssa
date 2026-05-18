@@ -10,11 +10,18 @@ export type HighlightCardDetail = {
   text: string
 }
 
+export type HighlightCardBadge =
+  | string
+  | {
+      text: string
+      variant?: 'red' | 'light'
+    }
+
 export type HighlightCardProps = {
   eyebrow: string
   title: string
   details?: HighlightCardDetail[]
-  badges?: string[]
+  badges?: HighlightCardBadge[]
   description: React.ReactNode
   ctaLabel: string
   ctaHref: string
@@ -46,6 +53,20 @@ function DetailIcon({ detail }: { detail: HighlightCardDetail }) {
       className="size-5 shrink-0 object-contain lg:size-6"
     />
   )
+}
+
+function getBadgeText(badge: HighlightCardBadge) {
+  return typeof badge === 'string' ? badge : badge.text
+}
+
+function getBadgeClassName(badge: HighlightCardBadge) {
+  const variant = typeof badge === 'string' ? 'red' : (badge.variant ?? 'red')
+  const variantClassName =
+    variant === 'light'
+      ? 'bg-[#FCE6BA] text-[#706F6F]'
+      : 'bg-ssa-red text-ssa-yellow-light'
+
+  return `flex items-center justify-center gap-[3.66px] rounded-[5px] px-4 py-2 text-center font-sans text-sm font-bold leading-none lg:text-[19px] lg:leading-[19px] ${variantClassName}`
 }
 
 export function HighlightCard({
@@ -92,10 +113,10 @@ export function HighlightCard({
                 <ul className="flex flex-wrap gap-2">
                   {badges.map((badge) => (
                     <li
-                      key={badge}
-                      className="rounded-full bg-ssa-red px-4 py-2 font-sans text-sm font-semibold leading-none text-ssa-yellow-light lg:text-[19px] lg:leading-[19px]"
+                      key={getBadgeText(badge)}
+                      className={getBadgeClassName(badge)}
                     >
-                      {badge}
+                      {getBadgeText(badge)}
                     </li>
                   ))}
                 </ul>
@@ -112,7 +133,7 @@ export function HighlightCard({
 
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full bg-ssa-card-cta px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-card-cta-hover focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
+          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-[#EC415E] bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-[#FE6681D9] focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>

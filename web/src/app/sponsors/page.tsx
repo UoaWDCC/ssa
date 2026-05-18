@@ -1,6 +1,8 @@
+import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
 import CtaLink from '@/components/CtaLink'
+import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import {
   HighlightCard,
@@ -37,7 +39,7 @@ const mockSponsorOfTheWeek: SponsorCardContent = {
     'Sip n Chill offers icy desserts , refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
   eyebrow: 'Sponsor of the Week',
   details: [{ icon: FaLocationDot, text: 'Newmarket 432 Khyber Pass Road' }],
-  badges: ['10% OFF for SSA Members'],
+  badges: ['10% OFF FOR SSA MEMBERS'],
   ctaLabel: 'CHECK US OUT!',
   imageAlt: 'Sip n Chill sponsor photo',
 }
@@ -82,14 +84,14 @@ export default async function SponsorsPage() {
   const sponsors = mockSponsors
 
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
+    <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
       <Hero
         title="Sponsors"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
         mascotImage="/ssa_nerd_merlion.svg"
         mascotAlt="SSA Nerd Merlion mascot"
       />
-      <section className="px-6 pb-16 md:px-10 md:pb-24 lg:px-16">
+      <section className="mt-10 px-6 md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
         <HighlightCard
           eyebrow={sponsorOfTheWeek.eyebrow}
           title={sponsorOfTheWeek.name}
@@ -111,22 +113,35 @@ export default async function SponsorsPage() {
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <div className="mx-auto mt-16 flex w-full max-w-[1214px] justify-center md:mt-20 lg:mt-[143px] lg:justify-end lg:pr-[67px]">
-            <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
-              <p className="font-averia text-[40px] font-light leading-tight text-ssa-red">
-                Keen to support SSA?
-              </p>
-              <CtaLink
-                href="/contact"
-                className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-[#FFC5C5] px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-[#EAB7BF] hover:bg-[#EAB7BF] lg:text-[25px] lg:leading-[27px]"
-              >
-                <span>Contact Us</span>
-                <span aria-hidden="true">→</span>
-              </CtaLink>
+          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible md:mt-20 lg:mt-[143px] lg:h-[344px]">
+            <Image
+              src="/nerdy-merlion.png"
+              alt="Nerdy Merlion mascot"
+              width={397}
+              height={491}
+              className="mx-auto h-auto w-[240px] md:w-[320px] lg:absolute lg:bottom-0 lg:left-[84px] lg:z-0 lg:w-[397px] lg:translate-y-[30%]"
+            />
+
+            <div className="mt-8 flex w-full justify-center lg:absolute lg:right-[67px] lg:top-0 lg:mt-0 lg:w-[390px]">
+              <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
+                <p className="font-averia text-[40px] font-light leading-tight text-ssa-red">
+                  Keen to support SSA?
+                </p>
+                <CtaLink
+                  href="/contact"
+                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-[#FFC5C5] px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-[#EAB7BF] hover:bg-[#EAB7BF] lg:text-[25px] lg:leading-[27px]"
+                >
+                  <span>Contact Us</span>
+                  <span aria-hidden="true">→</span>
+                </CtaLink>
+              </div>
             </div>
-          </div>
+          </section>
         </section>
       </section>
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </main>
   )
 }
