@@ -2,8 +2,8 @@ import Image from 'next/image'
 
 type SponsorLogoTileProps = {
   name: string
-  logo: string
-  websiteURL: string
+  logoUrl: string
+  websiteUrl: string
   hoverOverlayClassName?: string
   hoverTitle: string
   hoverDescription: string
@@ -12,8 +12,8 @@ type SponsorLogoTileProps = {
 
 export default function SponsorLogoTile({
   name,
-  logo,
-  websiteURL,
+  logoUrl,
+  websiteUrl,
   hoverOverlayClassName = 'bg-ssa-pink-light/60',
   hoverTitle,
   hoverDescription,
@@ -21,14 +21,14 @@ export default function SponsorLogoTile({
 }: SponsorLogoTileProps) {
   return (
     <a
-      href={websiteURL}
+      href={websiteUrl}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Visit ${name}`}
       className="group relative block size-[222px] overflow-hidden rounded-[20px] border-4 border-ssa-pink-light bg-ssa-white"
     >
       <Image
-        src={logo}
+        src={logoUrl}
         alt={`${name} logo`}
         fill
         sizes="222px"

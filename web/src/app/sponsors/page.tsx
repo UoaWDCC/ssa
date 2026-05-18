@@ -9,79 +9,128 @@ import {
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
 
-import SponsorsGrid, { type Sponsor } from './components/SponsorsGrid'
+import SponsorsGrid, {
+  type Sponsor,
+  type SponsorGridItem,
+} from './components/SponsorsGrid'
+import type { Media } from '../../../../cms/src/payload-types'
 
-type SponsorOfTheWeek = {
-  name: string
-  logo: string
-  websiteURL: string
-  isSponsorOfTheWeek: boolean
-  description: string
+type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url' | 'filename'>
+
+function createSponsorMedia({
+  id,
+  alt,
+  url,
+  filename,
+}: SponsorMediaSeedInput): Media {
+  return {
+    id,
+    alt,
+    url,
+    filename,
+    updatedAt: '2026-05-18T00:00:00.000Z',
+    createdAt: '2026-05-18T00:00:00.000Z',
+  }
 }
 
-type SponsorCardContent = SponsorOfTheWeek & {
-  eyebrow: string
-  details: HighlightCardDetail[]
-  badges: string[]
-  ctaLabel: string
-  imageAlt: string
+function getSponsorLogoUrl(logo: Sponsor['logo']) {
+  if (typeof logo === 'number') return '/sponsors/sponsorcard.png'
+
+  return logo.url ?? '/sponsors/sponsorcard.png'
 }
 
-// TO DO: Replace this mock data with CMS/API data once the Sponsor of the Week endpoint is available.
-// Expected CMS fields: name, logo, websiteURL, isSponsorOfTheWeek, description.
-// Extra fields below are presentational props used by HighlightCard.
-const mockSponsorOfTheWeek: SponsorCardContent = {
+function getSponsorLogoAlt(sponsor: Sponsor) {
+  if (typeof sponsor.logo === 'number') return `${sponsor.name} logo`
+
+  return sponsor.logo.alt
+}
+
+// TO DO: Replace local sponsor seed data with CMS/API fetching once sponsor endpoint integration is completed.
+const sponsorOfTheWeekEntry: Sponsor = {
+  id: 1,
   name: 'SIP N CHILL',
-  logo: '/sponsors/sponsorcard.png', // Temporary local image until the CMS provides sponsor assets.
-  websiteURL: '/sponsors', // Temporary placeholder link until the CMS provides a sponsor URL.
+  logo: createSponsorMedia({
+    id: 101,
+    alt: 'Sip n Chill sponsor photo',
+    url: '/sponsors/sponsorcard.png',
+    filename: 'sponsorcard.png',
+  }),
+  websiteUrl:
+    'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
   isSponsorOfTheWeek: true,
   description:
     'Sip n Chill offers icy desserts , refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
-  eyebrow: 'Sponsor of the Week',
-  details: [{ icon: FaLocationDot, text: 'Newmarket 432 Khyber Pass Road' }],
-  badges: ['10% OFF FOR SSA MEMBERS'],
-  ctaLabel: 'CHECK US OUT!',
-  imageAlt: 'Sip n Chill sponsor photo',
+  location: 'Newmarket 432 Khyber Pass Road',
+  memberPerks: '10% OFF FOR SSA MEMBERS',
+  updatedAt: '2026-05-18T00:00:00.000Z',
+  createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-// TO DO: Replace this mock data with CMS/API data once the sponsors directory endpoint is available.
 // Hover overlay colours are presentational values for the current sponsor artwork.
-const mockSponsorTiles = [
+const sponsorSeedEntries: SponsorGridItem[] = [
   {
+    id: 2,
     name: 'Kompass Coffee',
-    logo: '/sponsors/kompass_coffee.png',
-    websiteURL: 'https://www.kompasscoffee.co.nz/',
+    logo: createSponsorMedia({
+      id: 102,
+      alt: 'Kompass Coffee logo',
+      url: '/sponsors/kompass_coffee.png',
+      filename: 'kompass_coffee.png',
+    }),
+    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
+    isSponsorOfTheWeek: false,
+    description: null,
+    location: null,
+    memberPerks: 'Present your SSA card for 15% off',
+    updatedAt: '2026-05-18T00:00:00.000Z',
+    createdAt: '2026-05-18T00:00:00.000Z',
     hoverOverlayClassName: 'bg-[#71717199]',
-    hoverTitle: 'kompass coffee',
-    hoverDescription: 'Present your SSA card for 15% off',
-    hoverTextClassName: 'text-[#FFFFFF]',
+    hoverTextClassName: 'text-white',
   },
   {
+    id: 3,
     name: 'Sip n Chill',
-    logo: '/sponsors/sipnchill.png',
-    websiteURL: '/sponsors',
+    logo: createSponsorMedia({
+      id: 103,
+      alt: 'Sip n Chill logo',
+      url: '/sponsors/sipnchill.png',
+      filename: 'sipnchill.png',
+    }),
+    websiteUrl:
+      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
     isSponsorOfTheWeek: true,
-    hoverOverlayClassName: 'bg-[#FFE6B699]',
-    hoverTitle: "SIP 'N CHILL",
-    hoverDescription: 'Present your SSA card for 10% off',
-    hoverTextClassName: 'text-[#434242]',
+    description: sponsorOfTheWeekEntry.description,
+    location: sponsorOfTheWeekEntry.location,
+    memberPerks: 'Present your SSA card for 10% off',
+    updatedAt: '2026-05-18T00:00:00.000Z',
+    createdAt: '2026-05-18T00:00:00.000Z',
+    hoverOverlayClassName: 'bg-ssa-yellow/60',
+    hoverTextClassName: 'text-ssa-grey',
   },
 ]
 
-const mockSponsors: Sponsor[] = Array.from({ length: 25 }, (_, index) => {
-  const sponsor = mockSponsorTiles[index % mockSponsorTiles.length]
+const sponsorEntries: SponsorGridItem[] = Array.from(
+  { length: 25 },
+  (_, index) => {
+    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
 
-  return {
-    ...sponsor,
-    name: `${sponsor.name} ${index + 1}`,
-  }
-})
+    return {
+      ...sponsor,
+      id: index + 10,
+    }
+  },
+)
 
 export default async function SponsorsPage() {
-  // TO DO: Re-enable CMS fetching once the Sponsor of the Week endpoint
-  // and returned image URLs are confirmed by the backend/CMS.
-  const sponsorOfTheWeek = mockSponsorOfTheWeek
-  const sponsors = mockSponsors
+  const sponsorOfTheWeek = sponsorOfTheWeekEntry
+  const sponsors = sponsorEntries
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
+    sponsorOfTheWeek.location
+      ? [{ icon: FaLocationDot, text: sponsorOfTheWeek.location }]
+      : []
+  const sponsorOfTheWeekBadges = sponsorOfTheWeek.memberPerks
+    ? [sponsorOfTheWeek.memberPerks]
+    : []
 
   return (
     <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
@@ -93,15 +142,15 @@ export default async function SponsorsPage() {
       />
       <section className="mt-10 px-6 md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
         <HighlightCard
-          eyebrow={sponsorOfTheWeek.eyebrow}
+          eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeek.name}
-          details={sponsorOfTheWeek.details}
-          badges={sponsorOfTheWeek.badges}
+          details={sponsorOfTheWeekDetails}
+          badges={sponsorOfTheWeekBadges}
           description={<p>{sponsorOfTheWeek.description}</p>}
-          ctaLabel={sponsorOfTheWeek.ctaLabel}
-          ctaHref={sponsorOfTheWeek.websiteURL}
-          imageSrc={sponsorOfTheWeek.logo}
-          imageAlt={sponsorOfTheWeek.imageAlt}
+          ctaLabel="CHECK US OUT!"
+          ctaHref={sponsorOfTheWeek.websiteUrl ?? '/sponsors'}
+          imageSrc={getSponsorLogoUrl(sponsorOfTheWeek.logo)}
+          imageAlt={getSponsorLogoAlt(sponsorOfTheWeek)}
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
