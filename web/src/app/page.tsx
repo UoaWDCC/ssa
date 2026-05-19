@@ -112,14 +112,17 @@ export default function Home() {
           title="Ice Kachang"
           details={[
             { icon: FaClock, text: '2nd April - 6PM' },
-            { icon: FaLocationDot, text: '401-318 Engineering Atrium (Level 3)' },
+            {
+              icon: FaLocationDot,
+              text: '401-318 Engineering Atrium (Level 3)',
+            },
           ]}
           badges={['$5 Members', '$11 Non-Members']}
           description={
             <>
-              Hot, stressed and over Uni already? Say less... we&apos;ve got the perfect cooldown
-              for you. Come chill with SSA at our Ice Kachang Night. Sweet, icy, colourful... but
-              there&apos;s a twist 👀
+              Hot, stressed and over Uni already? Say less... we&apos;ve got the
+              perfect cooldown for you. Come chill with SSA at our Ice Kachang
+              Night. Sweet, icy, colourful... but there&apos;s a twist 👀
             </>
           }
           ctaLabel="RSVP"
@@ -158,8 +161,8 @@ export default function Home() {
                   </p>
                   {/* View Album bottom right */}
                   <div className="absolute bottom-4 right-4">
-<a
-  href={image.albumHref}
+                    <a
+                      href={image.albumHref}
                       className="inline-flex items-center gap-2 bg-white/90 hover:bg-white text-ssa-black font-averia font-semibold text-sm md:text-base rounded-full px-5 py-2 transition-colors cursor-pointer"
                     >
                       View Album →
@@ -192,7 +195,16 @@ export default function Home() {
             aria-label="Previous slide"
             className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-ssa-black">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 text-ssa-black"
+            >
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
@@ -203,7 +215,16 @@ export default function Home() {
             aria-label="Next slide"
             className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-ssa-black">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5 text-ssa-black"
+            >
               <path d="M9 18l6-6-6-6" />
             </svg>
           </button>
