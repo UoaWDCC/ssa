@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import Stripe from 'stripe'
+import { activatePaidSignup } from '../_lib/activatePaidSignup'
 
 export const POST = async (request: NextRequest) => {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
@@ -38,7 +39,7 @@ export const POST = async (request: NextRequest) => {
 
     const { memberId: rawMemberId } = session.metadata ?? {}
     const stripeCustomerId =
-      typeof session.customer === 'string' ? session.customer : session.customer?.id ?? null
+      typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null)
 
     const memberId = Number(rawMemberId)
     if (!Number.isFinite(memberId)) {
@@ -52,17 +53,14 @@ export const POST = async (request: NextRequest) => {
     const payload = await getPayload({ config: configPromise })
 
     try {
-      await payload.update({
-        collection: 'members',
-        id: memberId,
-        data: {
-          status: 'active',
-          ...(stripeCustomerId ? { stripeCustomerId } : {}),
-        },
+      await activatePaidSignup({
+        memberId,
+        payload,
+        stripeCustomerId,
       })
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to update member'
-      console.error('Stripe webhook: failed to update member', { memberId, error: message })
+      const message = err instanceof Error ? err.message : 'Failed to activate paid signup'
+      console.error('Stripe webhook: failed to activate paid signup', { memberId, error: message })
       // Return 500 so Stripe retries with exponential backoff
       return Response.json({ error: message }, { status: 500 })
     }

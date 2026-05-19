@@ -1,11 +1,28 @@
 import { NextRequest } from 'next/server'
 
+import {
+  googleSignupSessionCookie,
+  readGoogleSignupSession,
+} from '@/lib/googleSignupSession'
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function textValue(value: unknown) {
+  return typeof value === 'string' ? value : undefined
+}
+
 export const POST = async (request: NextRequest) => {
   const cmsUrl = process.env.CMS_URL
 
   if (!cmsUrl) {
     return Response.json({ error: 'CMS_URL not configured' }, { status: 500 })
   }
+
+  const webUrl =
+    request.headers.get('origin') ??
+    `${request.headers.get('x-forwarded-proto') ?? 'http'}://${request.headers.get('host')}`
 
   let body: unknown
   try {
@@ -14,11 +31,52 @@ export const POST = async (request: NextRequest) => {
     return Response.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
+  if (!isRecord(body)) {
+    return Response.json({ error: 'Invalid request body' }, { status: 400 })
+  }
+
+  if (body.authProvider === 'google') {
+    const profile = readGoogleSignupSession(
+      request.cookies.get(googleSignupSessionCookie)?.value,
+    )
+
+    if (!profile) {
+      return Response.json(
+        {
+          error: 'Google sign up session expired. Please connect Google again.',
+        },
+        { status: 401 },
+      )
+    }
+
+    const firstName =
+      textValue(body.firstName)?.trim() || profile.firstName || ''
+    const lastName = textValue(body.lastName)?.trim() || profile.lastName || ''
+
+    body = {
+      ...body,
+      authProvider: 'google',
+      email: profile.email,
+      firstName,
+      googleSub: profile.googleSub,
+      lastName,
+      name: `${firstName} ${lastName}`.trim() || profile.name || profile.email,
+    }
+  } else {
+    body = {
+      ...body,
+      authProvider: 'email',
+    }
+  }
+
   let cmsResponse: Response
   try {
     cmsResponse = await fetch(`${cmsUrl}/stripe/checkout`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Web-Url': webUrl,
+      },
       body: JSON.stringify(body),
     })
   } catch (err: unknown) {

@@ -2,6 +2,20 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Create a `.env.local` file with the app URLs and OAuth keys used by the signup flow:
+
+```bash
+CMS_URL=http://localhost:3001
+NEXT_PUBLIC_CMS_URL=http://localhost:3001
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+GOOGLE_OAUTH_COOKIE_SECRET=use-a-long-random-secret
+# Optional when the derived localhost callback is not correct:
+# GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3000/api/auth/google/callback
+```
+
+The Google OAuth client must allow the redirect URI shown above for local development.
+
 First, run the development server:
 
 ```bash

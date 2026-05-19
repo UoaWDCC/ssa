@@ -12,7 +12,7 @@ const navLinks = [
   { label: 'Sponsors', href: '/sponsors' },
 ]
 
-const ctaLink = { label: 'Join SSA!', href: '/contact' }
+const ctaLink = { label: 'Join SSA!', href: '/signup' }
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
