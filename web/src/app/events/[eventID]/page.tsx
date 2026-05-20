@@ -16,7 +16,7 @@ const mockImages = [
   { id: 12, url: '/event-gallery/filler.svg', alt: 'photo 12' },
   { id: 13, url: '/event-gallery/filler.svg', alt: 'photo 13' },
   { id: 14, url: '/event-gallery/filler.svg', alt: 'photo 14' },
-  { id: 15, url: '/event-gallery/filler.svg', alt: 'photo 15' },
+  { id: 15, url: '/event-gallery/filler2.svg', alt: 'photo 15' },
 ]
 
 export default async function GalleryPage({
@@ -36,7 +36,11 @@ export default async function GalleryPage({
       {mockImages.length === 0 ? (
         <p className="text-center text-gray-500">No photos yet.</p>
       ) : (
-        <GalleryGrid images={mockImages} />
+        <GalleryGrid
+          images={mockImages}
+          eventTitle={eventID}
+          eventDate="13 MARCH 2025"
+        />
       )}
     </main>
   )

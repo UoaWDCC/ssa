@@ -16,6 +16,10 @@
   --color-ssa-yellow-light: #fff7e9;
   --color-ssa-white: #fefcf9;
   --color-ssa-black: #0a0805;
+  --color-ssa-skin-yellow: #ffe3ac;
+  --color-ssa-dark-skin-yellow: #ffd586;
+  --color-ssa-light-grey: rgba(130, 130, 130);
+  --color-ssa-light-brown: rgb(150, 128, 85);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
@@ -26,6 +30,19 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@utility animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }
 
 body {

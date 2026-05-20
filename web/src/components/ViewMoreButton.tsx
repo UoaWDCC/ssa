@@ -12,7 +12,7 @@ export default function ViewMoreButton({
   return (
     <button
       onClick={onClick}
-      className="px-8 py-3 rounded-full bg-ssa-yellow text-[#968055] font-averia font-bold hover:bg-ssa-red hover:text-ssa-yellow transition-colors duration-300"
+      className="px-8 py-3 rounded-full bg-ssa-skin-yellow text-ssa-light-brown font-averia font-bold border-[3px] border-ssa-dark-skin-yellow hover:bg-ssa-dark-skin-yellow hover:border-transparent transition-colors duration-300"
     >
       View More →
     </button>
