@@ -13,6 +13,10 @@ export default function Home() {
         subtitle="A home for people from the Little Red Dot."
         mascotImage="/ssa_merlion_full_body.svg"
         mascotAlt="SSA Merlion mascot"
+        tags={['Community', 'Culture', 'Food']}
+        ctaLabel="Join SSA"
+        ctaHref="/signup"
+        showSingaporeFlag
       />
       <section className="px-6 md:px-10 lg:px-16">
         <HighlightCard

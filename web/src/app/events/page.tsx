@@ -56,7 +56,7 @@ export default function EventsPage() {
           />
 
           <section className="mt-16 flex flex-col gap-5 md:mt-24 md:gap-6">
-            <h2 className="font-averia text-2xl font-bold text-ssa-grey md:text-4xl lg:text-5xl">
+            <h2 className="font-averia text-2xl font-bold text-ssa-white md:text-4xl lg:text-5xl">
               Past Events
             </h2>
 
