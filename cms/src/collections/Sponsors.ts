@@ -29,6 +29,14 @@ export const Sponsors: CollectionConfig = {
     {
       name: 'description',
       type: 'textarea',
-    }
-  ]
+    },
+    {
+      name: 'location',
+      type: 'text',
+    },
+    {
+      name: 'memberPerks',
+      type: 'text',
+    },
+  ],
 }

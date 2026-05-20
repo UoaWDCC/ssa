@@ -34,12 +34,13 @@ cd ssa
 
 ### 2. Install dependencies
 
-Install dependencies for each package separately:
+This repo is a pnpm workspace — run a single install at the root and pnpm will handle both packages:
 
 ```bash
-cd web && pnpm install
-cd ../cms && pnpm install
+pnpm install
 ```
+
+> Use pnpm only. `npm install` and `yarn install` are not supported and will produce a broken `node_modules/`.
 
 ### 3. Configure environment variables
 
