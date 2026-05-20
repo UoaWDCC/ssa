@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import ArrowRightIcon from './ArrowRightIcon'
+import { FaArrowRight, FaMagnifyingGlass } from 'react-icons/fa6'
 import PastEventCard from './PastEventCard'
 import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
 
@@ -49,20 +49,10 @@ export default function PastEventsSection() {
       {/* Search bar */}
       <label className="relative block">
         <span className="sr-only">Search events</span>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
+        <FaMagnifyingGlass
           className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-ssa-black/40"
           aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path d="m20 20-3.5-3.5" />
-        </svg>
+        />
         <input
           type="search"
           value={query}
@@ -119,7 +109,7 @@ export default function PastEventsSection() {
             className="inline-flex items-center gap-2 rounded-full bg-ssa-red-lighter px-8 py-3 font-averia text-base font-bold text-ssa-black transition-colors hover:bg-ssa-red hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
           >
             View More
-            <ArrowRightIcon />
+            <FaArrowRight aria-hidden="true" />
           </button>
         </div>
       )}

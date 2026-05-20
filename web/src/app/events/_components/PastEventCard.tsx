@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import ArrowRightIcon from './ArrowRightIcon'
+import { FaArrowRight, FaCalendarDays, FaLocationDot } from 'react-icons/fa6'
 import type { PastEvent, PastEventTag } from './pastEventsData'
 
 interface PastEventCardProps {
@@ -13,9 +13,9 @@ interface PastEventCardProps {
  */
 const TAG_COLOURS: Record<PastEventTag, string> = {
   Food: 'bg-ssa-red/80',
-  Community: 'bg-ssa-red-light/80',
+  Community: 'bg-ssa-red/80',
   Games: 'bg-ssa-red/80',
-  AGM: 'bg-ssa-red-light/80',
+  AGM: 'bg-ssa-red/80',
 }
 
 function formatEventDate(iso: string): string {
@@ -55,20 +55,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
         className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent"
       />
       <div className="absolute left-5 top-5 flex items-center gap-2 text-white">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-5 w-5"
-          aria-hidden="true"
-        >
-          <path d="M12 21s-7-7.5-7-12a7 7 0 1 1 14 0c0 4.5-7 12-7 12z" />
-          <circle cx="12" cy="9" r="2.5" />
-        </svg>
+        <FaLocationDot className="h-5 w-5" aria-hidden="true" />
         <span className="font-averia text-base font-bold uppercase tracking-wide">
           {location}
         </span>
@@ -81,20 +68,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
       />
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6">
         <div className="flex items-center gap-2 text-white/90">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-5 w-5"
-            aria-hidden="true"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <path d="M16 2v4M8 2v4M3 10h18" />
-          </svg>
+          <FaCalendarDays className="h-5 w-5" aria-hidden="true" />
           <time
             dateTime={date}
             className="font-averia text-base font-bold tracking-wide"
@@ -123,7 +97,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
         <span className="flex items-center gap-2.5 rounded-full bg-ssa-red px-8 py-3.5 font-averia text-xl font-bold text-white shadow-lg">
           See Photos
-          <ArrowRightIcon className="h-6 w-6" />
+          <FaArrowRight className="h-6 w-6" aria-hidden="true" />
         </span>
       </div>
     </Link>
