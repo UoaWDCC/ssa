@@ -40,13 +40,13 @@ export default function GalleryGrid({
 
   return (
     <>
-      <div className="flex flex-col items-center gap-10 max-w-8xl mx-auto w-full px-30 py-30">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full">
+      <div className="flex flex-col items-center gap-10 max-w-8xl mx-auto w-full px-4 md:px-30 py-10 md:py-30">
+        <div className="grid grid-cols-3 gap-2 md:gap-8 w-full">
           {visibleImages.map((img, index) => (
             <div
               key={img.id}
               onClick={() => openModal(index)}
-              className="relative aspect-square rounded-xl overflow-hidden shadow-[0_3px_4px_1px_rgba(0,0,0,0.25),0_4px_10px_0px_rgba(255,255,255,0.30)] group cursor-pointer"
+              className="relative aspect-square rounded-lg md:rounded-xl overflow-hidden group cursor-pointer"
             >
               <Image
                 src={img.url}

@@ -82,7 +82,7 @@ export default function PhotoAlbum({
       >
         {/* Inner content — width adapts to image aspect ratio */}
         <div
-          className="pt-8 pb-12 mx-auto"
+          className="px-4 md:px-12 pt-12 pb-6 md:pb-12 mx-auto"
           style={
             imgAspect
               ? { width: `min(${imgAspect * 60}vh, 100%)` }
@@ -107,13 +107,13 @@ export default function PhotoAlbum({
                 {eventDate}
               </p>
             </div>
-            <span className="text-2xl font-bold font-averia text-ssa-light-grey">
+            <span className="text-lg md:text-2xl font-bold font-averia text-ssa-light-grey self-end">
               {currentIndex + 1} / {total}
             </span>
           </div>
 
           {/* Image */}
-          <div className="relative w-full h-[60vh] rounded-2xl overflow-hidden">
+          <div className="relative w-full h-[40vh] md:h-[60vh] rounded-2xl overflow-hidden">
             <Image
               src={current.url}
               alt={current.alt}
@@ -132,7 +132,7 @@ export default function PhotoAlbum({
             {/* Right arrow */}
             <button
               onClick={handleNext}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-gray-700 bg-[#FFF7E9]/60 hover:bg-[#FFF7E9]/90 transition-colors duration-200 border border-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-gray-700 bg-[#FFF7E9]/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white"
             >
               <ArrowForwardIcon fontSize="small" />
             </button>
@@ -143,7 +143,7 @@ export default function PhotoAlbum({
             <a
               href={current.url}
               download
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-ssa-red text-white font-averia font-bold hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-ssa-red-light text-white font-averia font-bold hover:bg-ssa-red transition-opacity border-[3px] border-ssa-red"
             >
               Download <DownloadIcon fontSize="small" />
             </a>
