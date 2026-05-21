@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #ffffff;
+  --background: #fff1d5;
   --foreground: #171717;
 }
 
@@ -10,6 +10,8 @@
   --color-foreground: var(--foreground);
   --color-ssa-red: #f85b76;
   --color-ssa-red-light: #ff879c;
+  --color-ssa-pink: #ffb4c1;
+  --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
   --color-ssa-red-super-light: #fe6681d9;
   --color-stripe-purple: #635bff;
@@ -21,6 +23,14 @@
   --color-ssa-dark-skin-yellow: #ffd586;
   --color-ssa-light-grey: rgba(130, 130, 130);
   --color-ssa-light-brown: rgb(150, 128, 85);
+  --color-ssa-smoke-grey: #5e5e5e;
+  --color-ssa-grey: #434242;
+  --color-ssa-background: #fff1d5;
+  --color-ssa-card: #fff8ec;
+  --color-ssa-card-cta: #ffeccb;
+  --color-ssa-card-cta-hover: #ffdfab;
+  --color-ssa-muted-gold: #9f7d32;
+  --color-ssa-category-text: #968055;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
