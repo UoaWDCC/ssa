@@ -20,10 +20,6 @@ export const POST = async (request: NextRequest) => {
     return Response.json({ error: 'CMS_URL not configured' }, { status: 500 })
   }
 
-  const webUrl =
-    request.headers.get('origin') ??
-    `${request.headers.get('x-forwarded-proto') ?? 'http'}://${request.headers.get('host')}`
-
   let body: unknown
   try {
     body = await request.json()
@@ -75,7 +71,6 @@ export const POST = async (request: NextRequest) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Web-Url': webUrl,
       },
       body: JSON.stringify(body),
     })

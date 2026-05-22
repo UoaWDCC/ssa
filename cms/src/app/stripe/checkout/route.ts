@@ -5,12 +5,14 @@ import { getPayload } from 'payload'
 import Stripe from 'stripe'
 import { encryptSignupPassword } from '../_lib/signupPassword'
 
-function getWebUrl(request: NextRequest) {
-  const forwardedWebUrl = request.headers.get('x-web-url')
+function getWebUrl() {
   const configuredWebUrl = process.env.WEB_URL
   const fallbackWebUrl = 'http://localhost:3000'
 
-  for (const value of [forwardedWebUrl, configuredWebUrl, fallbackWebUrl]) {
+  for (const value of [
+    configuredWebUrl,
+    process.env.NODE_ENV === 'production' ? null : fallbackWebUrl,
+  ]) {
     if (!value) continue
 
     try {
@@ -23,7 +25,7 @@ function getWebUrl(request: NextRequest) {
     }
   }
 
-  return fallbackWebUrl
+  return null
 }
 
 function normalizeEmail(email: string) {
@@ -99,10 +101,14 @@ export const POST = async (request: NextRequest) => {
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   const priceId = process.env.STRIPE_PRICE_ID
-  const webUrl = getWebUrl(request)
+  const webUrl = getWebUrl()
 
   if (!stripeSecretKey || !priceId) {
     return Response.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+
+  if (!webUrl) {
+    return Response.json({ error: 'WEB_URL not configured' }, { status: 500 })
   }
 
   const payload = await getPayload({ config: configPromise })
