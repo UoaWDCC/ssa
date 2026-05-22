@@ -32,11 +32,11 @@ export const Events: CollectionConfig = {
       name: 'category',
       type: 'select',
       options: [
-        { label: 'Social', value: 'social' },
-        { label: 'Cultural', value: 'cultural' },
-        { label: 'Academic', value: 'academic' },
-        { label: 'Sports', value: 'sports' },
-        { label: 'Other', value: 'other' },
+        { label: 'Games', value: 'games' },
+        { label: 'Community', value: 'community' },
+        { label: 'Food', value: 'food' },
+        { label: 'AGM', value: 'agm' },
+        { label: 'All', value: 'all' },
       ],
     },
     {
