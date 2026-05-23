@@ -1,6 +1,7 @@
 import Hero from '@/components/Hero'
 import EventSignupForm from '../signup/components/EventSignUpForm'
 import { fetchPayloadForm } from '@/lib/payload-form'
+import { fetchEvent } from '@/lib/events'
 
 interface EventSignupPageProps {
   params: { id: string }
@@ -10,9 +11,12 @@ export default async function EventSignupPage({
   params,
 }: EventSignupPageProps) {
   const { id } = await params
-  console.log('event id:', id)
   const form = await fetchPayloadForm(id)
-  console.log('Fetched form:', form)
+  const event = await fetchEvent(id)
+
+  if (!event) {
+    return
+  }
 
   return (
     <main>
@@ -21,7 +25,7 @@ export default async function EventSignupPage({
         subtitle="Become a member of the Singapore Students' Association."
         mascotImage="/mascot.png"
       />
-      <EventSignupForm form={form} />
+      <EventSignupForm form={form} event={event} />
     </main>
   )
 }

@@ -2,7 +2,7 @@ import CardSection from '@/components/CardSection'
 
 interface PaymentStepProps {
   onPay: () => void
-  eventCost: number
+  eventCost: number | undefined
   isLoading: boolean
 }
 
@@ -11,7 +11,7 @@ const PaymentStep = ({ onPay, eventCost, isLoading }: PaymentStepProps) => {
     <CardSection title="Payment">
       <div className="flex flex-col gap-3">
         <p className="text-sm text-ssa-black">
-          A ticket to this event costs ${eventCost.toFixed(2)}
+          A ticket to this event costs ${eventCost?.toFixed(2)}
         </p>
         <div className="flex flex-col gap-2 mt-2">
           <button

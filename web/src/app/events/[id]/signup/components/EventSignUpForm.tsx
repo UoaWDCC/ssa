@@ -6,39 +6,51 @@ import ProgressBar from '@/components/ProgressBar'
 import EventPaymentStep from './EventPaymentStep'
 import PayloadFormStep from './PayloadFormStep'
 import type { PayloadForm } from '@/lib/payload-form'
+import { PayloadEvent } from '@/lib/events'
 
 type EventSignupFormProps = {
   form: PayloadForm | null
+  event: PayloadEvent | null
 }
 
-const EventSignupForm = ({ form }: EventSignupFormProps) => {
+type SubmissionDataEntry = {
+  field: string
+  value: unknown
+}
+
+const EventSignupForm = ({ form, event }: EventSignupFormProps) => {
   const searchParams = useSearchParams()
   const hasSession = Boolean(searchParams.get('session_id'))
 
-  const step = hasSession ? 1 : 0
+  const [step, setStep] = useState(hasSession ? 1 : 0)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  function handlePendingSubmission(submissionData: SubmissionDataEntry[]) {
+    if (!form) {
+      setError('The signup form is not configured in Payload CMS yet.')
+      return
+    }
+
+    window.sessionStorage.setItem(
+      `event-signup-submission:${form.id}`,
+      JSON.stringify(submissionData),
+    )
+    setStep(1)
+  }
 
   const handlePay = async () => {
     setError(null)
 
     setIsLoading(true)
     try {
-      const response = await fetch('/api/checkout', {
+      const response = await fetch(`/api/stripe/events/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: 'First Last',
-          email: 'example@email.com',
-          password: '123456',
-          phone: '1234567890',
-          upi: 'upi@example.com',
-          studentId: 'STUDENT123',
-          areaOfStudy: 'Computer Science',
-          yearOfUniversity: '4',
-          gender: 'male',
-          ethnicity: 'chinese',
-          returningMember: true,
+          eventId: form?.id,
+          customerId: '', // Placeholder, replace with actual customer ID if needed
+          priceId: event?.stripePriceId,
         }),
       })
 
@@ -69,7 +81,10 @@ const EventSignupForm = ({ form }: EventSignupFormProps) => {
 
           <ProgressBar step={step} total={2} />
           {step === 0 && form ? (
-            <PayloadFormStep form={form} />
+            <PayloadFormStep
+              form={form}
+              onSubmitPending={handlePendingSubmission}
+            />
           ) : (
             <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
               The signup form is not configured in Payload CMS yet.
@@ -79,7 +94,7 @@ const EventSignupForm = ({ form }: EventSignupFormProps) => {
           {step === 1 && (
             <EventPaymentStep
               onPay={handlePay}
-              eventCost={6}
+              eventCost={event?.eventCost}
               isLoading={isLoading}
             />
           )}

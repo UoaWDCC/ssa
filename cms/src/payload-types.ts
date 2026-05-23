@@ -201,6 +201,7 @@ export interface Media {
 export interface Event {
   id: number
   title: string
+  eventCost?: number | null
   date: string
   description?: string | null
   coverImage?: (number | null) | Media
@@ -630,6 +631,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface EventsSelect<T extends boolean = true> {
   title?: T
+  eventCost?: T
   date?: T
   description?: T
   coverImage?: T

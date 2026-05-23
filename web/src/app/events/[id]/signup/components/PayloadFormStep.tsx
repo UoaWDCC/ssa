@@ -8,8 +8,14 @@ import type { PayloadForm, PayloadFormField } from '@/lib/payload-form'
 
 type FormValues = Record<string, string | boolean>
 
+type SubmissionDataEntry = {
+  field: string
+  value: unknown
+}
+
 type PayloadFormStepProps = {
   form: PayloadForm
+  onSubmitPending: (submissionData: SubmissionDataEntry[]) => void
 }
 
 function getFieldKey(field: PayloadFormField, index: number) {
@@ -40,7 +46,10 @@ function renderMessage(message: unknown) {
   return null
 }
 
-export default function PayloadFormStep({ form }: PayloadFormStepProps) {
+export default function PayloadFormStep({
+  form,
+  onSubmitPending,
+}: PayloadFormStepProps) {
   const initialValues = useMemo<FormValues>(() => {
     return form.fields.reduce<FormValues>((accumulator, field, index) => {
       if (field.blockType === 'message') {
@@ -55,7 +64,6 @@ export default function PayloadFormStep({ form }: PayloadFormStepProps) {
   const [values, setValues] = useState<FormValues>(initialValues)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const buttonLabel = form.submitButtonLabel || 'Submit'
@@ -102,7 +110,6 @@ export default function PayloadFormStep({ form }: PayloadFormStepProps) {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
-    setSuccess(false)
 
     const nextErrors = validate()
     if (Object.keys(nextErrors).length > 0) {
@@ -126,40 +133,12 @@ export default function PayloadFormStep({ form }: PayloadFormStepProps) {
         })
         .filter(Boolean) as Array<{ field: string; value: unknown }>
 
-      const response = await fetch(`/api/forms/${form.id}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ submissionData }),
-      })
-
-      const result = await response.json().catch(() => null)
-
-      if (!response.ok) {
-        setError(result?.error ?? 'Something went wrong. Please try again.')
-        return
-      }
-
-      if (form.confirmationType === 'redirect' && form.redirect?.url) {
-        window.location.assign(form.redirect.url)
-        return
-      }
-
-      setSuccess(true)
+      onSubmitPending(submissionData)
     } catch {
-      setError('Network error. Please check your connection and try again.')
+      setError('Something went wrong. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  if (success) {
-    return (
-      <CardSection title={form.title}>
-        <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-800">
-          Your response has been submitted.
-        </div>
-      </CardSection>
-    )
   }
 
   return (

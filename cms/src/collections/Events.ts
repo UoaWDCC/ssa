@@ -15,6 +15,11 @@ export const Events: CollectionConfig = {
       required: true,
     },
     {
+      name: 'eventCost',
+      type: 'number',
+      required: false,
+    },
+    {
       name: 'date',
       type: 'date',
       required: true,

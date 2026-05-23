@@ -41,8 +41,8 @@ export const POST = async (request: NextRequest) => {
       mode: 'payment',
       customer: customerId,
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${webUrl}/events/signup/${eventId}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${webUrl}/events//signup/${eventId}?cancelled=true`,
+      success_url: `${webUrl}/events/${eventId}/signup/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${webUrl}/events/${eventId}/signup?cancelled=true`,
       metadata: { customerId: String(customerId) },
     })
 
