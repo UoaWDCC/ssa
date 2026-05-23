@@ -68,19 +68,20 @@ const EventSignupForm = ({ form }: EventSignupFormProps) => {
           )}
 
           <ProgressBar step={step} total={2} />
+          {step === 0 && form ? (
+            <PayloadFormStep form={form} />
+          ) : (
+            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
+              The signup form is not configured in Payload CMS yet.
+            </div>
+          )}
 
-          {step === 0 && (
+          {step === 1 && (
             <EventPaymentStep
               onPay={handlePay}
               eventCost={6}
               isLoading={isLoading}
             />
-          )}
-          {step === 1 && form && <PayloadFormStep form={form} />}
-          {step === 1 && !form && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
-              The signup form is not configured in Payload CMS yet.
-            </div>
           )}
         </div>
       </div>

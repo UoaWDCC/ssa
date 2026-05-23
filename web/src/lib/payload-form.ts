@@ -24,7 +24,7 @@ export type PayloadForm = {
 }
 
 type PayloadEvent = {
-  signupForm?: PayloadForm | string | null
+  signupForm?: PayloadForm | number | string | null
 }
 
 const defaultFormTitle = 'Contact Information'
@@ -51,7 +51,10 @@ export async function fetchPayloadForm(eventId?: string | null) {
         return event.signupForm
       }
 
-      if (typeof event.signupForm === 'string') {
+      if (
+        typeof event.signupForm === 'string' ||
+        typeof event.signupForm === 'number'
+      ) {
         const formResponse = await fetch(
           new URL(`/api/forms/${event.signupForm}`, cmsUrl),
           {
