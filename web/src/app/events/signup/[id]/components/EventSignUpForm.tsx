@@ -3,10 +3,15 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import ProgressBar from '@/components/ProgressBar'
-import GoogleFormStep from './GoogleFormStep'
 import EventPaymentStep from './EventPaymentStep'
+import PayloadFormStep from './PayloadFormStep'
+import type { PayloadForm } from '@/lib/payload-form'
 
-const EventSignupForm = () => {
+type EventSignupFormProps = {
+  form: PayloadForm | null
+}
+
+const EventSignupForm = ({ form }: EventSignupFormProps) => {
   const searchParams = useSearchParams()
   const hasSession = Boolean(searchParams.get('session_id'))
 
@@ -71,7 +76,12 @@ const EventSignupForm = () => {
               isLoading={isLoading}
             />
           )}
-          {step === 1 && <GoogleFormStep />}
+          {step === 1 && form && <PayloadFormStep form={form} />}
+          {step === 1 && !form && (
+            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
+              The signup form is not configured in Payload CMS yet.
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -26,6 +26,14 @@ export const Events: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'signupForm',
+      type: 'relationship',
+      relationTo: 'forms',
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'isUpcoming',
       type: 'checkbox',
       defaultValue: true,
@@ -41,8 +49,14 @@ export const Events: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           required: true,
-        }
+        },
       ],
-    }
-  ]
+    },
+    {
+      name: 'stripePriceId',
+      type: 'text',
+      defaultValue: '',
+      required: true,
+    },
+  ],
 }

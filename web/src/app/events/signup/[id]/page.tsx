@@ -1,8 +1,16 @@
-import { Suspense } from 'react'
 import Hero from '@/components/Hero'
 import EventSignupForm from './components/EventSignUpForm'
+import { fetchPayloadForm } from '@/lib/payload-form'
 
-export default function SignupPage() {
+interface EventSignupPageProps {
+  params: { id: string }
+}
+
+export default async function EventSignupPage({
+  params,
+}: EventSignupPageProps) {
+  const form = await fetchPayloadForm(params.id)
+
   return (
     <main>
       <Hero
@@ -10,15 +18,7 @@ export default function SignupPage() {
         subtitle="Become a member of the Singapore Students' Association."
         mascotImage="/mascot.png"
       />
-      <Suspense
-        fallback={
-          <div className="flex min-h-screen items-center justify-center">
-            Loading...
-          </div>
-        }
-      >
-        <EventSignupForm />
-      </Suspense>
+      <EventSignupForm form={form} />
     </main>
   )
 }
