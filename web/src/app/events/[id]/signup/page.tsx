@@ -13,6 +13,7 @@ export default async function EventSignupPage({
   const { id } = await params
   const form = await fetchPayloadForm(id)
   const event = await fetchEvent(id)
+  console.log('Fetched event:', event)
 
   if (!event) {
     return

@@ -44,12 +44,12 @@ const EventSignupForm = ({ form, event }: EventSignupFormProps) => {
 
     setIsLoading(true)
     try {
-      const response = await fetch(`/api/stripe/events/checkout`, {
+      const response = await fetch(`/api/events/checkout`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          eventId: form?.id,
-          customerId: '', // Placeholder, replace with actual customer ID if needed
+          eventId: event?.id,
+          customerId: 'cus_UYuqhW1J65hvuZ',
           priceId: event?.stripePriceId,
         }),
       })
