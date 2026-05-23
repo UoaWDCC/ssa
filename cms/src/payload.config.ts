@@ -3,6 +3,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
@@ -34,5 +35,12 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    formBuilderPlugin({
+    fields: {
+      payment: false,
+      upload: false,
+    },
+  }),
+  ],
 })
