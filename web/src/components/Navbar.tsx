@@ -146,7 +146,7 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 border-l-4 hover:opacity-90 transition-colors ${isActive ? 'text-ssa-white border-l-ssa-white' : 'text-ssa-white border-l-transparent'}`}
+                  className={`block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 border-l-4 hover:opacity-90 transition-colors ${isActive ? 'text-ssa-yellow-light border-l-ssa-white' : 'text-ssa-white border-l-transparent'}`}
                 >
                   {label}
                 </Link>
