@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useAuth } from '@/hooks/useAuth'
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -20,6 +21,9 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const menuOpenRef = useRef(false)
+  const auth = useAuth()
+  const isAuthenticated = auth.status === 'authenticated'
+  const authResolved = auth.status !== 'loading'
 
   useEffect(() => {
     menuOpenRef.current = menuOpen
@@ -106,18 +110,30 @@ export default function Navbar() {
           </ul>
 
           <div className="hidden md:flex items-center ml-auto gap-3">
-            <Link
-              href={signInLink.href}
-              className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
-            >
-              {signInLink.label}
-            </Link>
-            <Link
-              href={ctaLink.href}
-              className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
-            >
-              {ctaLink.label}
-            </Link>
+            {authResolved && isAuthenticated && (
+              <Link
+                href="/profile"
+                className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+              >
+                Profile
+              </Link>
+            )}
+            {authResolved && !isAuthenticated && (
+              <>
+                <Link
+                  href={signInLink.href}
+                  className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
+                >
+                  {signInLink.label}
+                </Link>
+                <Link
+                  href={ctaLink.href}
+                  className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+                >
+                  {ctaLink.label}
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -145,7 +161,12 @@ export default function Navbar() {
         className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
       >
         <ul className="flex flex-col">
-          {[...navLinks, signInLink, ctaLink].map(({ label, href }) => {
+          {[
+            ...navLinks,
+            ...(isAuthenticated
+              ? [{ label: 'Profile', href: '/profile' }]
+              : [signInLink, ctaLink]),
+          ].map(({ label, href }) => {
             const isActive = pathname === href
             return (
               <li key={href}>
@@ -164,8 +185,9 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div
-          className="fixed inset-0 z-30 md:hidden"
+        <button
+          aria-label="Close menu"
+          className="fixed inset-0 z-30 md:hidden cursor-default"
           onClick={() => setMenuOpen(false)}
         />
       )}
