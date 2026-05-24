@@ -13,6 +13,7 @@ const navLinks = [
 ]
 
 const ctaLink = { label: 'Join SSA!', href: '/signup' }
+const signInLink = { label: 'Sign In', href: '/sign-in' }
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
@@ -104,7 +105,13 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="hidden md:flex items-center ml-auto">
+          <div className="hidden md:flex items-center ml-auto gap-3">
+            <Link
+              href={signInLink.href}
+              className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
+            >
+              {signInLink.label}
+            </Link>
             <Link
               href={ctaLink.href}
               className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
@@ -138,7 +145,7 @@ export default function Navbar() {
         className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
       >
         <ul className="flex flex-col">
-          {[...navLinks, ctaLink].map(({ label, href }) => {
+          {[...navLinks, signInLink, ctaLink].map(({ label, href }) => {
             const isActive = pathname === href
             return (
               <li key={href}>
