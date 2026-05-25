@@ -7,7 +7,7 @@ import PhotoModal from '@/components/PhotoAlbum'
 import ZoomInIcon from '@mui/icons-material/ZoomIn'
 
 const INITIAL_COUNT = 12
-const LOAD_MORE_COUNT = 30
+const LOAD_MORE_COUNT = 12
 
 interface GalleryImage {
   id: number
@@ -40,13 +40,14 @@ export default function GalleryGrid({
 
   return (
     <>
-      <div className="flex flex-col items-center gap-10 max-w-8xl mx-auto w-full px-4 md:px-30 py-10 md:py-30">
+      <div className="flex flex-col items-center gap-10 max-w-7xl mx-auto w-full px-4 md:px-32 py-10 md:py-32">
         <div className="grid grid-cols-3 gap-2 md:gap-8 w-full">
           {visibleImages.map((img, index) => (
-            <div
+            <button
+              type="button"
               key={img.id}
               onClick={() => openModal(index)}
-              className="relative aspect-square rounded-lg md:rounded-xl overflow-hidden group cursor-pointer"
+              className="relative aspect-square rounded-lg md:rounded-xl overflow-hidden group"
             >
               <Image
                 src={img.url}
@@ -55,20 +56,14 @@ export default function GalleryGrid({
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                <div
-                  style={{
-                    backgroundColor: '#FFF7E9',
-                    border: '3px solid #D4CECE',
-                    width: 84,
-                    height: 84,
-                    borderRadius: 42,
-                  }}
-                  className="flex items-center justify-center"
-                >
-                  <ZoomInIcon style={{ color: '#C9A84C', fontSize: 38 }} />
+                <div className="flex items-center justify-center w-21 h-21 rounded-full bg-ssa-yellow-light border-[3px] border-ssa-light-grey">
+                  <ZoomInIcon
+                    className="text-ssa-light-brown"
+                    style={{ fontSize: 38 }}
+                  />
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
         <ViewMoreButton

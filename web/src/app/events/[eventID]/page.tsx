@@ -22,7 +22,7 @@ const mockImages = [
 export default async function GalleryPage({
   params,
 }: {
-  params: { eventID: string }
+  params: Promise<{ eventID: string }>
 }) {
   const { eventID } = await params
 
