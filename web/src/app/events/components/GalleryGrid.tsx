@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import ViewMoreButton from '@/components/ViewMoreButton'
-import PhotoModal from '@/components/PhotoAlbum'
+import ViewMoreButton from '@/app/events/components/ViewMoreButton'
+import PhotoModal from '@/app/events/components/PhotoAlbum'
 import ZoomInIcon from '@mui/icons-material/ZoomIn'
 
 const INITIAL_COUNT = 12
@@ -47,7 +47,7 @@ export default function GalleryGrid({
               type="button"
               key={img.id}
               onClick={() => openModal(index)}
-              className="relative aspect-square rounded-lg md:rounded-xl overflow-hidden group"
+              className="relative aspect-square rounded-lg md:rounded-xl overflow-hidden group cursor-pointer"
             >
               <Image
                 src={img.url}
@@ -55,7 +55,7 @@ export default function GalleryGrid({
                 fill
                 className="object-cover"
               />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center cursor-pointer">
                 <div className="flex items-center justify-center w-21 h-21 rounded-full bg-ssa-yellow-light border-[3px] border-ssa-light-grey">
                   <ZoomInIcon
                     className="text-ssa-light-brown"

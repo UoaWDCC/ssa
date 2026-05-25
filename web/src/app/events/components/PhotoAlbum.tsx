@@ -91,7 +91,7 @@ export default function PhotoAlbum({
           <button
             aria-label="Close"
             onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-ssa-light-grey/20 flex items-center justify-center text-ssa-white hover:bg-ssa-skin-yellow hover:text-ssa-light-brown transition-colors"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-ssa-light-grey/20 flex items-center justify-center text-ssa-white hover:bg-ssa-skin-yellow hover:text-ssa-light-brown transition-colors cursor-pointer"
           >
             <ClearIcon fontSize="small" />
           </button>
@@ -131,7 +131,7 @@ export default function PhotoAlbum({
             <button
               aria-label="Previous photo"
               onClick={handlePrev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white"
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white cursor-pointer"
             >
               <ArrowBackIcon fontSize="small" />
             </button>
@@ -140,7 +140,7 @@ export default function PhotoAlbum({
             <button
               aria-label="Next photo"
               onClick={handleNext}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white cursor-pointer"
             >
               <ArrowForwardIcon fontSize="small" />
             </button>
@@ -151,7 +151,7 @@ export default function PhotoAlbum({
             <a
               href={current.url}
               download
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-ssa-red-light text-white font-averia font-bold hover:bg-ssa-red transition-opacity border-[3px] border-ssa-red"
+              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-ssa-red-light text-white font-averia font-bold hover:bg-ssa-red transition-opacity border-[3px] border-ssa-red cursor-pointer"
             >
               Download <DownloadIcon fontSize="small" />
             </a>

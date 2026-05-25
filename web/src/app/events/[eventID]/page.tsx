@@ -1,5 +1,5 @@
 import Hero from '@/components/Hero'
-import GalleryGrid from '@/components/GalleryGrid'
+import GalleryGrid from '@/app/events/components/GalleryGrid'
 
 const mockImages = [
   { id: 1, url: '/event-gallery/filler.svg', alt: 'photo 1' },
