@@ -10,6 +10,7 @@ export type GoogleSignupProfile = {
 
 export const googleSignupSessionCookie = 'ssa_google_signup'
 export const googleOAuthStateCookie = 'ssa_google_oauth_state'
+export const googleOAuthModeCookie = 'ssa_google_oauth_mode'
 
 const sessionVersion = 'v1'
 

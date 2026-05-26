@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { FaUserCircle } from 'react-icons/fa'
 import { useAuth } from '@/hooks/useAuth'
 
 const navLinks = [
@@ -113,9 +114,10 @@ export default function Navbar() {
             {authResolved && isAuthenticated && (
               <Link
                 href="/profile"
-                className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+                aria-label="My profile"
+                className="text-ssa-black hover:text-ssa-yellow transition-colors shrink-0"
               >
-                Profile
+                <FaUserCircle className="w-9 h-9" />
               </Link>
             )}
             {authResolved && !isAuthenticated && (

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import {
   createOAuthState,
+  googleOAuthModeCookie,
   googleOAuthStateCookie,
 } from '@/lib/googleSignupSession'
 
@@ -31,14 +32,19 @@ export function GET(request: NextRequest) {
   authUrl.searchParams.set('state', state)
   authUrl.searchParams.set('prompt', 'select_account')
 
-  const response = NextResponse.redirect(authUrl)
-  response.cookies.set(googleOAuthStateCookie, state, {
+  const mode =
+    request.nextUrl.searchParams.get('mode') === 'signin' ? 'signin' : 'signup'
+  const cookieOptions = {
     httpOnly: true,
     maxAge: 10 * 60,
     path: '/',
-    sameSite: 'lax',
+    sameSite: 'lax' as const,
     secure: process.env.NODE_ENV === 'production',
-  })
+  }
+
+  const response = NextResponse.redirect(authUrl)
+  response.cookies.set(googleOAuthStateCookie, state, cookieOptions)
+  response.cookies.set(googleOAuthModeCookie, mode, cookieOptions)
 
   return response
 }

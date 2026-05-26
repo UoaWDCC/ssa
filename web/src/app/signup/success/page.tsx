@@ -32,7 +32,9 @@ async function confirmCheckoutSession(
   }
 }
 
-export default async function SignupSuccessPage({ searchParams }: Props) {
+export default async function SignupSuccessPage({
+  searchParams,
+}: Readonly<Props>) {
   const params = await searchParams
   const confirmation = await confirmCheckoutSession(params.session_id)
 
@@ -55,10 +57,12 @@ export default async function SignupSuccessPage({ searchParams }: Props) {
           {messageByConfirmation[confirmation]}
         </p>
         <Link
-          href="/"
+          href={confirmation === 'confirmed' ? '/sign-in?new=1' : '/'}
           className="inline-block rounded-lg bg-ssa-red px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
         >
-          Go to Homepage
+          {confirmation === 'confirmed'
+            ? 'Sign In to View Profile'
+            : 'Go to Homepage'}
         </Link>
       </div>
     </main>

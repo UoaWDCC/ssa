@@ -3,9 +3,21 @@ import { cookies } from 'next/headers'
 
 export type SessionUser = {
   email: string
+  userId?: string
   firstName?: string
   lastName?: string
-  userId?: string
+  phone?: string
+  role?: 'admin' | 'member'
+  authProvider?: 'email' | 'google'
+  membershipStatus?: 'active' | 'expired' | 'pending'
+  membershipExpiryDate?: string
+  upi?: string
+  studentId?: string
+  areaOfStudy?: string
+  yearOfUniversity?: string
+  gender?: string
+  ethnicity?: string
+  returningMember?: boolean
 }
 
 export const sessionCookie = 'ssa_session'
@@ -57,9 +69,21 @@ export function parseSession(value?: null | string): SessionUser | null {
     if (!parsed.email) return null
     return {
       email: parsed.email,
+      userId: parsed.userId,
       firstName: parsed.firstName,
       lastName: parsed.lastName,
-      userId: parsed.userId,
+      phone: parsed.phone,
+      role: parsed.role,
+      authProvider: parsed.authProvider,
+      membershipStatus: parsed.membershipStatus,
+      membershipExpiryDate: parsed.membershipExpiryDate,
+      upi: parsed.upi,
+      studentId: parsed.studentId,
+      areaOfStudy: parsed.areaOfStudy,
+      yearOfUniversity: parsed.yearOfUniversity,
+      gender: parsed.gender,
+      ethnicity: parsed.ethnicity,
+      returningMember: parsed.returningMember,
     }
   } catch {
     return null

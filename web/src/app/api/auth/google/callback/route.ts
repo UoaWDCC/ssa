@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import {
   createGoogleSignupSession,
+  googleOAuthModeCookie,
   googleOAuthStateCookie,
   googleSignupSessionCookie,
 } from '@/lib/googleSignupSession'
+import { createSession, sessionCookie, type SessionUser } from '@/lib/session'
 
 type GoogleTokenResponse = {
   access_token?: string
@@ -26,11 +28,34 @@ type GoogleTokenInfoResponse = {
   sub?: string
 }
 
+type CmsUser = {
+  id: number
+  email: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  role?: 'admin' | 'member'
+  authProvider?: 'email' | 'google' | null
+  membershipStatus?: 'active' | 'expired' | 'pending' | null
+  membershipExpiryDate?: string | null
+  upi?: string | null
+  studentId?: string | null
+  areaOfStudy?: string | null
+  yearOfUniversity?: string | null
+  gender?: string | null
+  ethnicity?: string | null
+  returningMember?: boolean | null
+}
+
 function getRedirectUri(request: NextRequest) {
   const configuredRedirectUri = process.env.GOOGLE_OAUTH_REDIRECT_URI
   if (configuredRedirectUri) return configuredRedirectUri
-
   return `${request.nextUrl.origin}/api/auth/google/callback`
+}
+
+function clearOAuthCookies(response: NextResponse) {
+  response.cookies.delete(googleOAuthStateCookie)
+  response.cookies.delete(googleOAuthModeCookie)
 }
 
 function redirectToSignup(
@@ -41,7 +66,17 @@ function redirectToSignup(
   for (const [key, value] of Object.entries(params)) {
     url.searchParams.set(key, value)
   }
+  return NextResponse.redirect(url)
+}
 
+function redirectToSignIn(
+  request: NextRequest,
+  params: Record<string, string>,
+) {
+  const url = new URL('/sign-in', request.nextUrl.origin)
+  for (const [key, value] of Object.entries(params)) {
+    url.searchParams.set(key, value)
+  }
   return NextResponse.redirect(url)
 }
 
@@ -59,10 +94,14 @@ export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code')
   const state = request.nextUrl.searchParams.get('state')
   const storedState = request.cookies.get(googleOAuthStateCookie)?.value
+  const mode = request.cookies.get(googleOAuthModeCookie)?.value
 
   if (!code || !state || !storedState || state !== storedState) {
-    const response = redirectToSignup(request, { google: 'invalid_state' })
-    response.cookies.delete(googleOAuthStateCookie)
+    const response =
+      mode === 'signin'
+        ? redirectToSignIn(request, { google: 'invalid_state' })
+        : redirectToSignup(request, { google: 'invalid_state' })
+    clearOAuthCookies(response)
     return response
   }
 
@@ -85,8 +124,11 @@ export async function GET(request: NextRequest) {
       tokenData.error,
       tokenData.error_description,
     )
-    const response = redirectToSignup(request, { google: 'token_failed' })
-    response.cookies.delete(googleOAuthStateCookie)
+    const response =
+      mode === 'signin'
+        ? redirectToSignIn(request, { google: 'token_failed' })
+        : redirectToSignup(request, { google: 'token_failed' })
+    clearOAuthCookies(response)
     return response
   }
 
@@ -104,13 +146,73 @@ export async function GET(request: NextRequest) {
     tokenInfo.email_verified === 'false'
   ) {
     console.error('[google-oauth] invalid id token')
-    const response = redirectToSignup(request, { google: 'invalid_token' })
-    response.cookies.delete(googleOAuthStateCookie)
+    const response =
+      mode === 'signin'
+        ? redirectToSignIn(request, { google: 'invalid_token' })
+        : redirectToSignup(request, { google: 'invalid_token' })
+    clearOAuthCookies(response)
     return response
   }
 
+  // Sign-in mode: look up existing user in the CMS by googleSub
+  if (mode === 'signin') {
+    const cmsUrl = process.env.CMS_URL
+    const secret =
+      process.env.GOOGLE_OAUTH_COOKIE_SECRET || process.env.AUTH_SECRET
+
+    if (cmsUrl && secret) {
+      const cmsRes = await fetch(`${cmsUrl}/google-login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ googleSub: tokenInfo.sub, secret }),
+      })
+
+      if (cmsRes.ok) {
+        const { user } = (await cmsRes.json()) as { user: CmsUser }
+
+        const sessionUser: SessionUser = {
+          email: user.email,
+          userId: String(user.id),
+          firstName: user.firstName ?? undefined,
+          lastName: user.lastName ?? undefined,
+          phone: user.phone ?? undefined,
+          role: user.role,
+          authProvider: user.authProvider ?? undefined,
+          membershipStatus: user.membershipStatus ?? undefined,
+          membershipExpiryDate: user.membershipExpiryDate ?? undefined,
+          upi: user.upi ?? undefined,
+          studentId: user.studentId ?? undefined,
+          areaOfStudy: user.areaOfStudy ?? undefined,
+          yearOfUniversity: user.yearOfUniversity ?? undefined,
+          gender: user.gender ?? undefined,
+          ethnicity: user.ethnicity ?? undefined,
+          returningMember: user.returningMember ?? undefined,
+        }
+
+        const response = NextResponse.redirect(
+          new URL('/', request.nextUrl.origin),
+        )
+        clearOAuthCookies(response)
+        response.cookies.set(sessionCookie, createSession(sessionUser), {
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          maxAge: 60 * 60 * 24 * 7,
+          secure: process.env.NODE_ENV === 'production',
+        })
+        return response
+      }
+
+      // No account found — send back to sign-in with an error
+      const response = redirectToSignIn(request, { google: 'no_account' })
+      clearOAuthCookies(response)
+      return response
+    }
+  }
+
+  // Signup mode (default): store Google profile and continue to signup form
   const response = redirectToSignup(request, { google: 'connected' })
-  response.cookies.delete(googleOAuthStateCookie)
+  clearOAuthCookies(response)
   response.cookies.set(
     googleSignupSessionCookie,
     createGoogleSignupSession({
@@ -128,6 +230,5 @@ export async function GET(request: NextRequest) {
       secure: process.env.NODE_ENV === 'production',
     },
   )
-
   return response
 }
