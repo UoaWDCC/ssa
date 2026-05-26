@@ -63,7 +63,7 @@ function getBadgeClassName(badge: HighlightCardBadge) {
   const variant = typeof badge === 'string' ? 'red' : (badge.variant ?? 'red')
   const variantClassName =
     variant === 'light'
-      ? 'bg-[#FCE6BA] text-[#706F6F]'
+      ? 'bg-ssa-badge-light text-ssa-badge-light-text'
       : 'bg-ssa-red text-ssa-yellow-light'
 
   return `flex items-center justify-center gap-[3.66px] rounded-[5px] px-4 py-2 text-center font-sans text-sm font-bold leading-none lg:text-[19px] lg:leading-[19px] ${variantClassName}`

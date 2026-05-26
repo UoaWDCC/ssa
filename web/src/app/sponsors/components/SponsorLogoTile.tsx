@@ -3,11 +3,15 @@ import Image from 'next/image'
 type SponsorLogoTileProps = {
   name: string
   logoUrl: string
-  websiteUrl: string
+  websiteUrl?: string
   hoverOverlayClassName?: string
   hoverTitle: string
   hoverDescription: string
   hoverTextClassName: string
+}
+
+function isExternalUrl(url?: string) {
+  return url ? /^https?:\/\//.test(url) : false
 }
 
 export default function SponsorLogoTile({
@@ -19,11 +23,13 @@ export default function SponsorLogoTile({
   hoverDescription,
   hoverTextClassName,
 }: SponsorLogoTileProps) {
+  const opensInNewTab = isExternalUrl(websiteUrl)
+
   return (
     <a
-      href={websiteUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={websiteUrl ?? '/sponsors'}
+      target={opensInNewTab ? '_blank' : undefined}
+      rel={opensInNewTab ? 'noopener noreferrer' : undefined}
       aria-label={`Visit ${name}`}
       className="group relative block size-[222px] overflow-hidden rounded-[20px] border-4 border-ssa-pink-light bg-ssa-white"
     >

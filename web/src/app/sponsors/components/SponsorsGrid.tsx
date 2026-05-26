@@ -29,7 +29,7 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
           websiteUrl={sponsor.websiteUrl ?? '/sponsors'}
           hoverOverlayClassName={sponsor.hoverOverlayClassName}
           hoverTitle={sponsor.name}
-          hoverDescription={sponsor.memberPerks ?? ''}
+          hoverDescription={sponsor.memberPerks?.trim() || 'Visit website'}
           hoverTextClassName={sponsor.hoverTextClassName ?? 'text-ssa-grey'}
         />
       ))}

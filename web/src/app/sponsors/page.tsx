@@ -45,7 +45,6 @@ function getSponsorLogoAlt(sponsor: Sponsor) {
   return sponsor.logo.alt
 }
 
-// TO DO: Replace local sponsor seed data with CMS/API fetching once sponsor endpoint integration is completed.
 const sponsorOfTheWeekEntry: Sponsor = {
   id: 1,
   name: 'SIP N CHILL',
@@ -66,7 +65,6 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-// Hover overlay colours are presentational values for the current sponsor artwork.
 const sponsorSeedEntries: SponsorGridItem[] = [
   {
     id: 2,
@@ -109,17 +107,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
   },
 ]
 
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 25 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
-
-    return {
-      ...sponsor,
-      id: index + 10,
-    }
-  },
-)
+const sponsorEntries: SponsorGridItem[] = sponsorSeedEntries
 
 export default async function SponsorsPage() {
   const sponsorOfTheWeek = sponsorOfTheWeekEntry
