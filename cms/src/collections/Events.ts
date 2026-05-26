@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Events: CollectionConfig = {
   slug: 'events',
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'title',
   },
@@ -10,6 +13,11 @@ export const Events: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'eventCost',
+      type: 'number',
+      required: false,
     },
     {
       name: 'date',
@@ -24,6 +32,14 @@ export const Events: CollectionConfig = {
       name: 'coverImage',
       type: 'upload',
       relationTo: 'media',
+    },
+    {
+      name: 'signupForm',
+      type: 'relationship',
+      relationTo: 'forms',
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'isUpcoming',
@@ -41,8 +57,14 @@ export const Events: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           required: true,
-        }
+        },
       ],
-    }
-  ]
+    },
+    {
+      name: 'stripePriceId',
+      type: 'text',
+      defaultValue: '',
+      required: true,
+    },
+  ],
 }
