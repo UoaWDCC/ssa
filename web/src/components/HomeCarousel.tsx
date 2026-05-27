@@ -105,7 +105,7 @@ export default function HomeCarousel() {
     <section className="px-4 sm:px-6 md:px-10 lg:px-20">
       <div className="relative drop-shadow-xl">
         <div
-          className="relative w-full aspect-[4/3] sm:aspect-[16/7] overflow-hidden rounded-2xl"
+          className="relative w-full aspect-4/3 sm:aspect-16/7 overflow-hidden rounded-2xl"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={stopTimer}
@@ -129,7 +129,7 @@ export default function HomeCarousel() {
                 {/* Dark overlay at 35% opacity */}
                 <div className="absolute inset-0 bg-black/35" />
                 {/* Dark gradient on top edge for title readability */}
-                <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/50 to-transparent" />
+                <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-black/50 to-transparent" />
                 {/* Title top left with more spacing */}
                 <p className="absolute top-12 left-12 text-white font-averia font-normal text-2xl md:text-3xl drop-shadow">
                   {image.title}

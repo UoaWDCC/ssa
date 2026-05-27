@@ -7,7 +7,7 @@ import HomeCarousel from '@/components/HomeCarousel'
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
+    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
         variant="fullscreen"
         title="Singapore Students' Association"
