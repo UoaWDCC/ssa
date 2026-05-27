@@ -1,4 +1,3 @@
-'use client'
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
