@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Events: CollectionConfig = {
   slug: 'events',
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'title',
   },
@@ -26,6 +29,17 @@ export const Events: CollectionConfig = {
       relationTo: 'media',
     },
     {
+      name: 'category',
+      type: 'select',
+      options: [
+        { label: 'Games', value: 'games' },
+        { label: 'Community', value: 'community' },
+        { label: 'Food', value: 'food' },
+        { label: 'AGM', value: 'agm' },
+        { label: 'All', value: 'all' },
+      ],
+    },
+    {
       name: 'isUpcoming',
       type: 'checkbox',
       defaultValue: true,
@@ -41,8 +55,8 @@ export const Events: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           required: true,
-        }
+        },
       ],
-    }
-  ]
+    },
+  ],
 }
