@@ -5,7 +5,7 @@ export default function JoinCard() {
   return (
     <div className="px-4 sm:px-6 md:px-8">
       <section className="mx-auto w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:grid lg:min-h-[420px] lg:grid-cols-2">
-        <div className="flex min-h-60 flex-col justify-between gap-4 bg-ssa-red p-5 sm:p-6 md:p-7 lg:min-h-0 lg:p-5 lg:pl-10 lg:pr-6">
+        <div className="flex min-h-60 flex-col gap-4 bg-ssa-red p-6 sm:p-8 lg:min-h-0 lg:p-12 lg:pr-10">
           <div className="space-y-3">
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-white sm:text-4xl lg:text-[2.4rem]">
               Join SSA
