@@ -12,7 +12,7 @@ const navLinks = [
   { label: 'Sponsors', href: '/sponsors' },
 ]
 
-const ctaLink = { label: 'Join SSA!', href: '/contact' }
+const ctaLink = { label: 'Join SSA!', href: '/signup' }
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
@@ -107,7 +107,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center ml-auto">
             <Link
               href={ctaLink.href}
-              className="font-averia font-bold text-xl text-ssa-white bg-white/10 border border-white/40 px-5 py-2 rounded-full hover:bg-white/20 transition-colors shrink-0"
+              className="font-averia font-bold text-xl text-ssa-grey bg-ssa-yellow-light border border-ssa-yellow  border-2  px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
             >
               {ctaLink.label}
             </Link>
