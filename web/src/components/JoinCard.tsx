@@ -17,7 +17,7 @@ export default function JoinCard() {
           </div>
           <Link
             href="/signup"
-            className="inline-flex w-full items-center justify-center rounded-full border-2 border-ssa-muted-gold bg-ssa-yellow-light px-4 py-2 font-averia text-sm font-bold text-ssa-muted-gold transition-transform duration-200 hover:-translate-y-0.5 hover:bg-ssa-yellow sm:px-5 sm:py-2.5 sm:text-base"
+            className="mt-auto inline-flex w-full items-center justify-center rounded-full border-2 border-ssa-muted-gold bg-ssa-yellow-light px-4 py-3 font-averia text-sm font-bold text-ssa-muted-gold transition-transform duration-200 hover:-translate-y-0.5 hover:bg-ssa-yellow sm:px-5 sm:py-3.5 sm:text-base">
           >
             Sign Up! →
           </Link>
