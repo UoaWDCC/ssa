@@ -1,22 +1,12 @@
-'use client'
-
-import { useState } from 'react'
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
 
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
 
-import EventCategoryFilters from './components/EventCategoryFilters'
-import EventSearchInput from './components/EventSearchInput'
-
-const pastEventCategories = ['All', 'Games', 'Community', 'Food', 'AGM']
+import PastEventsSection from './_components/PastEventsSection'
 
 export default function EventsPage() {
-  const [selectedPastEventCategory, setSelectedPastEventCategory] =
-    useState('All')
-  const [eventSearchQuery, setEventSearchQuery] = useState('')
-
   return (
     <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
       <Hero
@@ -58,29 +48,10 @@ export default function EventsPage() {
             imageSrc="/events/highlight_mascot.png"
             imageAlt="Ice Kachang event artwork"
           />
-
-          <section className="mt-16 flex flex-col gap-5 md:mt-24 md:gap-6">
-            <h2 className="font-averia text-2xl font-bold text-ssa-grey md:text-4xl lg:text-5xl">
-              Past Events
-            </h2>
-
-            <div className="w-full bg-ssa-yellow-light px-4 py-4 md:px-6 md:py-5">
-              <div className="flex flex-col gap-3 md:gap-4">
-                <EventSearchInput
-                  value={eventSearchQuery}
-                  onChange={setEventSearchQuery}
-                />
-
-                <EventCategoryFilters
-                  categories={pastEventCategories}
-                  selectedCategory={selectedPastEventCategory}
-                  onSelectCategory={setSelectedPastEventCategory}
-                />
-              </div>
-            </div>
-          </section>
         </div>
       </section>
+
+      <PastEventsSection />
       <Footer />
     </main>
   )

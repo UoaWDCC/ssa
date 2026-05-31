@@ -6,7 +6,7 @@ on:
 
 jobs:
   pull_request_created:
-    if: github.event_name == 'pull_request' && github.event.action == 'opened' || github.event.action == 'reopened'
+    if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')
     runs-on: ubuntu-latest
     steps:
       - name: Discord Webhook Action
