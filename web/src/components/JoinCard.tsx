@@ -10,7 +10,7 @@ export default function JoinCard() {
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-white sm:text-4xl lg:text-[2.6rem]">
               Join SSA
             </h2>
-            <p className="font-averia max-w-md text-sm leading-6 text-ssa-white sm:text-base lg:text-lg">
+            <p className="font-averia max-w-md text-sm leading-6 text-ssa-white sm:text-base lg:text-xl">
               Sign up to Join SSA and get to know others in the community...
               Singapore Singapore Singapore.
             </p>
