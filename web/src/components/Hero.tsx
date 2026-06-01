@@ -67,7 +67,7 @@ export default function Hero({
         <h1
           className={`font-averia font-bold leading-tight break-words ${titleStyles[variant]}`}
         >
-          <div className="relative flex items-start">
+          <span className="relative inline-flex items-start">
             <span>{title}</span>
             {showSingaporeFlag && (
               <Image
@@ -78,7 +78,7 @@ export default function Hero({
                 className="absolute -right-4 top-10 hidden sm:block h-24 sm:h-28 md:h-32 w-auto"
               />
             )}
-          </div>
+          </span>
         </h1>
         <p
           className={`font-averia font-light leading-tight break-words ${subtitleStyles[variant]}`}
