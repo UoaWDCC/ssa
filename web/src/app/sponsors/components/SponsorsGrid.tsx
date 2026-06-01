@@ -26,7 +26,7 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
           key={sponsor.id}
           name={sponsor.name}
           logoUrl={getSponsorLogoUrl(sponsor.logo)}
-          websiteUrl={sponsor.websiteUrl ?? '/sponsors'}
+          websiteUrl={sponsor.websiteUrl ?? undefined}
           hoverOverlayClassName={sponsor.hoverOverlayClassName}
           hoverTitle={sponsor.name}
           hoverDescription={sponsor.memberPerks?.trim() || 'Visit website'}

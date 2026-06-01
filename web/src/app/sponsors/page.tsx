@@ -107,7 +107,18 @@ const sponsorSeedEntries: SponsorGridItem[] = [
   },
 ]
 
-const sponsorEntries: SponsorGridItem[] = sponsorSeedEntries
+const sponsorEntries: SponsorGridItem[] = Array.from(
+  { length: 25 },
+  (_, index) => {
+    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
+
+    return {
+      ...sponsor,
+      id: index + 10,
+      name: `${sponsor.name} ${index + 1}`,
+    }
+  },
+)
 
 export default async function SponsorsPage() {
   const sponsorOfTheWeek = sponsorOfTheWeekEntry

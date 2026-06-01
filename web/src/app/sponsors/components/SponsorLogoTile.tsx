@@ -14,25 +14,16 @@ function isExternalUrl(url?: string) {
   return url ? /^https?:\/\//.test(url) : false
 }
 
-export default function SponsorLogoTile({
+function SponsorTileContent({
   name,
   logoUrl,
-  websiteUrl,
-  hoverOverlayClassName = 'bg-ssa-pink-light/60',
+  hoverOverlayClassName,
   hoverTitle,
   hoverDescription,
   hoverTextClassName,
-}: SponsorLogoTileProps) {
-  const opensInNewTab = isExternalUrl(websiteUrl)
-
+}: Omit<SponsorLogoTileProps, 'websiteUrl'>) {
   return (
-    <a
-      href={websiteUrl ?? '/sponsors'}
-      target={opensInNewTab ? '_blank' : undefined}
-      rel={opensInNewTab ? 'noopener noreferrer' : undefined}
-      aria-label={`Visit ${name}`}
-      className="group relative block size-[222px] overflow-hidden rounded-[20px] border-4 border-ssa-pink-light bg-ssa-white"
-    >
+    <>
       <Image
         src={logoUrl}
         alt={`${name} logo`}
@@ -58,6 +49,54 @@ export default function SponsorLogoTile({
           <span>{hoverDescription}</span>
         </span>
       </span>
+    </>
+  )
+}
+
+export default function SponsorLogoTile({
+  name,
+  logoUrl,
+  websiteUrl,
+  hoverOverlayClassName = 'bg-ssa-pink-light/60',
+  hoverTitle,
+  hoverDescription,
+  hoverTextClassName,
+}: SponsorLogoTileProps) {
+  const opensInNewTab = isExternalUrl(websiteUrl)
+  const className =
+    'group relative block size-[222px] overflow-hidden rounded-[20px] border-4 border-ssa-pink-light bg-ssa-white'
+
+  if (!opensInNewTab) {
+    return (
+      <div className={className} aria-label={name}>
+        <SponsorTileContent
+          name={name}
+          logoUrl={logoUrl}
+          hoverOverlayClassName={hoverOverlayClassName}
+          hoverTitle={hoverTitle}
+          hoverDescription={hoverDescription}
+          hoverTextClassName={hoverTextClassName}
+        />
+      </div>
+    )
+  }
+
+  return (
+    <a
+      href={websiteUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`Visit ${name}`}
+      className={className}
+    >
+      <SponsorTileContent
+        name={name}
+        logoUrl={logoUrl}
+        hoverOverlayClassName={hoverOverlayClassName}
+        hoverTitle={hoverTitle}
+        hoverDescription={hoverDescription}
+        hoverTextClassName={hoverTextClassName}
+      />
     </a>
   )
 }
