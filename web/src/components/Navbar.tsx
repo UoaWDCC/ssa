@@ -107,7 +107,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center ml-auto">
             <Link
               href={ctaLink.href}
-              className="font-averia font-bold text-xl text-ssa-grey bg-ssa-yellow-light border border-ssa-yellow  border-2  px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+              className="font-averia font-bold text-xl text-ssa-grey bg-ssa-yellow-light border-ssa-yellow  border-2  px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
             >
               {ctaLink.label}
             </Link>
