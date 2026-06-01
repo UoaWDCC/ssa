@@ -3,6 +3,7 @@ import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
 import InstagramFeed from '@/components/InstagramFeed'
+import JoinCard from '@/components/JoinCard'
 import HomeCarousel from '@/components/HomeCarousel'
 
 export default function Home() {
@@ -40,10 +41,9 @@ export default function Home() {
           imageAlt="Ice Kachang event artwork"
         />
       </section>
-
+      <JoinCard />
       {/* Image Carousel */}
       <HomeCarousel />
-
       <InstagramFeed />
       <Footer />
     </main>
