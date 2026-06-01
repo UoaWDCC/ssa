@@ -17,7 +17,7 @@ interface HeroProps {
 
 const containerStyles: Record<HeroVariant, string> = {
   fullscreen:
-    'items-start min-h-screen pt-4 sm:pt-6 md:pt-8 pb-6 sm:pb-8 md:pb-10',
+    'items-start min-h-[80vh] pt-4 sm:pt-6 md:pt-8 pb-6 sm:pb-8 md:pb-10',
   compact:
     'items-end min-h-36 sm:min-h-44 md:min-h-56 lg:min-h-64 py-1 sm:py-2 md:py-4 pb-4 sm:pb-6 md:pb-8',
 }
@@ -42,7 +42,7 @@ const contentStyles: Record<HeroVariant, string> = {
 }
 
 const mascotStyles: Record<HeroVariant, string> = {
-  fullscreen: 'h-48 sm:h-56 md:h-80 lg:h-96',
+  fullscreen: 'h-40 sm:h-44 md:h-64 lg:h-72',
   compact: 'h-28 sm:h-32 md:h-40 lg:h-48',
 }
 
