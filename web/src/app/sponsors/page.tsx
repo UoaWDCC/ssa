@@ -106,7 +106,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
     hoverTextClassName: 'text-ssa-grey',
   },
 ]
-
+//remove after milestone
 const sponsorEntries: SponsorGridItem[] = Array.from(
   { length: 25 },
   (_, index) => {
