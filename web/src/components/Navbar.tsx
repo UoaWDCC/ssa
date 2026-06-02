@@ -96,7 +96,7 @@ export default function Navbar() {
                   >
                     {label}
                     <span
-                      className={`absolute bottom-0 left-4 right-4 h-[2px] bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                      className={`absolute bottom-0 left-4 right-4 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
                     />
                   </Link>
                 </li>
@@ -146,9 +146,12 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 border-l-4 hover:opacity-90 transition-colors ${isActive ? 'text-ssa-yellow-light border-l-ssa-white' : 'text-ssa-white border-l-transparent'}`}
+                  className="group relative block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 text-ssa-white hover:opacity-90 transition-opacity"
                 >
                   {label}
+                  <span
+                    className={`absolute bottom-0 left-6 right-6 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                  />
                 </Link>
               </li>
             )
