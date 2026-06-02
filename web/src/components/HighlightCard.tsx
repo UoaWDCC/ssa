@@ -140,7 +140,7 @@ export function HighlightCard({
         </Link>
       </div>
 
-      <div className="flex justify-end p-6 pt-0 sm:p-8 sm:pt-0 lg:items-start lg:py-[44px] lg:pl-8 lg:pr-[68px]">
+      <div className="hidden justify-end lg:flex lg:items-start lg:py-[44px] lg:pl-8 lg:pr-[68px]">
         <div className="relative aspect-[486/488] w-full max-w-[486px] shrink-0 overflow-hidden rounded-[20px] lg:h-[488px] lg:w-[486px] lg:aspect-auto">
           <Image
             src={imageSrc}

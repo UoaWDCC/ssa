@@ -28,7 +28,7 @@ function SponsorTileContent({
         src={logoUrl}
         alt={`${name} logo`}
         fill
-        sizes="222px"
+        sizes="(min-width: 1024px) 222px, calc((100vw - 80px) / 4)"
         className="object-cover"
       />
       <span
@@ -64,7 +64,7 @@ export default function SponsorLogoTile({
 }: SponsorLogoTileProps) {
   const opensInNewTab = isExternalUrl(websiteUrl)
   const className =
-    'group relative block size-[222px] overflow-hidden rounded-[20px] border-4 border-ssa-pink-light bg-ssa-white'
+    'group relative block size-[83px] overflow-hidden rounded-md border-2 border-ssa-pink-light bg-ssa-white sm:size-[120px] sm:rounded-lg md:size-[160px] lg:size-[222px] lg:rounded-[20px] lg:border-4'
 
   if (!opensInNewTab) {
     return (

@@ -20,7 +20,7 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
 
 export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
   return (
-    <div className="mx-auto grid w-full max-w-[1214px] grid-cols-2 justify-items-center gap-6 sm:grid-cols-3 lg:grid-cols-5 lg:gap-[26px]">
+    <div className="mx-auto grid w-full max-w-[1214px] grid-cols-4 justify-items-center gap-2 sm:gap-3 md:gap-4 lg:grid-cols-5 lg:gap-[26px]">
       {sponsors.map((sponsor) => (
         <SponsorLogoTile
           key={sponsor.id}

@@ -108,7 +108,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
 ]
 //remove after milestone
 const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 25 },
+  { length: 20 },
   (_, index) => {
     const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
 
@@ -121,14 +121,13 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
 )
 
 export default async function SponsorsPage() {
-  const sponsorOfTheWeek = sponsorOfTheWeekEntry
   const sponsors = sponsorEntries
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeek.location
-      ? [{ icon: FaLocationDot, text: sponsorOfTheWeek.location }]
+    sponsorOfTheWeekEntry.location
+      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
       : []
-  const sponsorOfTheWeekBadges = sponsorOfTheWeek.memberPerks
-    ? [sponsorOfTheWeek.memberPerks]
+  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
+    ? [sponsorOfTheWeekEntry.memberPerks]
     : []
 
   return (
@@ -142,14 +141,14 @@ export default async function SponsorsPage() {
       <section className="mt-10 px-6 md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
         <HighlightCard
           eyebrow="Sponsor of the Week"
-          title={sponsorOfTheWeek.name}
+          title={sponsorOfTheWeekEntry.name}
           details={sponsorOfTheWeekDetails}
           badges={sponsorOfTheWeekBadges}
-          description={<p>{sponsorOfTheWeek.description}</p>}
+          description={<p>{sponsorOfTheWeekEntry.description}</p>}
           ctaLabel="CHECK US OUT!"
-          ctaHref={sponsorOfTheWeek.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeek.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeek)}
+          ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
+          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
+          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
@@ -161,18 +160,18 @@ export default async function SponsorsPage() {
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible md:mt-20 lg:mt-[143px] lg:h-[344px]">
+          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[30px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="mx-auto h-auto w-[240px] md:w-[320px] lg:absolute lg:bottom-0 lg:left-[84px] lg:z-0 lg:w-[397px] lg:translate-y-[30%]"
+              className="hidden lg:absolute lg:bottom-0 lg:left-[84px] lg:z-0 lg:block lg:w-[397px] lg:translate-y-[30%]"
             />
 
-            <div className="mt-8 flex w-full justify-center lg:absolute lg:right-[67px] lg:top-0 lg:mt-0 lg:w-[390px]">
+            <div className="mt-[65px] flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-[90px] lg:mt-0 lg:justify-end lg:pr-16">
               <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
-                <p className="font-averia text-[40px] font-light leading-tight text-ssa-red">
+                <p className="font-averia text-[34px] font-light leading-tight text-ssa-red lg:text-[40px]">
                   Keen to support SSA?
                 </p>
                 <CtaLink
