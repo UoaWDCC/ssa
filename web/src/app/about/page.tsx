@@ -85,7 +85,7 @@ export default function AboutPage() {
 
   return (
     <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
-      <div className="-mt-[88px] bg-ssa-red">
+      <div className="-mt-[88px] rounded-2xl bg-ssa-red pt-[88px] overflow-hidden">
         <Hero
           title="About Us"
           subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
