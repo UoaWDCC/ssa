@@ -1,45 +1,14 @@
-export interface EventMedia {
-  id: number
-  url: string | null
-  alt: string
-  width: number | null
-  height: number | null
-}
-
-export type EventCategory =
-  | 'social'
-  | 'cultural'
-  | 'academic'
-  | 'sports'
-  | 'other'
-
-export interface EventImage {
-  id: string | null
-  image: EventMedia
-}
-
-export interface Event {
+// Matches the columns Payload CMS creates in the 'events' PostgreSQL table.
+// Column names are snake_case because that's what Payload stores in the database.
+export type Event = {
   id: number
   title: string
   date: string
   description: string | null
-  coverImage: EventMedia | null
-  category: EventCategory | null
-  isUpcoming: boolean | null
-  images: EventImage[] | null
-  updatedAt: string
-  createdAt: string
-}
-
-export interface EventsResponse {
-  docs: Event[]
-  totalDocs: number
-  limit: number
-  totalPages: number
-  page: number
-  pagingCounter: number
-  hasPrevPage: boolean
-  hasNextPage: boolean
-  prevPage: number | null
-  nextPage: number | null
+  // ID of the related media row (the actual image object is in the 'media' table)
+  cover_image_id: number | null
+  category: 'games' | 'community' | 'food' | 'agm' | 'all' | null
+  is_upcoming: boolean | null
+  updated_at: string
+  created_at: string
 }

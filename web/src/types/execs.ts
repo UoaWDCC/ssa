@@ -1,31 +1,14 @@
-export interface ExecMedia {
-  id: number
-  url: string | null
-  alt: string
-  width: number | null
-  height: number | null
-}
-
-export interface Exec {
+// Matches the columns Payload CMS creates in the 'execs' PostgreSQL table.
+// Column names are snake_case because that's what Payload stores in the database.
+export type Exec = {
   id: number
   name: string
   role: string
-  photo: ExecMedia | null
+  // ID of the related media row (the actual image is in the 'media' table)
+  photo_id: number | null
   bio: string | null
+  // Academic year this exec served (e.g. 2024)
   year: number | null
-  updatedAt: string
-  createdAt: string
-}
-
-export interface ExecsResponse {
-  docs: Exec[]
-  totalDocs: number
-  limit: number
-  totalPages: number
-  page: number
-  pagingCounter: number
-  hasPrevPage: boolean
-  hasNextPage: boolean
-  prevPage: number | null
-  nextPage: number | null
+  updated_at: string
+  created_at: string
 }

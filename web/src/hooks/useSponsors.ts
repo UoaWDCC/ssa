@@ -1,27 +1,39 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchFromCMS } from '@/lib/api'
-import type { Sponsor, SponsorsResponse } from '@/types/sponsors'
+import { supabase } from '@/lib/supabase'
+import type { Sponsor } from '@/types/sponsors'
 
-export const sponsorKeys = {
-  all: ['sponsors'] as const,
-  lists: () => [...sponsorKeys.all, 'list'] as const,
-  detail: (id: number) => [...sponsorKeys.all, 'detail', id] as const,
-}
-
+// Get all sponsors, sorted alphabetically by name
 export function useSponsors() {
   return useQuery({
-    queryKey: sponsorKeys.lists(),
-    queryFn: () =>
-      fetchFromCMS<SponsorsResponse>('/sponsors?depth=1&limit=100&sort=name'),
-    select: (data) => data.docs,
+    queryKey: ['sponsors'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('sponsors')
+        .select('*')
+        .order('name', { ascending: true })
+
+      if (error) throw error
+      return (data ?? []) as Sponsor[]
+    },
   })
 }
 
+// Get the single sponsor currently marked as sponsor of the week
 export function useSponsorOfTheWeek() {
-  const query = useSponsors()
-  return {
-    ...query,
-    data:
-      query.data?.find((s: Sponsor) => s.isSponsorOfTheWeek === true) ?? null,
-  }
+  return useQuery({
+    queryKey: ['sponsors', 'of-the-week'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('sponsors')
+        .select('*')
+        .eq('is_sponsor_of_the_week', true)
+        .limit(1)
+        .single()
+
+      // .single() returns an error if no row is found — treat that as null
+      if (error?.code === 'PGRST116') return null
+      if (error) throw error
+      return data as Sponsor
+    },
+  })
 }

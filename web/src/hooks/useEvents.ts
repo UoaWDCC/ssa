@@ -1,36 +1,53 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchFromCMS } from '@/lib/api'
-import type { Event, EventsResponse } from '@/types/events'
+import { supabase } from '@/lib/supabase'
+import type { Event } from '@/types/events'
 
-export const eventKeys = {
-  all: ['events'] as const,
-  lists: () => [...eventKeys.all, 'list'] as const,
-  detail: (id: number) => [...eventKeys.all, 'detail', id] as const,
-}
-
+// Get all events, newest date first
 export function useEvents() {
   return useQuery({
-    queryKey: eventKeys.lists(),
-    queryFn: () =>
-      fetchFromCMS<EventsResponse>('/events?depth=1&limit=100&sort=-date'),
-    select: (data) => data.docs,
+    queryKey: ['events'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .order('date', { ascending: false })
+
+      if (error) throw error
+      return (data ?? []) as Event[]
+    },
   })
 }
 
+// Only events marked as upcoming
 export function useUpcomingEvents() {
-  const query = useEvents()
+  return useQuery({
+    queryKey: ['events', 'upcoming'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('is_upcoming', true)
+        .order('date', { ascending: true })
 
-  return {
-    ...query,
-    data: query.data?.filter((event: Event) => event.isUpcoming === true) ?? [],
-  }
+      if (error) throw error
+      return (data ?? []) as Event[]
+    },
+  })
 }
 
+// Only past events
 export function usePastEvents() {
-  const query = useEvents()
+  return useQuery({
+    queryKey: ['events', 'past'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('events')
+        .select('*')
+        .eq('is_upcoming', false)
+        .order('date', { ascending: false })
 
-  return {
-    ...query,
-    data: query.data?.filter((event: Event) => event.isUpcoming !== true) ?? [],
-  }
+      if (error) throw error
+      return (data ?? []) as Event[]
+    },
+  })
 }

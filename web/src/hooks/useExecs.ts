@@ -1,18 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchFromCMS } from '@/lib/api'
-import type { ExecsResponse } from '@/types/execs'
+import { supabase } from '@/lib/supabase'
+import type { Exec } from '@/types/execs'
 
-export const execKeys = {
-  all: ['execs'] as const,
-  lists: () => [...execKeys.all, 'list'] as const,
-  detail: (id: number) => [...execKeys.all, 'detail', id] as const,
-}
-
+// Get all exec members, most recent year first
 export function useExecs() {
   return useQuery({
-    queryKey: execKeys.lists(),
-    queryFn: () =>
-      fetchFromCMS<ExecsResponse>('/execs?depth=1&limit=100&sort=-year'),
-    select: (data) => data.docs,
+    queryKey: ['execs'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('execs')
+        .select('*')
+        .order('year', { ascending: false })
+
+      if (error) throw error
+      return (data ?? []) as Exec[]
+    },
   })
 }
