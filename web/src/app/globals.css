@@ -13,11 +13,16 @@
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
+  --color-ssa-red-super-light: #fe6681d9;
   --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
   --color-ssa-white: #fefcf9;
   --color-ssa-black: #0a0805;
+  --color-ssa-skin-yellow: #ffe3ac;
+  --color-ssa-dark-skin-yellow: #ffd586;
+  --color-ssa-light-grey: #828282;
+  --color-ssa-light-brown: #caaf7e;
   --color-ssa-smoke-grey: #5e5e5e;
   --color-ssa-grey: #434242;
   --color-ssa-background: #fff1d5;
@@ -36,6 +41,19 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@utility animate-slide-up {
+  animation: slide-up 0.3s ease-out;
 }
 
 body {

@@ -104,11 +104,11 @@ export default function Navbar() {
                   <Link
                     href={href}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`group relative font-averia font-bold text-xl px-4 py-2 transition-colors whitespace-nowrap hover:text-ssa-yellow ${isActive ? 'text-ssa-yellow' : 'text-ssa-black'}`}
+                    className="group relative font-averia font-bold text-xl px-4 py-2 text-ssa-white transition-opacity whitespace-nowrap hover:opacity-90"
                   >
                     {label}
                     <span
-                      className={`absolute bottom-0 left-4 right-4 h-[2px] bg-ssa-yellow transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                      className={`absolute bottom-0 left-4 right-4 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
                     />
                   </Link>
                 </li>
@@ -152,13 +152,13 @@ export default function Navbar() {
             aria-controls="mobile-menu"
           >
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
             />
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
             />
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
             />
           </button>
         </div>
@@ -177,9 +177,12 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 border-l-4 hover:text-ssa-yellow transition-colors ${isActive ? 'text-ssa-yellow border-l-ssa-yellow' : 'text-ssa-black border-l-transparent'}`}
+                  className="group relative block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 text-ssa-white hover:opacity-90 transition-opacity"
                 >
                   {label}
+                  <span
+                    className={`absolute bottom-0 left-6 right-6 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                  />
                 </Link>
               </li>
             )
@@ -189,6 +192,7 @@ export default function Navbar() {
 
       {menuOpen && (
         <button
+          type="button"
           aria-label="Close menu"
           className="fixed inset-0 z-30 md:hidden cursor-default"
           onClick={() => setMenuOpen(false)}
