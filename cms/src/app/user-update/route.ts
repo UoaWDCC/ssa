@@ -26,18 +26,18 @@ export async function POST(request: Request) {
     return Response.json({ error: 'userId and data are required' }, { status: 400 })
   }
 
-  const {
-    firstName,
-    lastName,
-    phone,
-    upi,
-    studentId,
-    areaOfStudy,
-    yearOfUniversity,
-    gender,
-    ethnicity,
-    returningMember,
-  } = body.data
+  const d = body.data as {
+    firstName?: string | null
+    lastName?: string | null
+    phone?: string | null
+    upi?: string | null
+    studentId?: string | null
+    areaOfStudy?: string | null
+    yearOfUniversity?: '1' | '2' | '3' | '4' | '5+' | 'postgrad' | null
+    gender?: 'male' | 'female' | 'non-binary' | 'prefer-not-to-say' | null
+    ethnicity?: 'chinese' | 'malay' | 'indian' | 'eurasian' | 'other' | null
+    returningMember?: boolean | null
+  }
 
   const payload = await getPayload({ config: configPromise })
 
@@ -46,16 +46,16 @@ export async function POST(request: Request) {
     id: body.userId,
     overrideAccess: true,
     data: {
-      firstName,
-      lastName,
-      phone,
-      upi,
-      studentId,
-      areaOfStudy,
-      yearOfUniversity,
-      gender,
-      ethnicity,
-      returningMember,
+      firstName: d.firstName,
+      lastName: d.lastName,
+      phone: d.phone,
+      upi: d.upi,
+      studentId: d.studentId,
+      areaOfStudy: d.areaOfStudy,
+      yearOfUniversity: d.yearOfUniversity,
+      gender: d.gender,
+      ethnicity: d.ethnicity,
+      returningMember: d.returningMember,
     },
   })
 

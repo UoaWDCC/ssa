@@ -395,6 +395,11 @@ export default function ProfileClient({
   const showToast = (type: ToastState['type'], message: string) =>
     setToast({ type, message })
 
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' })
+    window.location.href = '/'
+  }
+
   function cancelEdit() {
     setForm(userToForm(baseUser))
     setIsEditing(false)
@@ -470,9 +475,17 @@ export default function ProfileClient({
       {/* ── header ── */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h1 className="font-averia font-bold text-3xl text-ssa-black">
-            {displayName}
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="font-averia font-bold text-3xl text-ssa-black">
+              {displayName}
+            </h1>
+            <button
+              onClick={handleLogout}
+              className="rounded border border-red-600 px-3 py-1 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+            >
+              Log out
+            </button>
+          </div>
           <p className="mt-1 text-sm text-ssa-black/50">{user.email}</p>
         </div>
 
