@@ -70,6 +70,10 @@ web_modules/
 .env.*
 !.env.example
 
+# Only pnpm-lock.yaml at the root is committed; other lockfiles are mistakes.
+package-lock.json
+yarn.lock
+
 # macOS
 .DS_Store
 
