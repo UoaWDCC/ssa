@@ -26,7 +26,7 @@ export default async function SignupSuccessPage({ searchParams }: Props) {
         )}
         <Link
           href="/"
-          className="inline-block rounded-lg bg-ssa-red px-6 py-3 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+          className="inline-block rounded-lg bg-ssa-red px-6 py-3 text-sm font-semibold text-ssa-white hover:opacity-90 transition-opacity"
         >
           Go to Homepage
         </Link>

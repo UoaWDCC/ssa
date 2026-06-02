@@ -78,7 +78,7 @@ export default function PastEventsSection() {
               onClick={() => handleFilterChange(filter)}
               className={`rounded-xl px-8 py-2 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
                 isActive
-                  ? 'bg-ssa-red text-white'
+                  ? 'bg-ssa-red text-ssa-white'
                   : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
               }`}
             >
@@ -111,7 +111,7 @@ export default function PastEventsSection() {
           <button
             type="button"
             onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
-            className="inline-flex items-center gap-2 rounded-xl bg-ssa-red-lighter px-8 py-3 font-averia text-base font-bold text-ssa-black transition-colors hover:bg-ssa-red hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-3xl bg-ssa-yellow px-10 py-3 font-averia text-base font-bold text-ssa-category-text transition-colors border-2 border-ssa-dark-skin-yellow hover:bg-ssa-dark-skin-yellow  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
           >
             View More
             <FaArrowRight aria-hidden="true" />

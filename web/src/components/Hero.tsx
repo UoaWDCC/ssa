@@ -18,7 +18,7 @@ const containerStyles: Record<HeroVariant, string> = {
 }
 
 const titleStyles: Record<HeroVariant, string> = {
-  fullscreen: 'text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl',
+  fullscreen: 'text-ssa-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl',
   compact: 'text-ssa-black text-2xl sm:text-3xl md:text-4xl lg:text-5xl',
 }
 

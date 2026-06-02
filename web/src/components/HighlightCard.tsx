@@ -59,14 +59,22 @@ export function HighlightCard({
   imageSrc,
   imageAlt,
 }: HighlightCardProps) {
+  const getBadgeClassName = (badge: string) => {
+    if (badge.toLowerCase().includes('non-member')) {
+      return 'rounded-lg bg-ssa-card-cta px-4 py-2 font-sans text-sm font-semibold leading-none text-ssa-smoke-grey lg:text-[19px] lg:leading-[19px]'
+    }
+
+    return 'rounded-lg bg-ssa-red px-4 py-2 font-sans text-sm font-semibold leading-none text-ssa-yellow-light lg:text-[19px] lg:leading-[19px]'
+  }
+
   return (
-    <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] lg:grid-cols-[minmax(0,1fr)_554px]">
+    <article className="mx-auto grid w-full max-w-303.5 overflow-hidden rounded-4xl bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-147.5 lg:grid-cols-[minmax(0,1fr)_554px]">
       <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 lg:py-11 lg:pl-14 lg:pr-10">
         <div className="space-y-1.5 lg:space-y-2">
           <p className="font-averia text-base font-bold uppercase leading-tight tracking-wide text-ssa-muted-gold lg:text-[21px] lg:leading-6">
             {eyebrow}
           </p>
-          <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-red lg:text-[40px] lg:leading-[42px]">
+          <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-red lg:text-[40px] lg:leading-10.5">
             {title}
           </h2>
         </div>
@@ -90,10 +98,7 @@ export function HighlightCard({
             {badges.length > 0 && (
               <ul className="flex flex-wrap gap-2">
                 {badges.map((badge) => (
-                  <li
-                    key={badge}
-                    className="rounded-full bg-ssa-red px-4 py-2 font-sans text-sm font-semibold leading-none text-ssa-yellow-light lg:text-[19px] lg:leading-[19px]"
-                  >
+                  <li key={badge} className={getBadgeClassName(badge)}>
                     {badge}
                   </li>
                 ))}
@@ -104,21 +109,21 @@ export function HighlightCard({
 
         <div className="my-5 h-px w-full bg-ssa-muted-gold/30 lg:my-6" />
 
-        <div className="font-averia text-xl font-light leading-snug text-ssa-smoke-grey lg:text-[25px] lg:leading-[30px]">
+        <div className="font-averia text-xl font-light leading-snug text-ssa-smoke-grey lg:text-[25px] lg:leading-7.5">
           {description}
         </div>
 
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full bg-ssa-card-cta px-6 font-averia text-xl font-bold leading-tight text-ssa-muted-gold transition-colors hover:bg-ssa-card-cta-hover focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-7 lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
+          className="mt-6 inline-flex min-h-14 w-full max-w-138.25 items-center justify-center gap-4 rounded-full bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-white transition-colors hover:bg-ssa-red-light focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-7 lg:h-17 lg:text-[25px] lg:leading-6.75"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>
         </Link>
       </div>
 
-      <div className="flex justify-end p-6 pt-0 sm:p-8 sm:pt-0 lg:items-start lg:py-[44px] lg:pl-8 lg:pr-[68px]">
-        <div className="relative aspect-[486/488] w-full max-w-[486px] shrink-0 overflow-hidden rounded-[20px] lg:h-[488px] lg:w-[486px] lg:aspect-auto">
+      <div className="flex justify-end p-6 pt-0 sm:p-8 sm:pt-0 lg:items-start lg:py-11 lg:pl-8 lg:pr-17">
+        <div className="relative aspect-486/488 w-full max-w-121.5 shrink-0 overflow-hidden rounded-[20px] lg:h-122 lg:w-121.5 lg:aspect-auto">
           <Image
             src={imageSrc}
             alt={imageAlt}
