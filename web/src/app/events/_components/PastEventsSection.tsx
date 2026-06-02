@@ -2,13 +2,36 @@
 
 import { useMemo, useState } from 'react'
 import { FaArrowRight, FaMagnifyingGlass } from 'react-icons/fa6'
+import { usePastEvents } from '@/hooks/useEvents'
+import type { Event } from '@/types/events'
 import PastEventCard from './PastEventCard'
-import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
+import {
+  CATEGORY_TO_TAG,
+  EVENT_FILTERS,
+  type EventFilter,
+  type PastEvent,
+} from './pastEventsData'
 
 const INITIAL_VISIBLE = 6
 const LOAD_MORE_STEP = 6
 
+// Maps a Supabase Event row to the shape PastEventCard expects
+function toPastEvent(event: Event): PastEvent {
+  const tag = event.category ? CATEGORY_TO_TAG[event.category] : undefined
+  return {
+    slug: String(event.id),
+    name: event.title,
+    location: '',
+    date: event.date,
+    thumbnail: event.cover_image?.url ?? '/carousel_one.jpg',
+    thumbnailAlt: event.cover_image?.alt ?? event.title,
+    tags: tag ? [tag] : [],
+  }
+}
+
 export default function PastEventsSection() {
+  const { data: rawEvents, isLoading, isError } = usePastEvents()
+
   const [query, setQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState<EventFilter>('All')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE)
@@ -23,6 +46,12 @@ export default function PastEventsSection() {
     setVisibleCount(INITIAL_VISIBLE)
   }
 
+  // Convert Supabase rows to the PastEvent shape once, then filter
+  const pastEvents = useMemo(
+    () => (rawEvents ?? []).map(toPastEvent),
+    [rawEvents],
+  )
+
   const filteredEvents = useMemo(() => {
     const q = query.trim().toLowerCase()
     return pastEvents.filter((event) => {
@@ -30,12 +59,9 @@ export default function PastEventsSection() {
         activeFilter === 'All' || event.tags.includes(activeFilter)
       if (!matchesFilter) return false
       if (!q) return true
-      return (
-        event.name.toLowerCase().includes(q) ||
-        event.location.toLowerCase().includes(q)
-      )
+      return event.name.toLowerCase().includes(q)
     })
-  }, [query, activeFilter])
+  }, [pastEvents, query, activeFilter])
 
   const visibleEvents = filteredEvents.slice(0, visibleCount)
   const hasMore = visibleCount < filteredEvents.length
@@ -88,14 +114,27 @@ export default function PastEventsSection() {
         })}
       </div>
 
-      {/* Grid */}
+      {isError && (
+        <p className="mt-8 text-center font-averia text-ssa-black/60">
+          Failed to load events. Please try again later.
+        </p>
+      )}
+
+      {/* Show skeleton cards while loading */}
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3">
-        {visibleEvents.map((event) => (
-          <PastEventCard key={event.slug} event={event} />
-        ))}
+        {isLoading
+          ? Array.from({ length: INITIAL_VISIBLE }, (_, i) => (
+              <div
+                key={`skeleton-${String(i)}`}
+                className="aspect-[5/6] w-full animate-pulse rounded-2xl bg-gray-200"
+              />
+            ))
+          : visibleEvents.map((event) => (
+              <PastEventCard key={event.slug} event={event} />
+            ))}
       </div>
 
-      {filteredEvents.length === 0 && (
+      {!isLoading && filteredEvents.length === 0 && (
         <p className="mt-10 text-center font-averia text-ssa-black/60">
           No events match your search.
         </p>
