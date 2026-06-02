@@ -1,11 +1,17 @@
 // Matches the columns Payload CMS creates in the 'execs' PostgreSQL table.
 // Column names are snake_case because that's what Payload stores in the database.
+
+export type ExecPhoto = {
+  url: string | null
+  alt: string | null
+}
+
 export type Exec = {
   id: number
   name: string
   role: string
-  // ID of the related media row (the actual image is in the 'media' table)
-  photo_id: number | null
+  // Joined from the 'media' table via photo_id foreign key
+  photo: ExecPhoto | null
   bio: string | null
   // Academic year this exec served (e.g. 2024)
   year: number | null
