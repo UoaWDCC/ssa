@@ -58,7 +58,7 @@ export default function PastEventsSection() {
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Search event..."
-          className="w-full rounded-full border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
+          className="w-full rounded-xl border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
         />
       </label>
 
@@ -76,7 +76,7 @@ export default function PastEventsSection() {
               type="button"
               aria-pressed={isActive}
               onClick={() => handleFilterChange(filter)}
-              className={`rounded-full px-10 py-3 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
+              className={`rounded-xl px-8 py-2 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
                 isActive
                   ? 'bg-ssa-red text-white'
                   : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
@@ -111,7 +111,7 @@ export default function PastEventsSection() {
           <button
             type="button"
             onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
-            className="inline-flex items-center gap-2 rounded-full bg-ssa-red-lighter px-8 py-3 font-averia text-base font-bold text-ssa-black transition-colors hover:bg-ssa-red hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-xl bg-ssa-red-lighter px-8 py-3 font-averia text-base font-bold text-ssa-black transition-colors hover:bg-ssa-red hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
           >
             View More
             <FaArrowRight aria-hidden="true" />
