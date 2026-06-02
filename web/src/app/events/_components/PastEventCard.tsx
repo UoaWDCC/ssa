@@ -75,7 +75,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/40 to-transparent"
       />
       <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6">
-        <div className="flex items-center gap-2 text-white/90">
+        <div className="flex items-center gap-2 text-ssa-white/90">
           <FaCalendarDays
             className="h-[1em] w-[1em] shrink-0"
             aria-hidden="true"
@@ -87,7 +87,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
             {formattedDate}
           </time>
         </div>
-        <h3 className="font-averia text-3xl font-bold leading-tight text-white">
+        <h3 className="font-averia text-3xl font-bold leading-tight text-ssa-white">
           {name}
         </h3>
         {tags.length > 0 && (
@@ -95,7 +95,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
             {tags.map((tag) => (
               <li
                 key={tag}
-                className={`rounded-full px-4 py-1 font-averia text-base font-bold text-white ${TAG_COLOURS[tag]}`}
+                className={`rounded-full px-4 py-1 font-averia text-base font-bold text-ssa-white ${TAG_COLOURS[tag]}`}
               >
                 {tag}
               </li>
@@ -106,7 +106,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
 
       {/* Hover overlay: See Photos */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
-        <span className="flex items-center gap-2.5 rounded-full bg-ssa-red px-8 py-3.5 font-averia text-xl font-bold text-white shadow-lg">
+        <span className="flex items-center gap-2.5 rounded-full bg-ssa-red px-8 py-3.5 font-averia text-xl font-bold text-ssa-white shadow-lg">
           See Photos
           <FaArrowRight
             className="h-[1em] w-[1em] shrink-0"
