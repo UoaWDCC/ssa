@@ -382,6 +382,7 @@ function userToForm(user: SessionUser): ProfileForm {
 export default function ProfileClient({
   user,
 }: Readonly<{ user: SessionUser }>) {
+  const [baseUser, setBaseUser] = useState<SessionUser>(user)
   const [isEditing, setIsEditing] = useState(false)
   const [form, setForm] = useState<ProfileForm>(() => userToForm(user))
   const [dialog, setDialog] = useState<DialogKind | null>(null)
@@ -395,7 +396,7 @@ export default function ProfileClient({
     setToast({ type, message })
 
   function cancelEdit() {
-    setForm(userToForm(user))
+    setForm(userToForm(baseUser))
     setIsEditing(false)
   }
 
@@ -419,6 +420,9 @@ export default function ProfileClient({
         }),
       })
       if (!res.ok) throw new Error('Failed')
+      const { user: saved } = (await res.json()) as { user: SessionUser }
+      setBaseUser(saved)
+      setForm(userToForm(saved))
       setDialog(null)
       setIsEditing(false)
       showToast('success', 'Your profile has been updated.')

@@ -26,13 +26,37 @@ export async function POST(request: Request) {
     return Response.json({ error: 'userId and data are required' }, { status: 400 })
   }
 
+  const {
+    firstName,
+    lastName,
+    phone,
+    upi,
+    studentId,
+    areaOfStudy,
+    yearOfUniversity,
+    gender,
+    ethnicity,
+    returningMember,
+  } = body.data
+
   const payload = await getPayload({ config: configPromise })
 
   const user = await payload.update({
     collection: 'users',
     id: body.userId,
-    data: body.data,
     overrideAccess: true,
+    data: {
+      firstName,
+      lastName,
+      phone,
+      upi,
+      studentId,
+      areaOfStudy,
+      yearOfUniversity,
+      gender,
+      ethnicity,
+      returningMember,
+    },
   })
 
   return Response.json({ user })

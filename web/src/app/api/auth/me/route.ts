@@ -42,20 +42,24 @@ export async function PATCH(request: Request) {
     user: Record<string, unknown>
   }
 
-  const sessionUser: SessionUser = {
-    ...user,
-    firstName: (updated.firstName as string | undefined) ?? undefined,
-    lastName: (updated.lastName as string | undefined) ?? undefined,
-    phone: (updated.phone as string | undefined) ?? undefined,
-    upi: (updated.upi as string | undefined) ?? undefined,
-    studentId: (updated.studentId as string | undefined) ?? undefined,
-    areaOfStudy: (updated.areaOfStudy as string | undefined) ?? undefined,
-    yearOfUniversity:
-      (updated.yearOfUniversity as string | undefined) ?? undefined,
-    gender: (updated.gender as string | undefined) ?? undefined,
-    ethnicity: (updated.ethnicity as string | undefined) ?? undefined,
-    returningMember:
-      (updated.returningMember as boolean | undefined) ?? undefined,
+  const sessionUser: SessionUser = { ...user }
+  const editableKeys = [
+    'firstName',
+    'lastName',
+    'phone',
+    'upi',
+    'studentId',
+    'areaOfStudy',
+    'yearOfUniversity',
+    'gender',
+    'ethnicity',
+    'returningMember',
+  ] as const
+  for (const key of editableKeys) {
+    if (key in updated) {
+      ;(sessionUser as Record<string, unknown>)[key] =
+        updated[key] === null ? undefined : updated[key]
+    }
   }
 
   const store = await cookies()

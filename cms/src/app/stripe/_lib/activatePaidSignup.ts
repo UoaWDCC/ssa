@@ -49,6 +49,8 @@ export async function activatePaidSignup({
     showHiddenFields: true,
   })) as MemberWithSignupPassword
 
+  if ((member as { status?: string }).status === 'active') return
+
   const existingUser = await payload.find({
     collection: 'users',
     limit: 1,
