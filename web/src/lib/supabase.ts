@@ -1,7 +1,16 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+let _client: SupabaseClient | null = null
 
-// Shared client used by all data-fetching hooks
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Returns the shared Supabase client, creating it on first call.
+// Defined as a function so the client is only created in the browser
+// (inside a queryFn), never during SSR when env vars aren't available.
+export function getSupabase(): SupabaseClient {
+  if (!_client) {
+    _client = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+    )
+  }
+  return _client
+}

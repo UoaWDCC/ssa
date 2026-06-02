@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 import type { Exec } from '@/types/execs'
 
 // Get all exec members, most recent year first.
@@ -8,7 +8,7 @@ export function useExecs() {
   return useQuery({
     queryKey: ['execs'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('execs')
         .select('*, photo:media!photo_id(url, alt)')
         .order('year', { ascending: false })

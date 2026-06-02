@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 import type { Sponsor } from '@/types/sponsors'
 
 // Get all sponsors, sorted alphabetically by name
@@ -7,7 +7,7 @@ export function useSponsors() {
   return useQuery({
     queryKey: ['sponsors'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('sponsors')
         .select('*')
         .order('name', { ascending: true })
@@ -23,7 +23,7 @@ export function useSponsorOfTheWeek() {
   return useQuery({
     queryKey: ['sponsors', 'of-the-week'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('sponsors')
         .select('*')
         .eq('is_sponsor_of_the_week', true)

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/lib/supabase'
+import { getSupabase } from '@/lib/supabase'
 import type { Event } from '@/types/events'
 
 // Get all events, newest date first.
@@ -8,7 +8,7 @@ export function useEvents() {
   return useQuery({
     queryKey: ['events'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('events')
         .select('*, cover_image:media!cover_image_id(url, alt)')
         .order('date', { ascending: false })
@@ -24,7 +24,7 @@ export function useUpcomingEvents() {
   return useQuery({
     queryKey: ['events', 'upcoming'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('events')
         .select('*, cover_image:media!cover_image_id(url, alt)')
         .eq('is_upcoming', true)
@@ -41,7 +41,7 @@ export function usePastEvents() {
   return useQuery({
     queryKey: ['events', 'past'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await getSupabase()
         .from('events')
         .select('*, cover_image:media!cover_image_id(url, alt)')
         .eq('is_upcoming', false)
