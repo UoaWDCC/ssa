@@ -200,6 +200,7 @@ export interface Event {
   date: string
   description?: string | null
   coverImage?: (number | null) | Media
+  category?: ('games' | 'community' | 'food' | 'agm' | 'all') | null
   isUpcoming?: boolean | null
   images?:
     | {
@@ -428,6 +429,7 @@ export interface EventsSelect<T extends boolean = true> {
   date?: T
   description?: T
   coverImage?: T
+  category?: T
   isUpcoming?: T
   images?:
     | T
