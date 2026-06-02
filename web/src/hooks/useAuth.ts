@@ -12,17 +12,23 @@ export function useAuth(): AuthState {
   const [state, setState] = useState<AuthState>({ status: 'loading' })
 
   useEffect(() => {
+    let isActive = true
     fetch('/api/auth/me')
       .then((res) => {
         if (!res.ok) {
-          setState({ status: 'unauthenticated' })
+          if (isActive) setState({ status: 'unauthenticated' })
           return
         }
-        return res
-          .json()
-          .then(({ user }) => setState({ status: 'authenticated', user }))
+        return res.json().then(({ user }) => {
+          if (isActive) setState({ status: 'authenticated', user })
+        })
       })
-      .catch(() => setState({ status: 'unauthenticated' }))
+      .catch(() => {
+        if (isActive) setState({ status: 'unauthenticated' })
+      })
+    return () => {
+      isActive = false
+    }
   }, [])
 
   return state

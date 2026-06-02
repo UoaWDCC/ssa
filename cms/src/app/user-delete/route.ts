@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -18,7 +19,9 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  if (!body.secret || body.secret !== secret) {
+  const incoming = Buffer.from(body.secret ?? '')
+  const expected = Buffer.from(secret)
+  if (incoming.length !== expected.length || !crypto.timingSafeEqual(incoming, expected)) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

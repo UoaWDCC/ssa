@@ -1,3 +1,4 @@
+import crypto from 'node:crypto'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
@@ -18,7 +19,9 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  if (!body.secret || body.secret !== secret) {
+  const incoming = Buffer.from(body.secret ?? '')
+  const expected = Buffer.from(secret)
+  if (incoming.length !== expected.length || !crypto.timingSafeEqual(incoming, expected)) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
@@ -41,6 +44,16 @@ export async function POST(request: Request) {
 
   const payload = await getPayload({ config: configPromise })
 
+  const current = (await payload.findByID({
+    collection: 'users',
+    id: body.userId,
+    overrideAccess: true,
+  })) as { firstName?: string | null; lastName?: string | null }
+
+  const mergedFirst = d.firstName === undefined ? (current.firstName ?? '') : (d.firstName ?? '')
+  const mergedLast = d.lastName === undefined ? (current.lastName ?? '') : (d.lastName ?? '')
+  const derivedName = [mergedFirst, mergedLast].filter(Boolean).join(' ') || null
+
   const user = await payload.update({
     collection: 'users',
     id: body.userId,
@@ -56,6 +69,7 @@ export async function POST(request: Request) {
       gender: d.gender,
       ethnicity: d.ethnicity,
       returningMember: d.returningMember,
+      ...(derivedName === null ? {} : { name: derivedName }),
     },
   })
 

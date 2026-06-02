@@ -408,21 +408,37 @@ export default function ProfileClient({
   async function confirmSave() {
     setDialogLoading(true)
     try {
+      const patch: Record<string, unknown> = {}
+      const stringFields = [
+        'firstName',
+        'lastName',
+        'phone',
+        'upi',
+        'studentId',
+        'areaOfStudy',
+        'yearOfUniversity',
+        'gender',
+        'ethnicity',
+      ] as const
+      for (const key of stringFields) {
+        const next = form[key] || null
+        const prev = baseUser[key] ?? null
+        if (next !== prev) patch[key] = next
+      }
+      const prevReturning = baseUser.returningMember ?? false
+      if (form.returningMember !== prevReturning)
+        patch.returningMember = form.returningMember
+
+      if (Object.keys(patch).length === 0) {
+        setDialog(null)
+        setIsEditing(false)
+        return
+      }
+
       const res = await fetch('/api/auth/me', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: form.firstName || null,
-          lastName: form.lastName || null,
-          phone: form.phone || null,
-          upi: form.upi || null,
-          studentId: form.studentId || null,
-          areaOfStudy: form.areaOfStudy || null,
-          yearOfUniversity: form.yearOfUniversity || null,
-          gender: form.gender || null,
-          ethnicity: form.ethnicity || null,
-          returningMember: form.returningMember,
-        }),
+        body: JSON.stringify(patch),
       })
       if (!res.ok) throw new Error('Failed')
       const { user: saved } = (await res.json()) as { user: SessionUser }

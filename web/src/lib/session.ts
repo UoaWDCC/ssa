@@ -1,4 +1,4 @@
-import crypto from 'crypto'
+import crypto from 'node:crypto'
 import { cookies } from 'next/headers'
 
 export type SessionUser = {
@@ -48,7 +48,10 @@ function timingSafeEqual(a: string, b: string) {
 }
 
 export function createSession(user: SessionUser) {
-  const payload = Buffer.from(JSON.stringify(user)).toString('base64url')
+  const exp = Date.now() + 7 * 24 * 60 * 60 * 1000
+  const payload = Buffer.from(JSON.stringify({ ...user, exp })).toString(
+    'base64url',
+  )
   const signed = `${sessionVersion}.${payload}`
   return `${signed}.${sign(signed)}`
 }
@@ -65,8 +68,9 @@ export function parseSession(value?: null | string): SessionUser | null {
   try {
     const parsed = JSON.parse(
       Buffer.from(payload, 'base64url').toString('utf8'),
-    ) as Partial<SessionUser>
+    ) as Partial<SessionUser> & { exp?: number }
     if (!parsed.email) return null
+    if (typeof parsed.exp !== 'number' || parsed.exp < Date.now()) return null
     return {
       email: parsed.email,
       userId: parsed.userId,

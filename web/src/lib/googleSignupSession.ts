@@ -16,10 +16,10 @@ const sessionVersion = 'v1'
 
 function getCookieSecret() {
   const secret =
-    process.env.GOOGLE_OAUTH_COOKIE_SECRET || process.env.AUTH_SECRET
+    process.env.AUTH_SECRET || process.env.GOOGLE_OAUTH_COOKIE_SECRET
 
   if (!secret) {
-    throw new Error('GOOGLE_OAUTH_COOKIE_SECRET must be configured')
+    throw new Error('AUTH_SECRET must be configured')
   }
 
   return secret
@@ -43,7 +43,10 @@ function timingSafeEqual(a: string, b: string) {
 }
 
 export function createGoogleSignupSession(profile: GoogleSignupProfile) {
-  const payload = Buffer.from(JSON.stringify(profile)).toString('base64url')
+  const exp = Date.now() + 30 * 60 * 1000
+  const payload = Buffer.from(JSON.stringify({ ...profile, exp })).toString(
+    'base64url',
+  )
   const signedPayload = `${sessionVersion}.${payload}`
 
   return `${signedPayload}.${sign(signedPayload)}`
@@ -61,9 +64,10 @@ export function readGoogleSignupSession(value?: null | string) {
   try {
     const parsed = JSON.parse(
       Buffer.from(payload, 'base64url').toString('utf8'),
-    ) as Partial<GoogleSignupProfile>
+    ) as Partial<GoogleSignupProfile> & { exp?: number }
 
     if (!parsed.email || !parsed.googleSub) return null
+    if (typeof parsed.exp !== 'number' || parsed.exp < Date.now()) return null
 
     return {
       email: parsed.email,

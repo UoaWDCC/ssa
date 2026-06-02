@@ -25,6 +25,12 @@ export default function Navbar() {
   const auth = useAuth()
   const isAuthenticated = auth.status === 'authenticated'
   const authResolved = auth.status !== 'loading'
+  let mobileAuthLinks: { label: string; href: string }[] = []
+  if (authResolved && isAuthenticated) {
+    mobileAuthLinks = [{ label: 'Profile', href: '/profile' }]
+  } else if (authResolved) {
+    mobileAuthLinks = [signInLink, ctaLink]
+  }
 
   useEffect(() => {
     menuOpenRef.current = menuOpen
@@ -163,12 +169,7 @@ export default function Navbar() {
         className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
       >
         <ul className="flex flex-col">
-          {[
-            ...navLinks,
-            ...(isAuthenticated
-              ? [{ label: 'Profile', href: '/profile' }]
-              : [signInLink, ctaLink]),
-          ].map(({ label, href }) => {
+          {[...navLinks, ...mobileAuthLinks].map(({ label, href }) => {
             const isActive = pathname === href
             return (
               <li key={href}>

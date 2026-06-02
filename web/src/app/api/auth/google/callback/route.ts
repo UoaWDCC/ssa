@@ -142,8 +142,7 @@ export async function GET(request: NextRequest) {
     tokenInfo.aud !== clientId ||
     !tokenInfo.sub ||
     !tokenInfo.email ||
-    tokenInfo.email_verified === false ||
-    tokenInfo.email_verified === 'false'
+    (tokenInfo.email_verified !== true && tokenInfo.email_verified !== 'true')
   ) {
     console.error('[google-oauth] invalid id token')
     const response =
