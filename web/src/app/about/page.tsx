@@ -1,6 +1,5 @@
 'use client'
 
-import Image from 'next/image'
 import Hero from '@/components/Hero'
 import Carousel from '@/components/AboutPageCarousel'
 import ExecGrid from './_components/ExecGrid'
