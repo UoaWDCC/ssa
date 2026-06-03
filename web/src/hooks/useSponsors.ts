@@ -18,6 +18,24 @@ export function useSponsors() {
   })
 }
 
+// Get a single sponsor by ID
+export function useSponsor(id: number | string | null | undefined) {
+  return useQuery({
+    queryKey: ['sponsors', id],
+    enabled: id !== null && id !== undefined && id !== '',
+    queryFn: async () => {
+      const { data, error } = await getSupabase()
+        .from('sponsors')
+        .select('*, logo:media!logo_id(url, alt)')
+        .eq('id', id)
+        .single()
+
+      if (error) throw error
+      return data as Sponsor
+    },
+  })
+}
+
 // Get the single sponsor currently marked as sponsor of the week
 export function useSponsorOfTheWeek() {
   return useQuery({

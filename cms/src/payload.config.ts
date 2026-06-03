@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import importExportPlugin from 'payload-plugin-import-export'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -34,5 +35,15 @@ export default buildConfig({
     },
   }),
   sharp,
-  plugins: [],
+  plugins: [
+    importExportPlugin({
+      enabled: true,
+      excludeCollections: [Users.slug, Members.slug],
+      canImport: (user) => {
+        if (!user || typeof user !== 'object') return false
+
+        return (user as { role?: string | null }).role === 'admin'
+      },
+    }),
+  ],
 })

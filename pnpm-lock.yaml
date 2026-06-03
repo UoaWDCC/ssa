@@ -44,6 +44,9 @@ importers:
       payload:
         specifier: 3.79.0
         version: 3.79.0(graphql@16.14.0)(typescript@5.7.3)
+      payload-plugin-import-export:
+        specifier: ^3.0.20
+        version: 3.0.20(@payloadcms/ui@3.79.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.79.0(graphql@16.14.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.79.0(graphql@16.14.0)(typescript@5.7.3))
       react:
         specifier: 19.2.1
         version: 19.2.1
@@ -3880,6 +3883,9 @@ packages:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
 
+  papaparse@5.5.3:
+    resolution: {integrity: sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==}
+
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -3918,6 +3924,13 @@ packages:
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
+
+  payload-plugin-import-export@3.0.20:
+    resolution: {integrity: sha512-5R9PMhetwrA5posucr/7qHbg0fVy8rj3feNIO04ejNAfwe7I7WgsC+MK/LDKiYBdH9AYGl2zYh7kedBMAYug6g==}
+    engines: {node: ^18.20.2 || >=20.9.0, pnpm: ^9 || ^10}
+    peerDependencies:
+      '@payloadcms/ui': ^3.37.0
+      payload: ^3.37.0
 
   payload@3.79.0:
     resolution: {integrity: sha512-Pey2gBhFL5QkAmN2KMkzXdiBS4QOi5IiQF4Ji9hCNu7kaDcNYtgk75EeWRGP4hOcb22+dqYnw2TZm5Zs/0KBKw==}
@@ -8827,6 +8840,8 @@ snapshots:
     dependencies:
       p-limit: 3.1.0
 
+  papaparse@5.5.3: {}
+
   parent-module@1.0.1:
     dependencies:
       callsites: 3.1.0
@@ -8865,6 +8880,12 @@ snapshots:
   path-type@4.0.0: {}
 
   pathe@2.0.3: {}
+
+  payload-plugin-import-export@3.0.20(@payloadcms/ui@3.79.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.79.0(graphql@16.14.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3))(payload@3.79.0(graphql@16.14.0)(typescript@5.7.3)):
+    dependencies:
+      '@payloadcms/ui': 3.79.0(@types/react@19.2.9)(monaco-editor@0.55.1)(next@15.4.11(@babel/core@7.29.0)(@playwright/test@1.58.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(sass@1.77.4))(payload@3.79.0(graphql@16.14.0)(typescript@5.7.3))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.7.3)
+      papaparse: 5.5.3
+      payload: 3.79.0(graphql@16.14.0)(typescript@5.7.3)
 
   payload@3.79.0(graphql@16.14.0)(typescript@5.7.3):
     dependencies:
