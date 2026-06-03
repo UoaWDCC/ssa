@@ -1,5 +1,6 @@
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
 
+import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
 
@@ -7,7 +8,7 @@ import PastEventsSection from './_components/PastEventsSection'
 
 export default function EventsPage() {
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light pb-16 text-ssa-grey md:gap-14 md:pb-24 lg:gap-[121px]">
+    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
       <Hero
         title="Events"
         subtitle="Join us for exciting events, cultural celebrations, and community gatherings throughout the year."
@@ -30,7 +31,10 @@ export default function EventsPage() {
                 text: '401-318 Engineering Atrium (Level 3)',
               },
             ]}
-            badges={['$5 Members', '$11 Non-Members']}
+            badges={[
+              '$5 MEMBERS',
+              { text: '$11 NON-MEMBERS', variant: 'light' },
+            ]}
             description={
               <>
                 Hot, stressed and over Uni already? Say less... we&apos;ve got
@@ -48,6 +52,7 @@ export default function EventsPage() {
       </section>
 
       <PastEventsSection />
+      <Footer />
     </main>
   )
 }
