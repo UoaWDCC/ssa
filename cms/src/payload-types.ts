@@ -152,6 +152,26 @@ export interface MemberAuthOperations {
  */
 export interface User {
   id: number
+  role: 'admin' | 'member'
+  name?: string | null
+  authProvider?: ('email' | 'google') | null
+  /**
+   * Google account subject identifier for OAuth signups.
+   */
+  googleSub?: string | null
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  membershipStatus?: ('active' | 'expired' | 'pending') | null
+  membershipExpiryDate?: string | null
+  stripeCustomerId?: string | null
+  upi?: string | null
+  studentId?: string | null
+  areaOfStudy?: string | null
+  yearOfUniversity?: ('1' | '2' | '3' | '4' | '5+' | 'postgrad') | null
+  gender?: ('male' | 'female' | 'non-binary' | 'prefer-not-to-say') | null
+  ethnicity?: ('chinese' | 'malay' | 'indian' | 'eurasian' | 'other') | null
+  returningMember?: boolean | null
   updatedAt: string
   createdAt: string
   email: string
@@ -247,10 +267,18 @@ export interface Exec {
 export interface Member {
   id: number
   name: string
+  firstName?: string | null
+  lastName?: string | null
   phone: string
+  authProvider: 'email' | 'google'
+  /**
+   * Google account subject identifier for OAuth signups.
+   */
+  googleSub?: string | null
   status: 'active' | 'expired' | 'pending'
   membershipExpiryDate?: string | null
   stripeCustomerId?: string | null
+  encryptedSignupPassword?: string | null
   emergencyContactName?: string | null
   emergencyContactPhone?: string | null
   upi?: string | null
@@ -384,6 +412,23 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T
+  name?: T
+  authProvider?: T
+  googleSub?: T
+  firstName?: T
+  lastName?: T
+  phone?: T
+  membershipStatus?: T
+  membershipExpiryDate?: T
+  stripeCustomerId?: T
+  upi?: T
+  studentId?: T
+  areaOfStudy?: T
+  yearOfUniversity?: T
+  gender?: T
+  ethnicity?: T
+  returningMember?: T
   updatedAt?: T
   createdAt?: T
   email?: T
@@ -472,10 +517,15 @@ export interface ExecsSelect<T extends boolean = true> {
  */
 export interface MembersSelect<T extends boolean = true> {
   name?: T
+  firstName?: T
+  lastName?: T
   phone?: T
+  authProvider?: T
+  googleSub?: T
   status?: T
   membershipExpiryDate?: T
   stripeCustomerId?: T
+  encryptedSignupPassword?: T
   emergencyContactName?: T
   emergencyContactPhone?: T
   upi?: T
