@@ -1,6 +1,7 @@
 'use client'
 
 import { useExecs } from '@/hooks/useExecs'
+import { getCmsMediaUrl } from '@/lib/media'
 
 const SKELETON_KEYS = [
   'sk-1',
@@ -44,7 +45,7 @@ export default function ExecGrid() {
                 name={exec.name}
                 role={exec.role}
                 // Fall back to the mascot if no photo has been uploaded yet
-                photo={exec.photo?.url ?? '/mascot.png'}
+                photo={getCmsMediaUrl(exec.photo?.url) ?? '/mascot.png'}
               />
             ))}
       </div>

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import { FaArrowRight, FaMagnifyingGlass } from 'react-icons/fa6'
 import { usePastEvents } from '@/hooks/useEvents'
+import { getCmsMediaUrl } from '@/lib/media'
 import type { Event } from '@/types/events'
 import PastEventCard from './PastEventCard'
 import {
@@ -23,7 +24,7 @@ function toPastEvent(event: Event): PastEvent {
     name: event.title,
     location: '',
     date: event.date,
-    thumbnail: event.cover_image?.url ?? '/carousel_one.jpg',
+    thumbnail: getCmsMediaUrl(event.cover_image?.url) ?? '/carousel_one.jpg',
     thumbnailAlt: event.cover_image?.alt ?? event.title,
     tags: tag ? [tag] : [],
   }
