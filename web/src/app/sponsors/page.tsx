@@ -138,7 +138,7 @@ export default async function SponsorsPage() {
         mascotImage="/ssa_nerd_merlion.svg"
         mascotAlt="SSA Nerd Merlion mascot"
       />
-      <section className="mt-10 px-6 md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
+      <section className="mt-10 px-[18px] md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
         <HighlightCard
           eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeekEntry.name}
@@ -152,21 +152,21 @@ export default async function SponsorsPage() {
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-8 w-full max-w-[1214px] md:mb-10">
-            <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-grey md:text-5xl lg:text-[64px]">
+          <div className="mx-auto mb-10 w-full max-w-[1214px] sm:mb-12">
+            <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
               Our Sponsors
             </h2>
           </div>
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[30px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
+          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="hidden lg:absolute lg:bottom-0 lg:left-[84px] lg:z-0 lg:block lg:w-[397px] lg:translate-y-[30%]"
+              className="hidden min-[1200px]:absolute min-[1200px]:bottom-0 min-[1200px]:left-[84px] min-[1200px]:z-0 min-[1200px]:block min-[1200px]:w-[397px] min-[1200px]:translate-y-[30%]"
             />
 
             <div className="mt-[65px] flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-[90px] lg:mt-0 lg:justify-end lg:pr-16">
@@ -176,7 +176,7 @@ export default async function SponsorsPage() {
                 </p>
                 <CtaLink
                   href="/contact"
-                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-[#FFC5C5] px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-[#EAB7BF] hover:bg-[#EAB7BF] lg:text-[25px] lg:leading-[27px]"
+                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-ssa-contact-cta px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-ssa-contact-cta-hover hover:bg-ssa-contact-cta-hover lg:text-[25px] lg:leading-[27px]"
                 >
                   <span>Contact Us</span>
                   <span aria-hidden="true">→</span>

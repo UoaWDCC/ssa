@@ -28,23 +28,23 @@ function SponsorTileContent({
         src={logoUrl}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 1024px) 222px, calc((100vw - 80px) / 4)"
+        sizes="(min-width: 1024px) 222px, (min-width: 768px) 160px, (min-width: 640px) 120px, 83px"
         className="object-cover"
       />
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-[16px] opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out group-hover:opacity-100 ${hoverOverlayClassName}`}
+        className={`absolute inset-0 rounded-md opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out group-hover:opacity-100 lg:rounded-[16px] ${hoverOverlayClassName}`}
       />
       <span
-        className={`absolute inset-0 flex flex-col justify-end gap-3 p-5 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 ${hoverTextClassName}`}
+        className={`absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 sm:gap-2 sm:p-4 lg:gap-3 lg:p-5 ${hoverTextClassName}`}
       >
-        <span className="font-averia text-[21px] font-bold leading-tight">
+        <span className="font-averia text-[8px] font-bold leading-tight sm:text-base lg:text-[21px]">
           {hoverTitle}
         </span>
-        <span className="flex items-center gap-[5px] self-start font-alegreya text-[17px] font-medium leading-tight">
+        <span className="flex items-center gap-[5px] self-start font-alegreya text-[6px] font-medium leading-tight sm:text-sm lg:text-[17px]">
           <span
             aria-hidden="true"
-            className="h-[30px] w-0 shrink-0 border-l-2 border-current"
+            className="h-3 w-0 shrink-0 border-l border-current sm:h-6 sm:border-l-2 lg:h-[30px]"
           />
           <span>{hoverDescription}</span>
         </span>
@@ -64,7 +64,7 @@ export default function SponsorLogoTile({
 }: SponsorLogoTileProps) {
   const opensInNewTab = isExternalUrl(websiteUrl)
   const className =
-    'group relative block size-[83px] overflow-hidden rounded-md border-2 border-ssa-pink-light bg-ssa-white sm:size-[120px] sm:rounded-lg md:size-[160px] lg:size-[222px] lg:rounded-[20px] lg:border-4'
+    'group relative block aspect-square w-full overflow-hidden rounded-lg border-2 border-ssa-pink-light bg-ssa-white lg:rounded-[20px] lg:border-4'
 
   if (!opensInNewTab) {
     return (

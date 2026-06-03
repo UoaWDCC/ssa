@@ -81,7 +81,7 @@ export function HighlightCard({
   imageAlt,
 }: HighlightCardProps) {
   return (
-    <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] lg:grid-cols-[minmax(0,1fr)_554px]">
+    <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] min-[1200px]:grid-cols-[minmax(0,1fr)_554px]">
       <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 lg:pb-[58px] lg:pl-14 lg:pr-10 lg:pt-11">
         <div>
           <div className="space-y-1.5 lg:space-y-2">
@@ -133,20 +133,20 @@ export function HighlightCard({
 
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-[#EC415E] bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-[#FE6681D9] focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
+          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-ssa-cta-border bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-red-super-light focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>
         </Link>
       </div>
 
-      <div className="hidden justify-end lg:flex lg:items-start lg:py-[44px] lg:pl-8 lg:pr-[68px]">
-        <div className="relative aspect-[486/488] w-full max-w-[486px] shrink-0 overflow-hidden rounded-[20px] lg:h-[488px] lg:w-[486px] lg:aspect-auto">
+      <div className="hidden justify-end min-[1200px]:flex min-[1200px]:items-start min-[1200px]:py-[44px] min-[1200px]:pl-8 min-[1200px]:pr-[68px]">
+        <div className="relative aspect-[486/488] w-full max-w-[486px] shrink-0 overflow-hidden rounded-[20px] min-[1200px]:h-[488px] min-[1200px]:w-[486px] min-[1200px]:aspect-auto">
           <Image
             src={imageSrc}
             alt={imageAlt}
             fill
-            sizes="(min-width: 1024px) 486px, calc(100vw - 48px)"
+            sizes="(min-width: 1200px) 486px, 0px"
             className="object-cover"
           />
         </div>
