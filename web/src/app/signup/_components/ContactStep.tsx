@@ -36,17 +36,6 @@ export default function ContactStep({
         />
       </div>
       <InputField
-        label="Email Address"
-        required
-        name="email"
-        autoComplete="email"
-        placeholder="hello@gmail.com"
-        type="email"
-        value={data.email}
-        onChange={(v) => onChange('email', v)}
-        error={fieldErrors.email}
-      />
-      <InputField
         label="Phone Number"
         required
         name="phone"
@@ -56,28 +45,6 @@ export default function ContactStep({
         value={data.phone}
         onChange={(v) => onChange('phone', v)}
         error={fieldErrors.phone}
-      />
-      <InputField
-        label="Password"
-        required
-        name="password"
-        autoComplete="new-password"
-        placeholder="Min. 8 characters, include a letter and number"
-        type="password"
-        value={data.password}
-        onChange={(v) => onChange('password', v)}
-        error={fieldErrors.password}
-      />
-      <InputField
-        label="Confirm Password"
-        required
-        name="confirmPassword"
-        autoComplete="new-password"
-        placeholder="Re-enter password"
-        type="password"
-        value={data.confirmPassword}
-        onChange={(v) => onChange('confirmPassword', v)}
-        error={fieldErrors.confirmPassword}
       />
     </CardSection>
   )

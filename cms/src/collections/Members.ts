@@ -16,9 +16,34 @@ export const Members: CollectionConfig = {
       required: true,
     },
     {
+      name: 'firstName',
+      type: 'text',
+    },
+    {
+      name: 'lastName',
+      type: 'text',
+    },
+    {
       name: 'phone',
       type: 'text',
       required: true,
+    },
+    {
+      name: 'authProvider',
+      type: 'select',
+      defaultValue: 'email',
+      options: [
+        { label: 'Email', value: 'email' },
+        { label: 'Google', value: 'google' },
+      ],
+      required: true,
+    },
+    {
+      name: 'googleSub',
+      type: 'text',
+      admin: {
+        description: 'Google account subject identifier for OAuth signups.',
+      },
     },
     {
       name: 'status',
@@ -26,15 +51,15 @@ export const Members: CollectionConfig = {
       options: [
         {
           label: 'ACTIVE',
-          value: 'active'
+          value: 'active',
         },
         {
           label: 'EXPIRED',
-          value: 'expired'
+          value: 'expired',
         },
         {
           label: 'PENDING',
-          value: 'pending'
+          value: 'pending',
         },
       ],
       required: true,
@@ -47,6 +72,11 @@ export const Members: CollectionConfig = {
     {
       name: 'stripeCustomerId',
       type: 'text',
+    },
+    {
+      name: 'encryptedSignupPassword',
+      type: 'text',
+      hidden: true,
     },
     {
       name: 'emergencyContactName',
@@ -106,5 +136,5 @@ export const Members: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
     },
-  ]
+  ],
 }
