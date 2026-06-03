@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { FaUserCircle } from 'react-icons/fa'
+import { useAuth } from '@/hooks/useAuth'
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -12,13 +14,23 @@ const navLinks = [
   { label: 'Sponsors', href: '/sponsors' },
 ]
 
-const ctaLink = { label: 'Join SSA!', href: '/contact' }
+const ctaLink = { label: 'Join SSA!', href: '/signup' }
+const signInLink = { label: 'Sign In', href: '/sign-in' }
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
   const menuOpenRef = useRef(false)
+  const auth = useAuth()
+  const isAuthenticated = auth.status === 'authenticated'
+  const authResolved = auth.status !== 'loading'
+  let mobileAuthLinks: { label: string; href: string }[] = []
+  if (authResolved && isAuthenticated) {
+    mobileAuthLinks = [{ label: 'Profile', href: '/profile' }]
+  } else if (authResolved) {
+    mobileAuthLinks = [signInLink, ctaLink]
+  }
 
   useEffect(() => {
     menuOpenRef.current = menuOpen
@@ -92,11 +104,11 @@ export default function Navbar() {
                   <Link
                     href={href}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`group relative font-averia font-bold text-xl px-4 py-2 transition-colors whitespace-nowrap hover:text-ssa-yellow ${isActive ? 'text-ssa-yellow' : 'text-ssa-black'}`}
+                    className="group relative font-averia font-bold text-xl px-4 py-2 text-ssa-white transition-opacity whitespace-nowrap hover:opacity-90"
                   >
                     {label}
                     <span
-                      className={`absolute bottom-0 left-4 right-4 h-[2px] bg-ssa-yellow transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                      className={`absolute bottom-0 left-4 right-4 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
                     />
                   </Link>
                 </li>
@@ -104,13 +116,32 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="hidden md:flex items-center ml-auto">
-            <Link
-              href={ctaLink.href}
-              className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
-            >
-              {ctaLink.label}
-            </Link>
+          <div className="hidden md:flex items-center ml-auto gap-3">
+            {authResolved && isAuthenticated && (
+              <Link
+                href="/profile"
+                aria-label="My profile"
+                className="text-ssa-black hover:text-ssa-yellow transition-colors shrink-0"
+              >
+                <FaUserCircle className="w-9 h-9" />
+              </Link>
+            )}
+            {authResolved && !isAuthenticated && (
+              <>
+                <Link
+                  href={signInLink.href}
+                  className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
+                >
+                  {signInLink.label}
+                </Link>
+                <Link
+                  href={ctaLink.href}
+                  className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+                >
+                  {ctaLink.label}
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -121,13 +152,13 @@ export default function Navbar() {
             aria-controls="mobile-menu"
           >
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? 'translate-y-[8px] rotate-45' : ''}`}
             />
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`}
             />
             <span
-              className={`block h-[3px] w-6 bg-ssa-black rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
+              className={`block h-[3px] w-6 bg-ssa-white rounded transition-all duration-300 ${menuOpen ? '-translate-y-[8px] -rotate-45' : ''}`}
             />
           </button>
         </div>
@@ -138,7 +169,7 @@ export default function Navbar() {
         className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
       >
         <ul className="flex flex-col">
-          {[...navLinks, ctaLink].map(({ label, href }) => {
+          {[...navLinks, ...mobileAuthLinks].map(({ label, href }) => {
             const isActive = pathname === href
             return (
               <li key={href}>
@@ -146,9 +177,12 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 border-l-4 hover:text-ssa-yellow transition-colors ${isActive ? 'text-ssa-yellow border-l-ssa-yellow' : 'text-ssa-black border-l-transparent'}`}
+                  className="group relative block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 text-ssa-white hover:opacity-90 transition-opacity"
                 >
                   {label}
+                  <span
+                    className={`absolute bottom-0 left-6 right-6 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
+                  />
                 </Link>
               </li>
             )
@@ -157,8 +191,10 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div
-          className="fixed inset-0 z-30 md:hidden"
+        <button
+          type="button"
+          aria-label="Close menu"
+          className="fixed inset-0 z-30 md:hidden cursor-default"
           onClick={() => setMenuOpen(false)}
         />
       )}

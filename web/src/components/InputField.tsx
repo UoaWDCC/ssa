@@ -11,7 +11,9 @@ export default function InputField({
   type = 'text',
   error,
   autoComplete,
+  disabled,
   name,
+  readOnly,
 }: {
   label: string
   required?: boolean
@@ -21,7 +23,9 @@ export default function InputField({
   type?: string
   error?: string
   autoComplete?: string
+  disabled?: boolean
   name?: string
+  readOnly?: boolean
 }) {
   const id = useId()
   const errorId = useId()
@@ -42,6 +46,8 @@ export default function InputField({
         aria-invalid={!!error}
         aria-describedby={error ? errorId : undefined}
         autoComplete={autoComplete}
+        disabled={disabled}
+        readOnly={readOnly}
         className="w-full rounded-lg px-3 py-2 text-sm text-gray-900 outline-none border border-transparent focus:border-ssa-red bg-white placeholder:text-gray-400"
       />
       {error && (
