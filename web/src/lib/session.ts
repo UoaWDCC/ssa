@@ -20,7 +20,33 @@ export type SessionUser = {
   returningMember?: boolean
 }
 
+export type CmsSessionUser = {
+  id: string | number
+  email: string
+  firstName?: string | null
+  lastName?: string | null
+  phone?: string | null
+  role?: 'admin' | 'member' | null
+  authProvider?: 'email' | 'google' | null
+  membershipStatus?: 'active' | 'expired' | 'pending' | null
+  membershipExpiryDate?: string | null
+  upi?: string | null
+  studentId?: string | null
+  areaOfStudy?: string | null
+  yearOfUniversity?: string | null
+  gender?: string | null
+  ethnicity?: string | null
+  returningMember?: boolean | null
+}
+
 export const sessionCookie = 'ssa_session'
+export const sessionCookieOptions = {
+  httpOnly: true,
+  sameSite: 'lax' as const,
+  path: '/',
+  maxAge: 60 * 60 * 24 * 7,
+  secure: process.env.NODE_ENV === 'production',
+}
 
 const sessionVersion = 'v1'
 
@@ -97,4 +123,25 @@ export function parseSession(value?: null | string): SessionUser | null {
 export async function getSession(): Promise<SessionUser | null> {
   const store = await cookies()
   return parseSession(store.get(sessionCookie)?.value)
+}
+
+export function toSessionUser(user: CmsSessionUser): SessionUser {
+  return {
+    email: user.email,
+    userId: String(user.id),
+    firstName: user.firstName ?? undefined,
+    lastName: user.lastName ?? undefined,
+    phone: user.phone ?? undefined,
+    role: user.role ?? undefined,
+    authProvider: user.authProvider ?? undefined,
+    membershipStatus: user.membershipStatus ?? undefined,
+    membershipExpiryDate: user.membershipExpiryDate ?? undefined,
+    upi: user.upi ?? undefined,
+    studentId: user.studentId ?? undefined,
+    areaOfStudy: user.areaOfStudy ?? undefined,
+    yearOfUniversity: user.yearOfUniversity ?? undefined,
+    gender: user.gender ?? undefined,
+    ethnicity: user.ethnicity ?? undefined,
+    returningMember: user.returningMember ?? undefined,
+  }
 }
