@@ -9,13 +9,13 @@ export default function InstagramFeed() {
       <div className="flex items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <Image
-            src="/ssa_nerd_merlion.svg"
+            src="/favicon.ico"
             alt="SSA logo"
             width={49}
             height={46}
             className="shrink-0"
           />
-          <span className="font-averia font-bold text-ssa-red text-2xl truncate leading-none">
+          <span className="font-be-vietnam-pro font-bold text-ssa-red text-2xl truncate leading-none">
             Singaporean Students&apos; Association
           </span>
         </div>
@@ -23,7 +23,8 @@ export default function InstagramFeed() {
           href="https://www.instagram.com/ssa.auckland"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[16.38px] font-semibold uppercase tracking-[-0.02em] bg-ssa-salmon text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center">
+          className="text-[16.38px] font-be-vietnam-pro uppercase tracking-[-0.02em] bg-ssa-salmon text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center"
+        >
           Follow Us
         </a>
       </div>
