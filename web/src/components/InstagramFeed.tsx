@@ -23,8 +23,7 @@ export default function InstagramFeed() {
           href="https://www.instagram.com/ssa.auckland"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[16.38px] font-semibold uppercase tracking-[-0.02em] bg-ssa-red text-ssa-white px-[21.84px] py-[16.38px] rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center"
-        >
+          className="text-[16.38px] font-semibold uppercase tracking-[-0.02em] bg-ssa-salmon text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center">
           Follow Us
         </a>
       </div>
