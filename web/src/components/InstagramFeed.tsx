@@ -11,11 +11,11 @@ export default function InstagramFeed() {
           <Image
             src="/ssa_nerd_merlion.svg"
             alt="SSA logo"
-            width={32}
-            height={32}
+            width={49}
+            height={46}
             className="shrink-0"
           />
-          <span className="font-averia font-bold text-ssa-black text-lg truncate">
+          <span className="font-averia font-bold text-ssa-red text-2xl truncate leading-none">
             Singaporean Students&apos; Association
           </span>
         </div>
@@ -23,7 +23,7 @@ export default function InstagramFeed() {
           href="https://www.instagram.com/ssa.auckland"
           target="_blank"
           rel="noopener noreferrer"
-          className="font-averia font-bold text-sm bg-ssa-red text-white px-4 py-2 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap"
+          className="text-[16.38px] font-semibold uppercase tracking-[-0.02em] bg-ssa-red text-ssa-white px-[21.84px] py-[16.38px] rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center"
         >
           Follow Us
         </a>
