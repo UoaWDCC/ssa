@@ -96,10 +96,10 @@ type ButtonElementProps = CommonProps &
     href?: undefined
   }
 
+// Derive link props from `next/link` so callers keep Next features
+// (prefetch/replace/scroll and the UrlObject `href` form).
 type LinkElementProps = CommonProps &
-  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof CommonProps> & {
-    href: string
-  }
+  Omit<React.ComponentProps<typeof Link>, keyof CommonProps>
 
 export type ButtonProps = ButtonElementProps | LinkElementProps
 
