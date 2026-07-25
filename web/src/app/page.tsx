@@ -15,7 +15,7 @@ export default function Home() {
         subtitle="A home for people from the Little Red Dot."
         mascotImage="/ssa_merlion_full_body.svg"
         mascotAlt="SSA Merlion mascot"
-        ctaLabel="Join Us!"
+        ctaLabel="JOIN SSA!"
         ctaHref="/signup"
         showSingaporeFlag
       />
