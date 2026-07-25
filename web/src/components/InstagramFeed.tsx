@@ -23,7 +23,7 @@ export default function InstagramFeed() {
           href="https://www.instagram.com/ssa.auckland"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[16.38px] font-be-vietnam-pro uppercase tracking-[-0.02em] bg-ssa-salmon text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center"
+          className="text-[16.38px] font-be-vietnam-pro font-semibold uppercase tracking-[-0.02em] bg-ssa-salmon text-white px-6 py-2.5 rounded-full hover:opacity-90 transition-opacity shrink-0 whitespace-nowrap flex items-center justify-center"
         >
           Follow Us
         </a>
