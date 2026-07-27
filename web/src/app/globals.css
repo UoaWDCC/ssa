@@ -29,11 +29,19 @@
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
   --color-ssa-card-cta-hover: #ffdfab;
+  --color-ssa-cta-text: #633c3c;
+  --color-ssa-cta-border: #ec415e;
+  --color-ssa-contact-cta: #ffc5c5;
+  --color-ssa-contact-cta-hover: #eab7bf;
   --color-ssa-muted-gold: #9f7d32;
   --color-ssa-category-text: #968055;
+  --color-ssa-badge-light: #fce6ba;
+  --color-ssa-badge-light-text: #706f6f;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
+  --font-alegreya: var(--font-alegreya);
+  --font-be-vietnam-pro: var(--font-be-vietnam-pro);
 }
 
 @media (prefers-color-scheme: dark) {

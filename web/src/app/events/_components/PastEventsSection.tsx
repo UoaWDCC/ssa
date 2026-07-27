@@ -41,7 +41,7 @@ export default function PastEventsSection() {
   const hasMore = visibleCount < filteredEvents.length
 
   return (
-    <section className="px-8 sm:px-14 md:px-20 lg:px-[6.5rem] py-8 sm:py-10 md:py-12">
+    <section className="px-8 sm:px-14 md:px-20 lg:px-26 py-8 sm:py-10 md:py-12">
       <h2 className="font-averia font-bold text-ssa-black text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6">
         Past Events
       </h2>
@@ -58,7 +58,7 @@ export default function PastEventsSection() {
           value={query}
           onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Search event..."
-          className="w-full rounded-full border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
+          className="w-full rounded-xl border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
         />
       </label>
 
@@ -76,9 +76,9 @@ export default function PastEventsSection() {
               type="button"
               aria-pressed={isActive}
               onClick={() => handleFilterChange(filter)}
-              className={`rounded-full px-10 py-3 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
+              className={`rounded-xl px-8 py-2 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
                 isActive
-                  ? 'bg-ssa-red text-white'
+                  ? 'bg-ssa-red text-ssa-white'
                   : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
               }`}
             >
@@ -89,9 +89,14 @@ export default function PastEventsSection() {
       </div>
 
       {/* Grid */}
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 md:gap-8 lg:grid-cols-3">
+      <div className="mt-8 -mx-8 flex gap-5 overflow-x-auto px-8 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 md:gap-8 lg:grid-cols-3">
         {visibleEvents.map((event) => (
-          <PastEventCard key={event.slug} event={event} />
+          <div
+            key={event.slug}
+            className="w-[82vw] flex-none snap-start sm:w-auto"
+          >
+            <PastEventCard event={event} />
+          </div>
         ))}
       </div>
 
@@ -106,7 +111,7 @@ export default function PastEventsSection() {
           <button
             type="button"
             onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
-            className="inline-flex items-center gap-2 rounded-full bg-ssa-red-lighter px-8 py-3 font-averia text-base font-bold text-ssa-black transition-colors hover:bg-ssa-red hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
+            className="inline-flex items-center gap-2 rounded-3xl bg-ssa-yellow px-10 py-3 font-averia text-base font-bold text-ssa-category-text transition-colors border-2 border-ssa-dark-skin-yellow hover:bg-ssa-dark-skin-yellow  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
           >
             View More
             <FaArrowRight aria-hidden="true" />
