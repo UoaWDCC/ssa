@@ -1,91 +1,12 @@
-'use client'
-
-import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Hero from '@/components/Hero'
+import Footer from '@/components/Footer'
 import ExecGrid from './_components/ExecGrid'
 
-// TODO: replace with CMS data matching field requirements
-const carouselImages = [
-  { src: '/carousel_two.jpg', alt: 'SSA Event 1' },
-  { src: '/carousel_one.jpg', alt: 'SSA Event 2' },
-  { src: '/carousel_two.jpg', alt: 'SSA Event 3' },
-]
-
 export default function AboutPage() {
-  const [current, setCurrent] = useState(0)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
-  const touchStartX = useRef<number | null>(null)
-
-  const startTimer = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-    intervalRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % carouselImages.length)
-    }, 6000)
-  }, [])
-
-  const stopTimer = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current)
-  }, [])
-
-  const goTo = useCallback(
-    (index: number) => {
-      setCurrent(index)
-      startTimer()
-    },
-    [startTimer],
-  )
-
-  const goPrev = useCallback(() => {
-    goTo((current - 1 + carouselImages.length) % carouselImages.length)
-  }, [current, goTo])
-
-  const goNext = useCallback(() => {
-    goTo((current + 1) % carouselImages.length)
-  }, [current, goTo])
-
-  useEffect(() => {
-    startTimer()
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current)
-    }
-  }, [startTimer])
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowLeft') {
-        goTo((current - 1 + carouselImages.length) % carouselImages.length)
-      } else if (e.key === 'ArrowRight') {
-        goTo((current + 1) % carouselImages.length)
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [current, goTo])
-
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-  }, [])
-
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent) => {
-      if (touchStartX.current === null) return
-      const diff = touchStartX.current - e.changedTouches[0].clientX
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          goNext()
-        } else {
-          goPrev()
-        }
-      }
-      touchStartX.current = null
-    },
-    [goNext, goPrev],
-  )
-
   return (
-    <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
-      <div className="-mt-[88px] rounded-2xl bg-ssa-red pt-[88px] overflow-hidden">
+    <main className="flex flex-col bg-[#fffbf4] text-[#434242]">
+      <div className="-mt-[88px] overflow-hidden rounded-2xl bg-ssa-red pt-[88px]">
         <Hero
           title="About Us"
           subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
@@ -94,89 +15,32 @@ export default function AboutPage() {
         />
       </div>
 
-      <section className="pt-10 px-4 sm:px-6 md:px-10 lg:px-20">
-        <div className="relative">
+      <section className="mx-auto w-full max-w-[1440px] px-[18px] pt-[32px] sm:px-8 md:px-12 md:pt-16 lg:px-16 xl:px-[clamp(24px,6.8056vw,98px)] xl:pt-[88px]">
+        <div className="relative aspect-[366/236.6457] w-full overflow-hidden rounded-[4px] md:aspect-[1244/573] md:rounded-[12px]">
+          <Image
+            src="/about-team.png"
+            alt="Members of the Singapore Students’ Association holding the association banner"
+            width={1388}
+            height={850}
+            priority
+            sizes="(max-width: 639px) calc(100vw - 36px), (max-width: 767px) calc(100vw - 64px), (max-width: 1023px) calc(100vw - 96px), (max-width: 1279px) calc(100vw - 128px), (max-width: 1439px) 86.4vw, 1244px"
+            className="absolute left-[-11.15%] top-[-4.69%] h-[115.97%] w-[122.45%] max-w-none md:top-[-6.58%] md:h-[162.73%]"
+          />
           <div
-            className="relative w-full aspect-[4/3] sm:aspect-[16/9] overflow-hidden rounded-2xl"
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onMouseEnter={stopTimer}
-            onMouseLeave={startTimer}
-          >
-            <div
-              className="flex h-full transition-transform duration-500 ease-in-out"
-              style={{ transform: `translateX(-${current * 100}%)` }}
-            >
-              {carouselImages.map((image, index) => (
-                <div key={index} className="relative h-full w-full shrink-0">
-                  <Image
-                    src={image.src}
-                    alt={image.alt}
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={goPrev}
-            aria-label="Previous slide"
-            className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 text-ssa-black"
-            >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
-
-          <button
-            onClick={goNext}
-            aria-label="Next slide"
-            className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white/70 hover:bg-white transition-colors cursor-pointer"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 text-ssa-black"
-            >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
+            aria-hidden="true"
+            className="absolute inset-0 bg-[rgba(50,50,50,0.2)] md:hidden"
+          />
         </div>
-
-        <div className="flex justify-center gap-2 pt-4">
-          {carouselImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => goTo(index)}
-              aria-label={`Go to slide ${index + 1}`}
-              className="flex items-center justify-center w-6 h-6 cursor-pointer"
-            >
-              <span
-                className={`block w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === current ? 'bg-ssa-red scale-125' : 'bg-ssa-red/30'}`}
-              />
-            </button>
-          ))}
+        <div
+          aria-hidden="true"
+          className="relative mt-[88px] hidden h-0 w-full xl:block"
+        >
+          <div className="absolute inset-x-0 bottom-0 h-[4px] bg-black/[0.05]" />
         </div>
       </section>
 
       <ExecGrid />
+      <Footer />
     </main>
   )
 }
