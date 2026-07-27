@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import type React from 'react'
 import type { IconType } from 'react-icons'
+import Button from '@/components/Button'
 
 export type HighlightCardDetail = {
   icon?: IconType
@@ -36,7 +36,7 @@ function DetailIcon({ detail }: { detail: HighlightCardDetail }) {
     return (
       <Icon
         aria-hidden="true"
-        className="size-5 shrink-0 text-ssa-red lg:size-6"
+        className="size-[18px] shrink-0 text-ssa-black"
       />
     )
   }
@@ -50,7 +50,7 @@ function DetailIcon({ detail }: { detail: HighlightCardDetail }) {
       width={24}
       height={24}
       aria-hidden={detail.iconAlt ? undefined : true}
-      className="size-5 shrink-0 object-contain lg:size-6"
+      className="size-[18px] shrink-0 object-contain brightness-0"
     />
   )
 }
@@ -63,10 +63,10 @@ function getBadgeClassName(badge: HighlightCardBadge) {
   const variant = typeof badge === 'string' ? 'red' : (badge.variant ?? 'red')
   const variantClassName =
     variant === 'light'
-      ? 'bg-ssa-badge-light text-ssa-badge-light-text'
-      : 'bg-ssa-red text-ssa-yellow-light'
+      ? 'bg-ssa-muted-cream text-ssa-muted-taupe'
+      : 'bg-ssa-red-light text-white'
 
-  return `flex items-center justify-center gap-[3.66px] rounded-[5px] px-4 py-2 text-center font-sans text-sm font-bold leading-none lg:text-[19px] lg:leading-[19px] ${variantClassName}`
+  return `flex items-center justify-center rounded-[2px] px-2 py-[5px] text-center font-dm-mono text-xs font-normal uppercase leading-3 ${variantClassName}`
 }
 
 export function HighlightCard({
@@ -81,74 +81,68 @@ export function HighlightCard({
   imageAlt,
 }: HighlightCardProps) {
   return (
-    <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] min-[1200px]:grid-cols-[minmax(0,1fr)_554px]">
-      <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 lg:pb-[58px] lg:pl-14 lg:pr-10 lg:pt-11">
-        <div>
-          <div className="space-y-1.5 lg:space-y-2">
-            <p className="font-averia text-base font-bold uppercase leading-tight tracking-wide text-ssa-muted-gold lg:text-[21px] lg:leading-6">
-              {eyebrow}
-            </p>
-            <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-red lg:text-[40px] lg:leading-[42px]">
-              {title}
-            </h2>
-          </div>
-
-          {(details.length > 0 || badges.length > 0) && (
-            <div className="mt-5 flex flex-col gap-3 lg:mt-6 lg:gap-4">
-              {details.length > 0 && (
-                <ul className="flex flex-col gap-2 lg:gap-1.5">
-                  {details.map((detail) => (
-                    <li
-                      key={detail.text}
-                      className="flex items-center gap-3 font-averia text-lg font-light leading-tight text-ssa-grey lg:text-[23px] lg:leading-8"
-                    >
-                      <DetailIcon detail={detail} />
-                      <span>{detail.text}</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {badges.length > 0 && (
-                <ul className="flex flex-wrap gap-2">
-                  {badges.map((badge) => (
-                    <li
-                      key={getBadgeText(badge)}
-                      className={getBadgeClassName(badge)}
-                    >
-                      {getBadgeText(badge)}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-
-          <div className="my-5 h-px w-full bg-ssa-muted-gold/30 lg:my-6" />
-
-          <div className="font-averia text-xl font-light leading-snug text-ssa-smoke-grey [&_p]:m-0 lg:text-[25px] lg:leading-[30px]">
-            {description}
-          </div>
-        </div>
-
-        <Link
-          href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-ssa-cta-border bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-red-super-light focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
-        >
-          <span>{ctaLabel}</span>
-          <span aria-hidden="true">→</span>
-        </Link>
+    <article className="mx-auto min-h-[366px] w-full max-w-[360px] overflow-hidden rounded-[14px] bg-ssa-yellow-light p-6 shadow-[0_1px_3px_1px_#00000026] md:max-w-[720px] xl:grid xl:h-[395px] xl:min-h-0 xl:max-w-[1250px] xl:grid-cols-2 xl:gap-9 xl:p-9">
+      <div className="relative hidden min-h-0 w-full overflow-hidden rounded-[16px] xl:block xl:h-full">
+        <Image
+          src={imageSrc}
+          alt={imageAlt}
+          fill
+          sizes="(min-width: 1400px) 571px, (min-width: 1280px) calc(50vw - 82px), (min-width: 768px) calc(100vw - 144px), calc(100vw - 96px)"
+          className="object-cover"
+        />
       </div>
 
-      <div className="hidden justify-end min-[1200px]:flex min-[1200px]:items-start min-[1200px]:py-[44px] min-[1200px]:pl-8 min-[1200px]:pr-[68px]">
-        <div className="relative aspect-[486/488] w-full max-w-[486px] shrink-0 overflow-hidden rounded-[20px] min-[1200px]:h-[488px] min-[1200px]:w-[486px] min-[1200px]:aspect-auto">
-          <Image
-            src={imageSrc}
-            alt={imageAlt}
-            fill
-            sizes="(min-width: 1200px) 486px, 0px"
-            className="object-cover"
-          />
+      <div className="flex min-w-0 flex-col font-be-vietnam-pro xl:h-full">
+        <div>
+          <p className="font-dm-mono text-xs font-normal uppercase leading-4 tracking-[1px] text-ssa-muted-taupe xl:font-medium">
+            {eyebrow}
+          </p>
+          <h2 className="mt-[2px] text-2xl font-bold leading-7 text-ssa-red">
+            {title}
+          </h2>
+
+          {badges.length > 0 && (
+            <ul className="mt-1 flex flex-wrap gap-2">
+              {badges.map((badge) => (
+                <li
+                  key={getBadgeText(badge)}
+                  className={getBadgeClassName(badge)}
+                >
+                  {getBadgeText(badge)}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {details.length > 0 && (
+            <ul className="mt-4 flex flex-col gap-1 xl:mt-8 xl:gap-0">
+              {details.map((detail) => (
+                <li
+                  key={detail.text}
+                  className="flex min-w-0 items-center gap-2 text-base font-normal leading-6 text-ssa-grey"
+                >
+                  <DetailIcon detail={detail} />
+                  <span>{detail.text}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="mt-4 flex flex-col gap-4 xl:mt-auto">
+          <div className="font-inter text-base font-normal leading-6 text-ssa-grey [&_p]:m-0">
+            {description}
+          </div>
+
+          <Button
+            href={ctaHref}
+            size="long"
+            variant="filled"
+            color="red"
+            className="max-w-[566px] shrink-0"
+          >
+            {ctaLabel}
+          </Button>
         </div>
       </div>
     </article>

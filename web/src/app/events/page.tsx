@@ -16,19 +16,19 @@ export default function EventsPage() {
         mascotAlt="SSA Nerd Merlion mascot"
       />
 
-      <section className="px-6 md:px-10 lg:px-16">
-        <div className="mx-auto flex w-full max-w-[1214px] flex-col gap-5 md:gap-8">
+      <section className="px-[21px] md:px-10 lg:px-16">
+        <div className="mx-auto flex w-full max-w-[1250px] flex-col gap-5 md:gap-8">
           <HighlightCard
             eyebrow="Upcoming Event"
             title="Ice Kachang"
             details={[
               {
-                icon: FaClock,
-                text: '2nd April - 6PM',
-              },
-              {
                 icon: FaLocationDot,
                 text: '401-318 Engineering Atrium (Level 3)',
+              },
+              {
+                icon: FaClock,
+                text: '2nd April - 6:00 PM',
               },
             ]}
             badges={[
@@ -36,12 +36,13 @@ export default function EventsPage() {
               { text: '$11 NON-MEMBERS', variant: 'light' },
             ]}
             description={
-              <>
-                Hot, stressed and over Uni already? Say less... we&apos;ve got
-                the perfect cooldown for you. Come chill with SSA at our Ice
-                Kachang Night. Sweet, icy, colourful... but there&apos;s a twist
-                👀
-              </>
+              <p>
+                Hot, stressed and over Uni already?
+                <br />
+                Say less... we’ve got the perfect cooldown for you. Come chill
+                with SSA at our Ice Kachang Night. Sweet, icy, colourful… but
+                there’s a twist.
+              </p>
             }
             ctaLabel="RSVP"
             ctaHref="/events"

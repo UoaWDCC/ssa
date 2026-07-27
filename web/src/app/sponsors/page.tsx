@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FaLocationDot } from 'react-icons/fa6'
+import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
 import CtaLink from '@/components/CtaLink'
 import Footer from '@/components/Footer'
@@ -122,13 +122,14 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
 
 export default async function SponsorsPage() {
   const sponsors = sponsorEntries
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
+    ...(sponsorOfTheWeekEntry.location
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
-      : []
-  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
-    ? [sponsorOfTheWeekEntry.memberPerks]
-    : []
+      : []),
+    ...(sponsorOfTheWeekEntry.memberPerks
+      ? [{ icon: FaStar, text: '10% SSA Members' }]
+      : []),
+  ]
 
   return (
     <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
@@ -143,7 +144,6 @@ export default async function SponsorsPage() {
           eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeekEntry.name}
           details={sponsorOfTheWeekDetails}
-          badges={sponsorOfTheWeekBadges}
           description={<p>{sponsorOfTheWeekEntry.description}</p>}
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}

@@ -19,16 +19,16 @@ export default function Home() {
         ctaHref="/signup"
         showSingaporeFlag
       />
-      <section className="px-6 md:px-10 lg:px-16">
+      <section className="px-[21px] md:px-10 lg:px-16">
         <HighlightCard
           eyebrow="Upcoming Event"
           title="Ice Kachang"
           details={[
-            { icon: FaClock, text: '2nd April - 6PM' },
             {
               icon: FaLocationDot,
               text: '401-318 Engineering Atrium (Level 3)',
             },
+            { icon: FaClock, text: '2nd April - 6:00 PM' },
           ]}
           badges={['$5 Members', { text: '$11 Non-Members', variant: 'light' }]}
           description={

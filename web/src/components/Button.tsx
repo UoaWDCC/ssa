@@ -39,7 +39,7 @@ const sizes: Record<ButtonSize, string> = {
 // strings so Tailwind can detect them.
 const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
   filled: {
-    red: 'bg-ssa-red text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    red: 'bg-ssa-salmon-pink text-ssa-white hover:bg-ssa-red',
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
