@@ -51,7 +51,7 @@ export default function HomeCarousel() {
     if (intervalRef.current) clearInterval(intervalRef.current)
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => (prev + 1) % carouselImages.length)
-    }, 6000)
+    }, 5000)
   }, [])
 
   const stopTimer = useCallback(() => {
@@ -102,10 +102,10 @@ export default function HomeCarousel() {
   )
 
   return (
-    <section className="px-4 sm:px-6 md:px-10 lg:px-20">
+    <section className="px-4 sm:px-6 md:px-10 lg:px-16">
       <div className="relative drop-shadow-xl">
         <div
-          className="relative w-full aspect-4/3 sm:aspect-16/7 overflow-hidden rounded-2xl"
+          className="relative w-full aspect-4/3 sm:aspect-[1244/660] overflow-hidden rounded-[12px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={stopTimer}
@@ -130,8 +130,8 @@ export default function HomeCarousel() {
                 <div className="absolute inset-0 bg-black/35" />
                 {/* Dark gradient on top edge for title readability */}
                 <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-black/50 to-transparent" />
-                {/* Title top left with more spacing */}
-                <p className="absolute top-12 left-12 text-white font-averia font-normal text-2xl md:text-3xl drop-shadow">
+                {/* Title top left - DM Mono, 16px, -2% tracking, 36px inset */}
+                <p className="absolute top-9 left-9 text-white font-mono font-normal text-base leading-[13.33px] tracking-[-0.02em] drop-shadow">
                   {image.title}
                 </p>
                 {/* View Album bottom right - slightly thinner border, more round */}
@@ -147,14 +147,14 @@ export default function HomeCarousel() {
             ))}
           </div>
 
-          {/* Dots - hidden on mobile, shown on sm+ */}
-          <div className="hidden sm:flex absolute bottom-6 left-0 right-0 justify-center gap-2">
+          {/* Dots - hidden on mobile, shown on sm+. Pill container per Figma spec */}
+          <div className="hidden sm:flex absolute bottom-9 left-0 right-0 justify-center items-center gap-[7.76px] px-[15.52px] py-[11.64px] rounded-[18.41px] bg-black/50 mx-auto w-fit">
             {carouselImages.map((image, index) => (
               <button
                 key={image.id}
                 onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                className="flex items-center justify-center w-6 h-6 cursor-pointer"
+                className="flex items-center justify-center cursor-pointer"
               >
                 <span
                   className={`block w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === current ? 'bg-ssa-red scale-125' : 'bg-white/70'}`}
