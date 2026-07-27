@@ -1,7 +1,5 @@
-import type { Sponsor } from '../../../../../cms/src/payload-types'
+import type { Sponsor } from '@/lib/sponsors'
 import SponsorLogoTile from './SponsorLogoTile'
-
-export type { Sponsor } from '../../../../../cms/src/payload-types'
 
 export type SponsorGridItem = Sponsor & {
   hoverOverlayClassName?: string
@@ -9,7 +7,7 @@ export type SponsorGridItem = Sponsor & {
 }
 
 type SponsorsGridProps = {
-  sponsors: SponsorGridItem[]
+  sponsors?: SponsorGridItem[] | null
 }
 
 function getSponsorLogoUrl(logo: Sponsor['logo']) {
@@ -19,9 +17,11 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
 }
 
 export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
+  const sponsorList = Array.isArray(sponsors) ? sponsors : []
+
   return (
     <div className="mx-auto grid w-full max-w-[1214px] grid-cols-[repeat(auto-fit,83px)] justify-center gap-[7px] sm:grid-cols-[repeat(auto-fit,120px)] sm:gap-[26px] md:grid-cols-[repeat(auto-fit,160px)] lg:grid-cols-[repeat(auto-fit,222px)]">
-      {sponsors.map((sponsor) => (
+      {sponsorList.map((sponsor) => (
         <SponsorLogoTile
           key={sponsor.id}
           name={sponsor.name}

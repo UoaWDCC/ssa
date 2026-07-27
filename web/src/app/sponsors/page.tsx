@@ -8,28 +8,23 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import SponsorsGrid from './components/SponsorsGrid'
+import type { Media } from '@/types/payload-types'
+import { fetchSponsors, Sponsor } from '@/lib/sponsors'
 
-import SponsorsGrid, {
-  type Sponsor,
-  type SponsorGridItem,
-} from './components/SponsorsGrid'
-import type { Media } from '../../../../cms/src/payload-types'
-
-type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url' | 'filename'>
+type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
 
 function createSponsorMedia({
   id,
   alt,
   url,
-  filename,
 }: SponsorMediaSeedInput): Media {
   return {
     id,
     alt,
     url,
-    filename,
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
+    width: null,
+    height: null,
   }
 }
 
@@ -52,7 +47,6 @@ const sponsorOfTheWeekEntry: Sponsor = {
     id: 101,
     alt: 'Sip n Chill sponsor photo',
     url: '/sponsors/sponsorcard.png',
-    filename: 'sponsorcard.png',
   }),
   websiteUrl:
     'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
@@ -65,63 +59,9 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      filename: 'kompass_coffee.png',
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-[#71717199]',
-    hoverTextClassName: 'text-white',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      filename: 'sipnchill.png',
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-ssa-yellow/60',
-    hoverTextClassName: 'text-ssa-grey',
-  },
-]
-//remove after milestone
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 20 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
-
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-    }
-  },
-)
-
 export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
+  const sponsors = await fetchSponsors()
+  console.log('Sponsors:', sponsors)
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
     sponsorOfTheWeekEntry.location
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
