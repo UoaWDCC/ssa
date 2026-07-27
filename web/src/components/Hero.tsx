@@ -27,8 +27,9 @@ const titleStyles: Record<HeroVariant, string> = {
 }
 
 const subtitleStyles: Record<HeroVariant, string> = {
-  fullscreen: 'text-ssa-white text-md sm:text-xl md:text-2xl lg:text-3xl',
-  compact: 'text-ssa-white text-sm sm:text-base md:text-lg lg:text-xl',
+  fullscreen:
+    'text-ssa-white font-bold text-sm sm:text-base md:text-lg lg:text-xl',
+  compact: 'text-ssa-white text-xs sm:text-sm md:text-base lg:text-lg',
 }
 
 const contentStyles: Record<HeroVariant, string> = {
@@ -75,7 +76,7 @@ const orchidDuoStyles: Record<HeroVariant, string> = {
   fullscreen:
     'w-full max-w-[18rem] sm:max-w-[24rem] md:max-w-[30rem] lg:max-w-[36rem]',
   compact:
-    'w-full max-w-[14rem] sm:max-w-[18rem] md:max-w-[22rem] lg:max-w-[28rem]',
+    'w-full max-w-[10rem] sm:max-w-[12rem] md:max-w-[16rem] lg:max-w-[20rem]',
 }
 
 export default function Hero({
@@ -104,7 +105,7 @@ export default function Hero({
               {title}
             </h1>
             <p
-              className={`font-inter font-bold leading-tight wrap-break-word ${subtitleStyles[variant]}`}
+              className={`font-inter leading-tight wrap-break-word ${subtitleStyles[variant]}`}
             >
               {subtitle}
             </p>
@@ -135,7 +136,7 @@ export default function Hero({
             width={1200}
             height={1200}
             aria-hidden="true"
-            className={`${orchidDuoStyles[variant]} z-0 h-auto shrink-0 self-end md:self-center`}
+            className={`${orchidDuoStyles[variant]} z-0 h-auto shrink-0 self-end md:self-center translate-y-12`}
           />
         </div>
       ) : (
@@ -166,7 +167,7 @@ export default function Hero({
                 {title}
               </h1>
               <p
-                className={`font-inter font-bold leading-tight wrap-break-word ${subtitleStyles[variant]}`}
+                className={`leading-tight wrap-break-word ${subtitleStyles[variant]}`}
               >
                 {subtitle}
               </p>

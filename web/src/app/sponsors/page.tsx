@@ -133,7 +133,8 @@ export default async function SponsorsPage() {
   return (
     <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
       <Hero
-        title="Sponsors"
+        layout="split"
+        title="SPONSORS"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
       />
       <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
