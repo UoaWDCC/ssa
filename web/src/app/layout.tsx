@@ -37,7 +37,7 @@ const alegreya = Alegreya({
 const beVietnamPro = Be_Vietnam_Pro({
   variable: '--font-be-vietnam-pro',
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500', '600', '700'],
 })
 
 const dmMono = DM_Mono({
