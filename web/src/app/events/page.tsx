@@ -12,8 +12,6 @@ export default function EventsPage() {
       <Hero
         title="Events"
         subtitle="Join us for exciting events, cultural celebrations, and community gatherings throughout the year."
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
       />
 
       <section className="px-6 md:px-10 lg:px-16">

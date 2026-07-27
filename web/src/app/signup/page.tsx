@@ -8,7 +8,6 @@ export default function SignupPage() {
       <Hero
         title="Join SSA"
         subtitle="Become a member of the Singapore Students' Association."
-        mascotImage="/mascot.png"
       />
       <Suspense
         fallback={

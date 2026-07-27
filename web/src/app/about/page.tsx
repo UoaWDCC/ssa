@@ -14,12 +14,13 @@ const carouselImages = [
 export default function AboutPage() {
   return (
     <main className="flex flex-col bg-ssa-yellow-light pb-16 text-ssa-black md:pb-24">
-      <div className="-mt-[88px] rounded-2xl bg-ssa-red pt-[88px] overflow-hidden">
+      <div
+        className="overflow-hidden rounded-2xl bg-ssa-red"
+        style={{ marginTop: '-88px', paddingTop: '88px' }}
+      >
         <Hero
           title="About Us"
           subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
-          mascotImage="/ssa_nerd_merlion.svg"
-          mascotAlt="SSA Nerd Merlion mascot"
         />
       </div>
 
