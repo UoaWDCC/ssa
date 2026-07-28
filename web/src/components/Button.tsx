@@ -11,7 +11,7 @@ export type ArrowSide = 'left' | 'right'
  * Shared SSA pill button (matches the finalized "JOIN SSA!" Figma design).
  *
  * On hover the background and text colours swap, the label slides across, and the
- * arrow animates to the opposite side of the button while the pill lifts.
+ * arrow animates to the opposite side of the button. The pill itself stays put.
  *
  * - `size`      — `short` (content width) or `long` (full-width CTA).
  * - `variant`   — `filled` (accent fill, light text) · `light` (cream fill, accent text) · `outline`.
@@ -23,7 +23,7 @@ export type ArrowSide = 'left' | 'right'
  */
 
 const base =
-  'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-sans font-bold leading-tight cursor-pointer select-none transition-all duration-300 ease-out shadow-[0_3px_0_0_rgba(0,0,0,0.08)] hover:-translate-y-0.5 hover:shadow-[0_5px_0_0_rgba(0,0,0,0.08)] active:translate-y-0 active:shadow-[0_2px_0_0_rgba(0,0,0,0.08)] focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 disabled:opacity-60 disabled:pointer-events-none'
+  'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-averia font-bold leading-tight cursor-pointer select-none transition-colors duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
 
 // Horizontal metrics are in `em` so they track the label size instead of needing a
 // responsive override per breakpoint. `px-[2.2em]` is the edge inset — for `short` it
@@ -156,9 +156,18 @@ export default function Button({
   )
 
   if (props.href !== undefined) {
-    const { href, ...rest } = props as LinkElementProps
+    const { href, target, rel, ...rest } = props as LinkElementProps
     return (
-      <Link href={href} className={classes} {...rest}>
+      <Link
+        href={href}
+        target={target}
+        // Reverse-tabnabbing guard for external links, matching the rest of the
+        // codebase (Footer, InstagramFeed, SponsorLogoTile). A caller-supplied
+        // `rel` still wins.
+        rel={target === '_blank' ? (rel ?? 'noopener noreferrer') : rel}
+        className={classes}
+        {...rest}
+      >
         {content}
       </Link>
     )
