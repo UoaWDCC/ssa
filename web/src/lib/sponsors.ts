@@ -1,13 +1,12 @@
 'use server'
 
 import type { Media } from '@/types/payload-types'
-
 const CMS_URL = process.env.CMS_URL
 
 export interface Sponsor {
   id: number
   name: string
-  logo: Media
+  logo: number | Media
   websiteUrl?: string | null
   isSponsorOfTheWeek?: boolean | null
   description?: string | null
@@ -18,11 +17,7 @@ export interface Sponsor {
 }
 
 export async function fetchSponsors(): Promise<Sponsor[]> {
-  if (!CMS_URL) {
-    throw new Error('CMS_URL is not configured')
-  }
-
-  const res = await fetch(`${CMS_URL}/api/sponsors`, {
+  const res = await fetch(`${CMS_URL}/api/sponsors?depth=2`, {
     headers: { 'Content-Type': 'application/json' },
     cache: 'no-store',
   })
@@ -31,6 +26,25 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
     throw new Error(`CMS request failed: ${res.status} ${res.statusText}`)
   }
 
-  const data = await res.json()
-  return data.docs as Sponsor[]
+  const data = (await res.json()) as { docs: Array<Omit<Sponsor, 'logo'> & { logo: number | Record<string, unknown> }> }
+  return data.docs.map((sponsor) => {
+    if (typeof sponsor.logo === 'number') return sponsor as Sponsor
+    const logo = sponsor.logo as {
+      id: number
+      alt: string
+      url?: string | null
+      width?: number | null
+      height?: number | null
+     }
+     return {
+      ...sponsor,
+      logo: {
+        id: logo.id,
+        alt: logo.alt,
+        url: logo.url ? new URL(logo.url, CMS_URL).toString() : null,
+        width: logo.width ?? null,
+        height: logo.height ?? null,
+      },
+     }
+   }) as Sponsor[]
 }

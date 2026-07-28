@@ -25,18 +25,6 @@ export interface Event {
   createdAt: string
 }
 
-export interface Exec {
-  id: number
-  name: string
-  position: string
-  photo: Media | null
-  bio: string | null
-  linkedIn: string | null
-  email: string | null
-  updatedAt: string
-  createdAt: string
-}
-
 export interface EventsResponse {
   docs: Event[]
   totalDocs: number
