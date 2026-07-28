@@ -37,6 +37,7 @@ export default function Navbar() {
   }, [menuOpen])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHidden(window.scrollY > 80)
 
     let lastY = window.scrollY
