@@ -23,7 +23,7 @@ export type ArrowSide = 'left' | 'right'
  */
 
 const base =
-  'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-averia font-bold leading-tight cursor-pointer select-none transition-colors duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
+  'group relative inline-flex items-center justify-center overflow-hidden rounded-full font-be-vietnam-pro font-bold leading-tight cursor-pointer select-none transition-colors duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60'
 
 // Horizontal metrics are in `em` so they track the label size instead of needing a
 // responsive override per breakpoint. `px-[2.2em]` is the edge inset — for `short` it
