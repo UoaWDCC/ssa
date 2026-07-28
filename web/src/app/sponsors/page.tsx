@@ -14,11 +14,7 @@ import { fetchSponsors, Sponsor } from '@/lib/sponsors'
 
 type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
 
-function createSponsorMedia({
-  id,
-  alt,
-  url,
-}: SponsorMediaSeedInput): Media {
+function createSponsorMedia({ id, alt, url }: SponsorMediaSeedInput): Media {
   return {
     id,
     alt,
