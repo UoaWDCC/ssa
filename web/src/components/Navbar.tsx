@@ -8,14 +8,13 @@ import { FaUserCircle } from 'react-icons/fa'
 import { useAuth } from '@/hooks/useAuth'
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Events', href: '/events' },
-  { label: 'Sponsors', href: '/sponsors' },
+  { label: 'HOME', href: '/' },
+  { label: 'ABOUT', href: '/about' },
+  { label: 'EVENTS', href: '/events' },
+  { label: 'SPONSORS', href: '/sponsors' },
 ]
 
-const ctaLink = { label: 'Join SSA!', href: '/signup' }
-const signInLink = { label: 'Sign In', href: '/sign-in' }
+const ctaLink = { label: 'JOIN SSA!', href: '/signup' }
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
@@ -25,11 +24,12 @@ export default function Navbar() {
   const auth = useAuth()
   const isAuthenticated = auth.status === 'authenticated'
   const authResolved = auth.status !== 'loading'
+
   let mobileAuthLinks: { label: string; href: string }[] = []
   if (authResolved && isAuthenticated) {
     mobileAuthLinks = [{ label: 'Profile', href: '/profile' }]
   } else if (authResolved) {
-    mobileAuthLinks = [signInLink, ctaLink]
+    mobileAuthLinks = [ctaLink]
   }
 
   useEffect(() => {
@@ -37,11 +37,6 @@ export default function Navbar() {
   }, [menuOpen])
 
   useEffect(() => {
-    // Initial hidden state must be derived from window.scrollY at mount
-    // (page may load mid-scroll on refresh / deep link / back navigation),
-    // and window is unavailable during SSR so it can't go in a useState
-    // lazy initializer.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHidden(window.scrollY > 80)
 
     let lastY = window.scrollY
@@ -85,8 +80,13 @@ export default function Navbar() {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0 shadow-lg'}`}
       >
-        <div className="w-full flex items-center gap-4">
-          <Link href="/" className="shrink-0" aria-label="SSA Home">
+        <div className="relative w-full flex items-center justify-center">
+          {/* Logo — pinned to the left */}
+          <Link
+            href="/"
+            className="absolute left-0 shrink-0"
+            aria-label="SSA Home"
+          >
             <Image
               src="/mascot.png"
               alt="SSA Mascot"
@@ -96,7 +96,7 @@ export default function Navbar() {
             />
           </Link>
 
-          <ul className="hidden md:flex items-center gap-1">
+          <ul className="group hidden md:flex items-center gap-1">
             {navLinks.map(({ label, href }) => {
               const isActive = pathname === href
               return (
@@ -104,19 +104,16 @@ export default function Navbar() {
                   <Link
                     href={href}
                     aria-current={isActive ? 'page' : undefined}
-                    className="group relative font-averia font-bold text-xl px-4 py-2 text-ssa-white transition-opacity whitespace-nowrap hover:opacity-90"
+                    className="relative font-['Be_Vietnam_Pro'] font-semibold text-base leading-6 tracking-[-0.02em] uppercase px-4 py-2 text-ssa-white transition-opacity duration-200 whitespace-nowrap group-hover:opacity-60 hover:!opacity-100"
                   >
                     {label}
-                    <span
-                      className={`absolute bottom-0 left-4 right-4 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                    />
                   </Link>
                 </li>
               )
             })}
           </ul>
 
-          <div className="hidden md:flex items-center ml-auto gap-3">
+          <div className="absolute right-0 hidden md:flex items-center gap-3">
             {authResolved && isAuthenticated && (
               <Link
                 href="/profile"
@@ -127,25 +124,18 @@ export default function Navbar() {
               </Link>
             )}
             {authResolved && !isAuthenticated && (
-              <>
-                <Link
-                  href={signInLink.href}
-                  className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
-                >
-                  {signInLink.label}
-                </Link>
-                <Link
-                  href={ctaLink.href}
-                  className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
-                >
-                  {ctaLink.label}
-                </Link>
-              </>
+              <Link
+                href={ctaLink.href}
+                className="font-be-vietnam-pro font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
+              >
+                {ctaLink.label}
+              </Link>
             )}
           </div>
 
+          {/* Hamburger — pinned to the right on mobile */}
           <button
-            className="md:hidden ml-auto flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
+            className="md:hidden absolute right-0 flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
@@ -164,9 +154,14 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* Mobile menu */}
       <div
         id="mobile-menu"
-        className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+        className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${
+          menuOpen
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}
       >
         <ul className="flex flex-col">
           {[...navLinks, ...mobileAuthLinks].map(({ label, href }) => {
@@ -177,12 +172,9 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className="group relative block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 text-ssa-white hover:opacity-90 transition-opacity"
+                  className="block w-full font-be-vietnam-pro font-bold text-2xl leading-8 tracking-[-0.04em] text-white px-6 py-4 border-b border-white/10 transition-opacity duration-200 hover:opacity-70"
                 >
                   {label}
-                  <span
-                    className={`absolute bottom-0 left-6 right-6 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                  />
                 </Link>
               </li>
             )
@@ -190,6 +182,7 @@ export default function Navbar() {
         </ul>
       </div>
 
+      {/* Backdrop to close mobile menu on outside tap */}
       {menuOpen && (
         <button
           type="button"
