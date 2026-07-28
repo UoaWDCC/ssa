@@ -8,7 +8,7 @@ import PastEventsSection from './_components/PastEventsSection'
 
 export default function EventsPage() {
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-[121px]">
+    <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-[121px]">
       <Hero
         title="Events"
         subtitle="Join us for exciting events, cultural celebrations, and community gatherings throughout the year."

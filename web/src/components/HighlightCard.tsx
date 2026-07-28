@@ -33,24 +33,23 @@ function DetailIcon({ detail }: { detail: HighlightCardDetail }) {
   if (detail.icon) {
     const Icon = detail.icon
 
-    return (
-      <Icon
-        aria-hidden="true"
-        className="size-[18px] shrink-0 text-ssa-black"
-      />
-    )
+    return <Icon aria-hidden="true" className="size-4 shrink-0 text-ssa-grey" />
   }
 
   if (!detail.iconSrc) return null
 
+  const iconMask = `url("${detail.iconSrc}")`
+
   return (
-    <Image
-      src={detail.iconSrc}
-      alt={detail.iconAlt ?? ''}
-      width={24}
-      height={24}
+    <span
+      role={detail.iconAlt ? 'img' : undefined}
+      aria-label={detail.iconAlt}
       aria-hidden={detail.iconAlt ? undefined : true}
-      className="size-[18px] shrink-0 object-contain brightness-0"
+      className="size-4 shrink-0 bg-ssa-grey [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain]"
+      style={{
+        maskImage: iconMask,
+        WebkitMaskImage: iconMask,
+      }}
     />
   )
 }
@@ -81,7 +80,7 @@ export function HighlightCard({
   imageAlt,
 }: HighlightCardProps) {
   return (
-    <article className="mx-auto min-h-[366px] w-full max-w-[360px] overflow-hidden rounded-[14px] bg-ssa-yellow-light p-6 shadow-[0_1px_3px_1px_#00000026] md:max-w-[720px] xl:grid xl:h-[395px] xl:min-h-0 xl:max-w-[1250px] xl:grid-cols-2 xl:gap-9 xl:p-9">
+    <article className="mx-auto min-h-[366px] w-full max-w-[360px] overflow-hidden rounded-xl bg-ssa-yellow-light p-6 shadow-[0_1px_3px_1px_#00000026] md:max-w-[720px] xl:grid xl:h-[395px] xl:min-h-0 xl:max-w-[1250px] xl:grid-cols-2 xl:gap-9 xl:p-9">
       <div className="relative hidden min-h-0 w-full overflow-hidden rounded-[16px] xl:block xl:h-full">
         <Image
           src={imageSrc}
@@ -94,10 +93,10 @@ export function HighlightCard({
 
       <div className="flex min-w-0 flex-col font-be-vietnam-pro xl:h-full">
         <div>
-          <p className="font-dm-mono text-xs font-normal uppercase leading-4 tracking-[1px] text-ssa-muted-taupe xl:font-medium">
+          <p className="font-dm-mono text-xs font-normal uppercase leading-4 tracking-[0.04em] text-ssa-muted-taupe xl:font-medium">
             {eyebrow}
           </p>
-          <h2 className="mt-[2px] text-2xl font-bold leading-7 text-ssa-red">
+          <h2 className="mt-[2px] text-2xl font-bold leading-7 tracking-[-1px] text-ssa-red">
             {title}
           </h2>
 
@@ -119,7 +118,7 @@ export function HighlightCard({
               {details.map((detail) => (
                 <li
                   key={detail.text}
-                  className="flex min-w-0 items-center gap-2 text-base font-normal leading-6 text-ssa-grey"
+                  className="flex min-w-0 items-center gap-2 font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-grey"
                 >
                   <DetailIcon detail={detail} />
                   <span>{detail.text}</span>
@@ -130,7 +129,7 @@ export function HighlightCard({
         </div>
 
         <div className="mt-4 flex flex-col gap-4 xl:mt-auto">
-          <div className="font-inter text-base font-normal leading-6 text-ssa-grey [&_p]:m-0">
+          <div className="font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-grey [&_p]:m-0">
             {description}
           </div>
 

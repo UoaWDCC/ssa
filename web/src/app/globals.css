@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #fff1d5;
+  --background: #fffbf4;
   --foreground: #171717;
 }
 
@@ -28,7 +28,7 @@
   --color-ssa-muted-taupe: #8c8880;
   --color-ssa-smoke-grey: #5e5e5e;
   --color-ssa-grey: #434242;
-  --color-ssa-background: #fff1d5;
+  --color-ssa-background: #fffbf4;
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
   --color-ssa-card-cta-hover: #ffdfab;

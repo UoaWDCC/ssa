@@ -47,7 +47,7 @@ function getSponsorLogoAlt(sponsor: Sponsor) {
 
 const sponsorOfTheWeekEntry: Sponsor = {
   id: 1,
-  name: 'SIP N CHILL',
+  name: 'Sip N Chill',
   logo: createSponsorMedia({
     id: 101,
     alt: 'Sip n Chill sponsor photo',
@@ -127,12 +127,12 @@ export default async function SponsorsPage() {
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
       : []),
     ...(sponsorOfTheWeekEntry.memberPerks
-      ? [{ icon: FaStar, text: '10% SSA Members' }]
+      ? [{ icon: FaStar, text: sponsorOfTheWeekEntry.memberPerks }]
       : []),
   ]
 
   return (
-    <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
+    <main className="flex flex-col bg-ssa-background text-ssa-grey">
       <Hero
         title="Sponsors"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
