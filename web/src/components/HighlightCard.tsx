@@ -82,13 +82,13 @@ export function HighlightCard({
 }: HighlightCardProps) {
   return (
     <article className="mx-auto grid w-full max-w-[1214px] overflow-hidden rounded-[32px] bg-ssa-card shadow-[0px_3px_4px_1px_#00000040,1px_-5px_4.3px_0px_#D5D5D54D] lg:min-h-[590px] min-[1200px]:grid-cols-[minmax(0,1fr)_554px]">
-      <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 lg:pb-[58px] lg:pl-14 lg:pr-10 lg:pt-11">
+      <div className="flex min-w-0 flex-col px-6 py-8 sm:px-8 md:px-10 md:py-10 lg:pb-[58px] lg:pl-14 lg:pr-10 lg:pt-11">
         <div>
           <div className="space-y-1.5 lg:space-y-2">
-            <p className="font-averia text-base font-bold uppercase leading-tight tracking-wide text-ssa-muted-gold lg:text-[21px] lg:leading-6">
+            <p className="font-averia text-base font-bold uppercase leading-tight tracking-wide text-ssa-muted-gold md:text-lg lg:text-[21px] lg:leading-6">
               {eyebrow}
             </p>
-            <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-red lg:text-[40px] lg:leading-[42px]">
+            <h2 className="font-averia text-4xl font-bold leading-tight text-ssa-red md:text-[38px] lg:text-[40px] lg:leading-[42px]">
               {title}
             </h2>
           </div>
@@ -100,7 +100,7 @@ export function HighlightCard({
                   {details.map((detail) => (
                     <li
                       key={detail.text}
-                      className="flex items-center gap-3 font-averia text-lg font-light leading-tight text-ssa-grey lg:text-[23px] lg:leading-8"
+                      className="flex items-center gap-3 font-averia text-lg font-light leading-tight text-ssa-grey md:text-xl lg:text-[23px] lg:leading-8"
                     >
                       <DetailIcon detail={detail} />
                       <span>{detail.text}</span>
@@ -126,14 +126,14 @@ export function HighlightCard({
 
           <div className="my-5 h-px w-full bg-ssa-muted-gold/30 lg:my-6" />
 
-          <div className="font-averia text-xl font-light leading-snug text-ssa-smoke-grey [&_p]:m-0 lg:text-[25px] lg:leading-[30px]">
+          <div className="font-averia text-xl font-light leading-snug text-ssa-smoke-grey [&_p]:m-0 md:text-[22px] lg:text-[25px] lg:leading-[30px]">
             {description}
           </div>
         </div>
 
         <Link
           href={ctaHref}
-          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-ssa-cta-border bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-red-super-light focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
+          className="mt-6 inline-flex min-h-14 w-full max-w-[553px] items-center justify-center gap-4 rounded-full border-[3.5px] border-ssa-cta-border bg-ssa-red px-6 font-averia text-xl font-bold leading-tight text-ssa-cta-text transition-colors hover:bg-ssa-red-super-light focus:outline-none focus:ring-2 focus:ring-ssa-muted-gold focus:ring-offset-2 focus:ring-offset-ssa-card md:text-2xl md:min-h-[60px] lg:mt-auto lg:h-[68px] lg:text-[25px] lg:leading-[27px]"
         >
           <span>{ctaLabel}</span>
           <span aria-hidden="true">→</span>
