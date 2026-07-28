@@ -15,8 +15,13 @@ export interface Exec {
 }
 
 export async function fetchExecs(): Promise<Exec[]> {
+  if (!CMS_URL) {
+    throw new Error('CMS_URL is not configured')
+  }
+
   const res = await fetch(`${CMS_URL}/api/execs`, {
     headers: { 'Content-Type': 'application/json' },
+    cache: 'no-store',
   })
 
   if (!res.ok) {
@@ -24,5 +29,5 @@ export async function fetchExecs(): Promise<Exec[]> {
   }
 
   const data = await res.json()
-  return data as Exec[]
+  return data.docs as Exec[]
 }

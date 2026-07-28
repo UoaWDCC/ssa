@@ -4,11 +4,6 @@ import type { Media } from '@/types/payload-types'
 
 const CMS_URL = process.env.CMS_URL
 
-interface PayloadListResponse<T> {
-  docs?: T[]
-  [key: string]: unknown
-}
-
 export interface Sponsor {
   id: number
   name: string
@@ -36,15 +31,6 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
     throw new Error(`CMS request failed: ${res.status} ${res.statusText}`)
   }
 
-  const data = (await res.json()) as Sponsor[] | PayloadListResponse<Sponsor> | null
-
-  if (Array.isArray(data)) {
-    return data
-  }
-
-  if (data && Array.isArray(data.docs)) {
-    return data.docs
-  }
-
-  return []
+  const data = await res.json()
+  return data.docs as Sponsor[]
 }
