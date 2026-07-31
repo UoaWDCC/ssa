@@ -105,7 +105,7 @@ export default function HomeCarousel() {
     <section className="px-4 sm:px-6 md:px-10 lg:px-16">
       <div className="relative drop-shadow-xl">
         <div
-          className="relative w-full aspect-4/3 sm:aspect-[1244/660] overflow-hidden rounded-[12px]"
+          className="relative w-full aspect-4/3 sm:aspect-[1244/580] overflow-hidden rounded-[12px]"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={stopTimer}
