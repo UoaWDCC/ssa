@@ -7,16 +7,20 @@ export default function InstagramFeed() {
     <section className="px-4 sm:px-6 md:px-10 lg:px-16 py-12 md:py-20">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 gap-3">
-        <div className="flex items-center gap-3 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
           <Image
             src="/favicon.ico"
             alt="SSA logo"
-            width={49}
-            height={46}
-            className="shrink-0"
+            width={39}
+            height={39}
+            className="shrink-0 w-[34px] h-[34px] sm:w-[39px] sm:h-[39px] object-contain"
           />
-          <span className="font-be-vietnam-pro font-bold text-ssa-red text-2xl truncate leading-none">
-            Singaporean Students&apos; Association
+          <span className="flex flex-col justify-center w-[73px] h-[35px] sm:w-[81px] sm:h-[39px] font-be-vietnam-pro font-semibold text-[12.92px] leading-[11.62px] tracking-[-0.83px] sm:text-[14.33px] sm:leading-[12.88px] sm:tracking-[-0.92px] text-ssa-red lowercase">
+            singaporean
+            <br />
+            student
+            <br />
+            association
           </span>
         </div>
         <a
