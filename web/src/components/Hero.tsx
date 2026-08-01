@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import Button from '@/components/Button'
 
 type HeroVariant = 'fullscreen' | 'compact'
 
@@ -98,12 +98,14 @@ export default function Hero({
           </ul>
         )}
         {ctaLabel && ctaHref && (
-          <Link
+          <Button
             href={ctaHref}
-            className="mt-3 inline-flex w-fit self-start min-w-0 items-center justify-center rounded-[15px] border-2 border-ssa-yellow-light px-7 py-2 font-averia text-base font-bold text-ssa-yellow-light hover:bg-white/20 sm:mt-4 sm:px-8 sm:py-2.5 sm:text-lg"
+            variant="light"
+            size="short"
+            className="mt-3 w-fit self-start sm:mt-4"
           >
             {ctaLabel}
-          </Link>
+          </Button>
         )}
       </div>
       {mascotImage && (
