@@ -1,8 +1,8 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import Button from '@/components/Button'
 
 const carouselImages = [
   {
@@ -126,28 +126,27 @@ export default function HomeCarousel() {
                   className="object-cover"
                   priority={image.id === 'vausa-mid-autumn'}
                 />
-                {/* Dark overlay at 35% opacity */}
                 <div className="absolute inset-0 bg-black/35" />
-                {/* Dark gradient on top edge for title readability */}
                 <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-black/50 to-transparent" />
-                {/* Title top left - DM Mono, 16px, -2% tracking, 36px inset */}
                 <p className="absolute top-9 left-9 text-white font-mono font-normal text-base leading-[13.33px] tracking-[-0.02em] drop-shadow">
                   {image.title}
                 </p>
-                {/* View Album bottom right - slightly thinner border, more round */}
                 <div className="absolute bottom-10 right-10">
-                  <Link
+                  <Button
                     href={image.albumHref}
-                    className="inline-flex items-center gap-2 border-2 rounded-3xl border-ssa-white bg-transparent text-ssa-white font-averia font-semibold text-sm md:text-xl px-4 py-2 md:px-8 md:py-4 transition-colors cursor-pointer hover:bg-white/20"
+                    variant="outline"
+                    color="white"
+                    size="short"
+                    arrowSize="h-[10.67px] w-4"
+                    className="!px-6 !py-4 !border-[1.87px] !text-sm md:!text-base uppercase font-be-vietnam-pro"
                   >
-                    View Album →
-                  </Link>
+                    View Album
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Dots - hidden on mobile, shown on sm+. Pill container per Figma spec */}
           <div className="hidden sm:flex absolute bottom-9 left-0 right-0 justify-center items-center gap-[7.76px] px-[15.52px] py-[11.64px] rounded-[18.41px] bg-black/50 mx-auto w-fit">
             {carouselImages.map((image, index) => (
               <button
@@ -164,7 +163,6 @@ export default function HomeCarousel() {
           </div>
         </div>
 
-        {/* Prev button */}
         <button
           onClick={goPrev}
           aria-label="Previous slide"
@@ -184,7 +182,6 @@ export default function HomeCarousel() {
           </svg>
         </button>
 
-        {/* Next button */}
         <button
           onClick={goNext}
           aria-label="Next slide"
