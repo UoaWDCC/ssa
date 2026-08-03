@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
-import CtaLink from '@/components/CtaLink'
+import Button from '@/components/Button'
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import {
@@ -179,7 +179,7 @@ export default async function SponsorsPage() {
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="pointer-events-none h-auto w-[230px] select-none lg:absolute lg:bottom-[-120px] lg:left-[-45px] lg:z-0 lg:w-[300px] lg:max-w-none"
+              className="pointer-events-none h-auto w-[210px] select-none lg:absolute lg:bottom-[-120px] lg:left-[-45px] lg:z-0 lg:w-[300px] lg:max-w-none"
             />
 
             <div className="relative z-10 flex w-full max-w-[260px] flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
@@ -187,13 +187,16 @@ export default async function SponsorsPage() {
                 Keen to support SSA?
               </p>
 
-              <CtaLink
+              <Button
                 href="/contact"
-                className="mt-3 h-[52px] w-full gap-2 border-transparent bg-ssa-red px-6 py-3 text-base text-ssa-white hover:bg-ssa-red-light"
+                size="long"
+                variant="filled"
+                color="pink"
+                arrowSide="right"
+                className="mt-3 h-[48px] py-0 text-base uppercase"
               >
-                <span>Contact Us</span>
-                <span aria-hidden="true">→</span>
-              </CtaLink>
+                Contact Us
+              </Button>
             </div>
           </section>
         </section>
