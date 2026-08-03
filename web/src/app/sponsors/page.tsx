@@ -108,7 +108,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
 ]
 //remove after milestone
 const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 20 },
+  { length: 48 },
   (_, index) => {
     const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
 
@@ -152,7 +152,7 @@ export default async function SponsorsPage() {
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-10 w-full max-w-[1214px] sm:mb-12">
+          <div className="mx-auto mb-10 w-full max-w-[1244px] sm:mb-12">
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
               Our Sponsors
             </h2>

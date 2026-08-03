@@ -28,7 +28,7 @@ function SponsorTileContent({
         src={logoUrl}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 1024px) 222px, (min-width: 768px) 160px, (min-width: 640px) 120px, 83px"
+        sizes="(min-width: 1280px) 190px, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw"
         className="object-cover"
       />
       <span
