@@ -5,6 +5,7 @@ import {
   Averia_Serif_Libre,
   Alegreya,
   Be_Vietnam_Pro,
+  Inter,
 } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
@@ -38,6 +39,12 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
 })
 
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  weight: ['400'],
+})
+
 export const metadata: Metadata = {
   title: "SSA | Singaporean Students' Association",
   description: "SSA | Singaporean Students' Association",
@@ -51,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />

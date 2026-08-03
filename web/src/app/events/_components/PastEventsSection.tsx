@@ -1,7 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { FaArrowRight, FaMagnifyingGlass } from 'react-icons/fa6'
+import { FaArrowRight } from 'react-icons/fa6'
+import CategoryFilters from '@/components/CategoryFilters'
+import SearchBar from '@/components/SearchBar'
 import PastEventCard from './PastEventCard'
 import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
 
@@ -42,51 +44,24 @@ export default function PastEventsSection() {
 
   return (
     <section className="px-8 sm:px-14 md:px-20 lg:px-26 py-8 sm:py-10 md:py-12">
-      <h2 className="font-averia font-bold text-ssa-black text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6">
+      <h2 className="mb-4 font-be-vietnam-pro text-2xl font-bold tracking-[-1px] text-ssa-red">
         Past Events
       </h2>
 
-      {/* Search bar */}
-      <label className="relative block">
-        <span className="sr-only">Search events</span>
-        <FaMagnifyingGlass
-          className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-ssa-black/40"
-          aria-hidden="true"
-        />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => handleQueryChange(e.target.value)}
-          placeholder="Search event..."
-          className="w-full rounded-xl border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
-        />
-      </label>
-
-      {/* Filter chips */}
-      <div
-        role="group"
-        aria-label="Filter past events by category"
-        className="mt-5 flex flex-wrap gap-3"
-      >
-        {EVENT_FILTERS.map((filter) => {
-          const isActive = activeFilter === filter
-          return (
-            <button
-              key={filter}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => handleFilterChange(filter)}
-              className={`rounded-xl px-8 py-2 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
-                isActive
-                  ? 'bg-ssa-red text-ssa-white'
-                  : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
-              }`}
-            >
-              {filter}
-            </button>
-          )
-        })}
-      </div>
+      <SearchBar
+        value={query}
+        onChange={handleQueryChange}
+        placeholder="Search Event"
+        ariaLabel="Search events"
+      />
+      <CategoryFilters
+        options={EVENT_FILTERS}
+        selectedOption={activeFilter}
+        onChange={handleFilterChange}
+        ariaLabel="Filter past events by category"
+        iconlessOption="All"
+        className="mt-4"
+      />
 
       {/* Grid */}
       <div className="mt-8 -mx-8 flex gap-5 overflow-x-auto px-8 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 md:gap-8 lg:grid-cols-3">
