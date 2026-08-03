@@ -1,6 +1,6 @@
 'use server'
 
-import { Media } from '@/types/payload-types'
+import type { Media } from '@/types/payload-types'
 const CMS_URL = process.env.CMS_URL
 
 export interface Exec {
