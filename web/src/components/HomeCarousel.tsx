@@ -137,7 +137,8 @@ export default function HomeCarousel() {
                     variant="outline"
                     color="white"
                     size="short"
-                    className="!px-6 !py-4 !border-[1.87px] !text-sm md:!text-base uppercase font-be-vietnam-pro"
+                    arrowSize="h-[10.67px] w-4"
+                    className="!px-6 !py-4 !border-[1.87px] !font-semibold !text-sm md:!text-base !leading-[21.33px] tracking-[-0.02em] uppercase"
                   >
                     View Album
                   </Button>
