@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import Button from '@/components/Button'
 
 type HeroVariant = 'fullscreen' | 'compact'
 type HeroLayout = 'centered' | 'split'

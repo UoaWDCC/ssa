@@ -14,6 +14,8 @@ export default function Home() {
         title="SINGAPORE STUDENTS' ASSOCIATION"
         subtitle="A home for people from the Little Red Dot."
         ctaLabel="JOIN SSA! →"
+        mascotImage="/ssa_merlion_full_body.svg"
+        mascotAlt="SSA Merlion mascot"
         ctaHref="/signup"
       />
       <section className="px-6 md:px-10 lg:px-16">
