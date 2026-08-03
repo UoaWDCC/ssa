@@ -8,6 +8,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-ssa-red: #f85b76;
   --color-ssa-red-light: #ff879c;
   --color-ssa-pink: #ffb4c1;
@@ -37,11 +38,22 @@
   --color-ssa-category-text: #968055;
   --color-ssa-badge-light: #fce6ba;
   --color-ssa-badge-light-text: #706f6f;
+  --color-footer-white: #ffffff;
+  --color-footer-pink-1: #ff637e;
+  --color-footer-pink-2: #fe6982;
+  --color-footer-pink-3: #ffa2a4;
+  --color-footer-peach-1: #ffc6ba;
+  --color-footer-peach-2: #ffdbc7;
+  --color-footer-peach-3: #ffdfca;
+  --color-footer-peach-4: #ffe3cc;
+  --color-footer-cream: #fff1d5;
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
+  --font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -55,6 +67,7 @@
   0% {
     transform: translateY(100%);
   }
+
   100% {
     transform: translateY(0);
   }
