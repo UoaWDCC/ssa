@@ -86,8 +86,6 @@ const sponsorSeedEntries: SponsorGridItem[] = [
     memberPerks: 'Present your SSA card for 15% off',
     updatedAt: '2026-05-18T00:00:00.000Z',
     createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-[#71717199]',
-    hoverTextClassName: 'text-white',
   },
   {
     id: 3,
@@ -106,8 +104,6 @@ const sponsorSeedEntries: SponsorGridItem[] = [
     memberPerks: 'Present your SSA card for 10% off',
     updatedAt: '2026-05-18T00:00:00.000Z',
     createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-ssa-yellow/60',
-    hoverTextClassName: 'text-ssa-grey',
   },
 ]
 
@@ -193,7 +189,7 @@ export default async function SponsorsPage() {
                 variant="filled"
                 color="pink"
                 arrowSide="right"
-                className="mt-3 h-[48px] py-0 text-base uppercase"
+                className="mt-3 h-12 py-0 text-base uppercase"
               >
                 Contact Us
               </Button>

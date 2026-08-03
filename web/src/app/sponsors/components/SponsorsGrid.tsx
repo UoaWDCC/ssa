@@ -7,10 +7,7 @@ import SponsorLogoTile from './SponsorLogoTile'
 
 export type { Sponsor } from '../../../../../cms/src/payload-types'
 
-export type SponsorGridItem = Sponsor & {
-  hoverOverlayClassName?: string
-  hoverTextClassName?: string
-}
+export type SponsorGridItem = Sponsor
 
 type SponsorsGridProps = {
   sponsors: SponsorGridItem[]
@@ -49,10 +46,8 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
             name={sponsor.name}
             logoUrl={getSponsorLogoUrl(sponsor.logo)}
             websiteUrl={sponsor.websiteUrl ?? undefined}
-            hoverOverlayClassName={sponsor.hoverOverlayClassName}
             hoverTitle={sponsor.name}
             hoverDescription={sponsor.memberPerks?.trim() || 'Visit website'}
-            hoverTextClassName={sponsor.hoverTextClassName ?? 'text-ssa-grey'}
           />
         ))}
       </div>

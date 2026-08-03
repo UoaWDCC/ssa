@@ -4,10 +4,8 @@ type SponsorLogoTileProps = {
   name: string
   logoUrl: string
   websiteUrl?: string
-  hoverOverlayClassName?: string
   hoverTitle: string
   hoverDescription: string
-  hoverTextClassName: string
 }
 
 function isExternalUrl(url?: string) {
@@ -17,10 +15,8 @@ function isExternalUrl(url?: string) {
 function SponsorTileContent({
   name,
   logoUrl,
-  hoverOverlayClassName = 'bg-ssa-pink-light/60',
   hoverTitle,
   hoverDescription,
-  hoverTextClassName,
 }: Omit<SponsorLogoTileProps, 'websiteUrl'>) {
   return (
     <>
@@ -34,23 +30,16 @@ function SponsorTileContent({
 
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-[6px] opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out group-hover:opacity-100 ${hoverOverlayClassName}`}
+        className="absolute inset-0 bg-black/50 opacity-0 backdrop-blur-[1.8px] transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
       />
 
-      <span
-        className={`absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 sm:gap-2 sm:p-4 lg:gap-3 lg:p-5 ${hoverTextClassName}`}
-      >
-        <span className="font-averia text-[8px] font-bold leading-tight sm:text-base lg:text-[19px]">
+      <span className="absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 sm:gap-2 sm:p-3 xl:gap-[10px] xl:p-[18px]">
+        <span className="font-inter text-[10px] font-medium leading-tight tracking-[-0.2px] text-white sm:text-sm xl:text-[18px] xl:leading-[22px] xl:tracking-[-0.4px]">
           {hoverTitle}
         </span>
 
-        <span className="flex items-center gap-[5px] self-start font-alegreya text-[6px] font-medium leading-tight sm:text-sm lg:text-base">
-          <span
-            aria-hidden="true"
-            className="h-3 w-0 shrink-0 border-l border-current sm:h-6 sm:border-l-2 lg:h-[30px]"
-          />
-
-          <span>{hoverDescription}</span>
+        <span className="font-dm-mono text-[7px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-pink-light sm:text-[9px] xl:text-xs xl:leading-3">
+          {hoverDescription}
         </span>
       </span>
     </>
@@ -61,15 +50,13 @@ export default function SponsorLogoTile({
   name,
   logoUrl,
   websiteUrl,
-  hoverOverlayClassName = 'bg-ssa-pink-light/60',
   hoverTitle,
   hoverDescription,
-  hoverTextClassName,
 }: SponsorLogoTileProps) {
   const opensInNewTab = isExternalUrl(websiteUrl)
 
   const className =
-    'group relative block aspect-square w-full overflow-hidden rounded-[6px] border border-ssa-yellow bg-ssa-white'
+    'group relative block aspect-square w-full overflow-hidden rounded-[6px] border-[1.6px] border-ssa-yellow bg-ssa-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2'
 
   if (!opensInNewTab) {
     return (
@@ -77,10 +64,8 @@ export default function SponsorLogoTile({
         <SponsorTileContent
           name={name}
           logoUrl={logoUrl}
-          hoverOverlayClassName={hoverOverlayClassName}
           hoverTitle={hoverTitle}
           hoverDescription={hoverDescription}
-          hoverTextClassName={hoverTextClassName}
         />
       </div>
     )
@@ -97,10 +82,8 @@ export default function SponsorLogoTile({
       <SponsorTileContent
         name={name}
         logoUrl={logoUrl}
-        hoverOverlayClassName={hoverOverlayClassName}
         hoverTitle={hoverTitle}
         hoverDescription={hoverDescription}
-        hoverTextClassName={hoverTextClassName}
       />
     </a>
   )

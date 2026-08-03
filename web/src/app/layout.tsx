@@ -11,6 +11,14 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
 
+import { DM_Mono } from 'next/font/google'
+
+const dmMono = DM_Mono({
+  variable: '--font-dm-mono',
+  subsets: ['latin'],
+  weight: ['400'],
+})
+
 const inter = Inter({
   subsets: ['latin'],
   weight: ['600'],
@@ -58,7 +66,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable}  ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable}  ${inter.variable} ${dmMono.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />
