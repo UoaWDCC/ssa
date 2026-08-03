@@ -11,6 +11,7 @@ import {
 
 import SponsorsGrid, {
   type Sponsor,
+  type SponsorCategory,
   type SponsorGridItem,
 } from './components/SponsorsGrid'
 import type { Media } from '../../../../cms/src/payload-types'
@@ -73,6 +74,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
   {
     id: 2,
     name: 'Kompass Coffee',
+    category: 'FOOD',
     logo: createSponsorMedia({
       id: 102,
       alt: 'Kompass Coffee logo',
@@ -90,6 +92,7 @@ const sponsorSeedEntries: SponsorGridItem[] = [
   {
     id: 3,
     name: 'Sip n Chill',
+    category: 'FOOD',
     logo: createSponsorMedia({
       id: 103,
       alt: 'Sip n Chill logo',
@@ -107,6 +110,13 @@ const sponsorSeedEntries: SponsorGridItem[] = [
   },
 ]
 
+const temporaryCategories: readonly SponsorCategory[] = [
+  'FOOD',
+  'RETAIL',
+  'SERVICES',
+  'ENTERTAINMENT',
+]
+
 // Remove when Payload CMS sponsors are connected.
 const sponsorEntries: SponsorGridItem[] = Array.from(
   { length: 45 },
@@ -117,6 +127,7 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
       ...sponsor,
       id: index + 10,
       name: `${sponsor.name} ${index + 1}`,
+      category: temporaryCategories[index % temporaryCategories.length],
     }
   },
 )
@@ -161,8 +172,8 @@ export default async function SponsorsPage() {
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-10 w-full max-w-[1244px] sm:mb-12">
-            <h2 className="font-be-vietnam-pro text-3xl font-bold leading-tight text-ssa-red sm:text-4xl md:text-5xl">
+          <div className="mx-auto mb-4 w-full max-w-[1244px]">
+            <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
               Sponsors
             </h2>
           </div>
