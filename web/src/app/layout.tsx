@@ -5,10 +5,17 @@ import {
   Averia_Serif_Libre,
   Alegreya,
   Be_Vietnam_Pro,
+  Inter,
 } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['600'],
+  variable: '--font-inter-source',
+})
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -51,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable}  ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />
