@@ -24,21 +24,22 @@ function SponsorTileContent({
         src={logoUrl}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 1280px) 190px, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw"
+        sizes="(min-width: 1280px) 190px, (min-width: 768px) 25vw, 33vw"
         className="object-cover"
       />
 
+      {/* Always visible on mobile; hover activated from md upwards */}
       <span
         aria-hidden="true"
-        className="absolute inset-0 bg-black/50 opacity-0 backdrop-blur-[1.8px] transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100"
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/80 opacity-100 transition-opacity duration-300 ease-out md:bg-none md:bg-black/50 md:opacity-0 md:backdrop-blur-[1.8px] md:group-hover:opacity-100 md:group-focus-visible:opacity-100"
       />
 
-      <span className="absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 sm:gap-2 sm:p-3 xl:gap-[10px] xl:p-[18px]">
-        <span className="font-inter text-[10px] font-medium leading-tight tracking-[-0.2px] text-white sm:text-sm xl:text-[18px] xl:leading-[22px] xl:tracking-[-0.4px]">
+      <span className="absolute inset-0 flex flex-col justify-end p-2 opacity-100 transition-opacity duration-300 ease-out md:gap-[10px] md:p-[18px] md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
+        <span className="font-inter text-[10px] font-medium leading-[10px] tracking-[-0.2px] text-white sm:text-xs sm:leading-3 md:text-[18px] md:leading-[22px] md:tracking-[-0.4px]">
           {hoverTitle}
         </span>
 
-        <span className="font-dm-mono text-[7px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-pink-light sm:text-[9px] xl:text-xs xl:leading-3">
+        <span className="hidden font-dm-mono text-[9px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-pink-light sm:block md:text-xs md:leading-3">
           {hoverDescription}
         </span>
       </span>

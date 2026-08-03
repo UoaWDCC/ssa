@@ -162,8 +162,8 @@ export default async function SponsorsPage() {
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
           <div className="mx-auto mb-10 w-full max-w-[1244px] sm:mb-12">
-            <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
-              Our Sponsors
+            <h2 className="font-be-vietnam-pro text-3xl font-bold leading-tight text-ssa-red sm:text-4xl md:text-5xl">
+              Sponsors
             </h2>
           </div>
 

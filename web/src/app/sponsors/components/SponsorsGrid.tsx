@@ -39,7 +39,7 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
 
   return (
     <div className="mx-auto w-full max-w-[1244px]">
-      <div className="grid w-full grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 xl:grid-cols-6 xl:gap-[20.87px]">
+      <div className="grid w-full grid-cols-3 gap-[7px] sm:gap-4 md:grid-cols-4 xl:grid-cols-6 xl:gap-[20.87px]">
         {visibleSponsors.map((sponsor) => (
           <SponsorLogoTile
             key={sponsor.id}
