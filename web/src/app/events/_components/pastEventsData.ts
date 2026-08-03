@@ -15,8 +15,8 @@ export type PastEvent = {
 
 export const EVENT_FILTERS: EventFilter[] = [
   'All',
-  'Games',
   'Community',
+  'Games',
   'Food',
   'AGM',
 ]
