@@ -1,4 +1,4 @@
-import { FaPlus } from 'react-icons/fa6'
+import { FaCheck, FaPlus } from 'react-icons/fa6'
 
 interface CategoryButtonProps {
   label: string
@@ -26,9 +26,12 @@ export default function CategoryButton({
           : 'bg-cream text-grey hover:bg-ssa-red hover:text-white'
       }`}
     >
-      {showPlusIcon && (
-        <FaPlus className="size-[15px] shrink-0" aria-hidden="true" />
-      )}
+      {showPlusIcon &&
+        (isActive ? (
+          <FaCheck className="size-[15px] shrink-0" aria-hidden="true" />
+        ) : (
+          <FaPlus className="size-[15px] shrink-0" aria-hidden="true" />
+        ))}
       {label}
     </button>
   )

@@ -5,6 +5,7 @@ import {
   Averia_Serif_Libre,
   Alegreya,
   Be_Vietnam_Pro,
+  DM_Mono,
   Inter,
 } from 'next/font/google'
 import './globals.css'
@@ -42,6 +43,12 @@ const beVietnamPro = Be_Vietnam_Pro({
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['400', '700'],
+})
+
+const dmMono = DM_Mono({
+  variable: '--font-dm-mono',
+  subsets: ['latin'],
   weight: ['400'],
 })
 
@@ -58,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${inter.variable} ${dmMono.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />
