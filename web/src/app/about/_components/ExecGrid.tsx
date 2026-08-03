@@ -1,8 +1,36 @@
-import { execMembers } from './execData'
+'use client'
+
+import { useQuery } from '@tanstack/react-query'
 import ExecCard from './ExecCard'
 import { aboutHeadingFont, aboutParagraphFont } from './fonts'
 
+type Exec = {
+  id: number
+  name: string
+  role: string
+  photo: string | null
+}
+
+type AboutUsResponse = {
+  execs: Exec[]
+}
+
+async function fetchExecs() {
+  const response = await fetch('/api/about-us')
+
+  if (!response.ok) {
+    throw new Error(`About Us request failed: ${response.status}`)
+  }
+
+  return response.json() as Promise<AboutUsResponse>
+}
+
 export default function ExecGrid() {
+  const { data, isError } = useQuery({
+    queryKey: ['about-us', 'execs'],
+    queryFn: fetchExecs,
+  })
+
   return (
     <section
       aria-labelledby="ssa-team-heading"
@@ -44,15 +72,20 @@ export default function ExecGrid() {
             className="absolute bottom-0 left-[-2px] top-0 hidden w-[4px] bg-black/[0.05] xl:block"
           />
           <div className="grid grid-cols-3 gap-[10px] md:grid-cols-4 xl:grid-cols-4 xl:gap-x-[20px] xl:gap-y-[29px]">
-            {execMembers.map((exec) => (
+            {data?.execs.map((exec) => (
               <ExecCard
                 key={exec.id}
                 name={exec.name}
                 role={exec.role}
-                photo={exec.photo}
+                photo={exec.photo ?? undefined}
               />
             ))}
           </div>
+          {isError && (
+            <p className="sr-only" role="status">
+              The team could not be loaded.
+            </p>
+          )}
         </div>
       </div>
     </section>

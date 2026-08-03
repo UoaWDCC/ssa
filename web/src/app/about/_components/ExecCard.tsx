@@ -4,7 +4,7 @@ import { aboutParagraphFont, aboutRoleFont } from './fonts'
 interface ExecCardProps {
   name: string
   role: string
-  photo: string
+  photo?: string
 }
 
 export default function ExecCard({
@@ -17,13 +17,17 @@ export default function ExecCard({
       tabIndex={0}
       className="group relative aspect-square w-full overflow-hidden rounded-[4px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f85b76] xl:rounded-[6px]"
     >
-      <Image
-        src={photo}
-        alt=""
-        fill
-        className="object-cover"
-        sizes="(max-width: 639px) calc((100vw - 55.35px) / 3), (max-width: 767px) calc((100vw - 84px) / 3), (max-width: 1023px) calc((100vw - 126px) / 4), (max-width: 1279px) calc((100vw - 158px) / 4), (max-width: 1439px) calc((86.3888vw - 516px) / 4), 182px"
-      />
+      {photo ? (
+        <Image
+          src={photo}
+          alt=""
+          fill
+          className="object-cover"
+          sizes="(max-width: 639px) calc((100vw - 55.35px) / 3), (max-width: 767px) calc((100vw - 84px) / 3), (max-width: 1023px) calc((100vw - 126px) / 4), (max-width: 1279px) calc((100vw - 158px) / 4), (max-width: 1439px) calc((86.3888vw - 516px) / 4), 182px"
+        />
+      ) : (
+        <div aria-hidden="true" className="absolute inset-0 bg-black/[0.05]" />
+      )}
       <div
         aria-hidden="true"
         className="absolute inset-0 bg-gradient-to-b from-[4.554%] from-[rgba(0,0,0,0)] to-[rgba(0,0,0,0.9)] xl:hidden"
