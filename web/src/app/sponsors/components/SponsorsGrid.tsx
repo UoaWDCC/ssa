@@ -20,7 +20,9 @@ const INITIAL_VISIBLE_COUNT = 24
 const LOAD_MORE_COUNT = 24
 
 function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') return '/sponsors/sponsorcard.png'
+  if (typeof logo === 'number') {
+    return '/sponsors/sponsorcard.png'
+  }
 
   return logo.url ?? '/sponsors/sponsorcard.png'
 }
@@ -28,8 +30,8 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
 export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT)
 
-  const visibleSponsors = sponsors.slice(0, visibleCount)
   const displayedCount = Math.min(visibleCount, sponsors.length)
+  const visibleSponsors = sponsors.slice(0, displayedCount)
   const hasMoreSponsors = displayedCount < sponsors.length
 
   function handleViewMore() {
@@ -55,8 +57,11 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
         ))}
       </div>
 
-      <div className="mt-14 flex flex-col items-center text-center sm:mt-16">
-        <p className="font-alegreya text-lg font-normal text-ssa-grey/70 sm:text-xl">
+      <div
+        className="mt-16 flex flex-col items-center text-center"
+        aria-live="polite"
+      >
+        <p className="font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-muted-text">
           Showing {displayedCount} of {sponsors.length} results
         </p>
 
@@ -64,7 +69,7 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
           <button
             type="button"
             onClick={handleViewMore}
-            className="mt-3 font-alegreya text-lg font-bold uppercase text-ssa-grey transition-opacity duration-200 hover:opacity-70 sm:text-xl"
+            className="mt-3 font-be-vietnam-pro text-base font-semibold uppercase leading-6 tracking-[-0.32px] text-ssa-muted-text transition-colors duration-200 hover:text-ssa-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ssa-red"
           >
             View More
           </button>

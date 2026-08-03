@@ -34,13 +34,17 @@ function createSponsorMedia({
 }
 
 function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') return '/sponsors/sponsorcard.png'
+  if (typeof logo === 'number') {
+    return '/sponsors/sponsorcard.png'
+  }
 
   return logo.url ?? '/sponsors/sponsorcard.png'
 }
 
 function getSponsorLogoAlt(sponsor: Sponsor) {
-  if (typeof sponsor.logo === 'number') return `${sponsor.name} logo`
+  if (typeof sponsor.logo === 'number') {
+    return `${sponsor.name} logo`
+  }
 
   return sponsor.logo.alt
 }
@@ -58,7 +62,7 @@ const sponsorOfTheWeekEntry: Sponsor = {
     'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
   isSponsorOfTheWeek: true,
   description:
-    'Sip n Chill offers icy desserts , refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
+    'Sip n Chill offers icy desserts, refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
   location: 'Newmarket 432 Khyber Pass Road',
   memberPerks: '10% OFF FOR SSA MEMBERS',
   updatedAt: '2026-05-18T00:00:00.000Z',
@@ -106,9 +110,10 @@ const sponsorSeedEntries: SponsorGridItem[] = [
     hoverTextClassName: 'text-ssa-grey',
   },
 ]
-//remove after milestone
+
+// Remove when Payload CMS sponsors are connected.
 const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 48 },
+  { length: 45 },
   (_, index) => {
     const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
 
@@ -122,10 +127,17 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
 
 export default async function SponsorsPage() {
   const sponsors = sponsorEntries
+
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
     sponsorOfTheWeekEntry.location
-      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
+      ? [
+          {
+            icon: FaLocationDot,
+            text: sponsorOfTheWeekEntry.location,
+          },
+        ]
       : []
+
   const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
     : []
@@ -138,6 +150,7 @@ export default async function SponsorsPage() {
         mascotImage="/ssa_nerd_merlion.svg"
         mascotAlt="SSA Nerd Merlion mascot"
       />
+
       <section className="mt-10 px-[18px] md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
         <HighlightCard
           eyebrow="Sponsor of the Week"
@@ -160,32 +173,32 @@ export default async function SponsorsPage() {
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
+          <section className="relative mx-auto mt-32 flex w-full max-w-[756px] flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-[184px] lg:block lg:h-[215px]">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="hidden min-[1200px]:absolute min-[1200px]:bottom-0 min-[1200px]:left-[84px] min-[1200px]:z-0 min-[1200px]:block min-[1200px]:w-[397px] min-[1200px]:translate-y-[30%]"
+              className="pointer-events-none h-auto w-[230px] select-none lg:absolute lg:bottom-[-120px] lg:left-[-45px] lg:z-0 lg:w-[300px] lg:max-w-none"
             />
 
-            <div className="mt-[65px] flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-[90px] lg:mt-0 lg:justify-end lg:pr-16">
-              <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
-                <p className="font-averia text-[34px] font-light leading-tight text-ssa-red lg:text-[40px]">
-                  Keen to support SSA?
-                </p>
-                <CtaLink
-                  href="/contact"
-                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-ssa-contact-cta px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-ssa-contact-cta-hover hover:bg-ssa-contact-cta-hover lg:text-[25px] lg:leading-[27px]"
-                >
-                  <span>Contact Us</span>
-                  <span aria-hidden="true">→</span>
-                </CtaLink>
-              </div>
+            <div className="relative z-10 flex w-full max-w-[260px] flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
+              <p className="w-full text-center font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
+                Keen to support SSA?
+              </p>
+
+              <CtaLink
+                href="/contact"
+                className="mt-3 h-[52px] w-full gap-2 border-transparent bg-ssa-red px-6 py-3 text-base text-ssa-white hover:bg-ssa-red-light"
+              >
+                <span>Contact Us</span>
+                <span aria-hidden="true">→</span>
+              </CtaLink>
             </div>
           </section>
         </section>
       </section>
+
       <div className="relative z-10">
         <Footer />
       </div>
