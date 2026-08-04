@@ -31,12 +31,6 @@ export default function AboutPage() {
             className="absolute inset-0 bg-[rgba(50,50,50,0.2)] md:hidden"
           />
         </div>
-        <div
-          aria-hidden="true"
-          className="relative mt-[88px] hidden h-0 w-full xl:block"
-        >
-          <div className="absolute inset-x-0 bottom-0 h-[4px] bg-black/[0.05]" />
-        </div>
       </section>
 
       <ExecGrid />

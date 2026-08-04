@@ -34,9 +34,9 @@ export default function ExecGrid() {
   return (
     <section
       aria-labelledby="ssa-team-heading"
-      className="mx-auto grid w-full max-w-[1440px] grid-cols-1 px-[17.675px] pb-[88px] pt-[32px] sm:px-8 md:px-12 lg:px-16 xl:grid-cols-[351px_minmax(0,1fr)] xl:gap-[56px] xl:px-[clamp(24px,6.8056vw,98px)] xl:pb-0 xl:pt-[61px]"
+      className="mx-auto grid w-full max-w-[1440px] grid-cols-1 px-[17.675px] pb-[88px] pt-[48px] sm:px-8 md:px-12 md:pt-[64px] lg:px-16 xl:grid-cols-[351px_4px_minmax(0,1fr)] xl:gap-x-[48px] xl:px-[clamp(24px,6.8056vw,98px)] xl:pb-0 xl:pt-[133px]"
     >
-      <div className="xl:pb-[184px] xl:pt-[72px]">
+      <div className="xl:pb-[184px]">
         <div className="xl:sticky xl:top-[88px]">
           <h2
             id="ssa-team-heading"
@@ -45,7 +45,7 @@ export default function ExecGrid() {
             Meet the SSA Team
           </h2>
           <div
-            className={`${aboutParagraphFont.className} mt-[40px] hidden space-y-[24px] text-[16.0008px] font-normal leading-[24px] tracking-[-0.4px] text-[#434242] xl:block`}
+            className={`${aboutParagraphFont.className} mt-[32px] space-y-[24px] text-[15px] font-normal leading-[23px] tracking-[-0.3px] text-black sm:text-[16px] sm:leading-[24px] sm:tracking-[-0.4px] xl:mt-[40px]`}
           >
             <p>
               We started off as a relatively small gathering of students years
@@ -65,28 +65,27 @@ export default function ExecGrid() {
         </div>
       </div>
 
-      <div className="mt-[16px] xl:mt-[72px] xl:pb-[184px]">
-        <div className="relative xl:pl-[49px]">
-          <div
-            aria-hidden="true"
-            className="absolute bottom-0 left-[-2px] top-0 hidden w-[4px] bg-black/[0.05] xl:block"
-          />
-          <div className="grid grid-cols-3 gap-[10px] md:grid-cols-4 xl:grid-cols-4 xl:gap-x-[20px] xl:gap-y-[29px]">
-            {data?.execs.map((exec) => (
-              <ExecCard
-                key={exec.id}
-                name={exec.name}
-                role={exec.role}
-                photo={exec.photo ?? undefined}
-              />
-            ))}
-          </div>
-          {isError && (
-            <p className="sr-only" role="status">
-              The team could not be loaded.
-            </p>
-          )}
+      <div
+        aria-hidden="true"
+        className="hidden self-stretch bg-black/[0.05] xl:block xl:mb-[184px]"
+      />
+
+      <div className="mt-[40px] xl:mt-0 xl:pb-[184px]">
+        <div className="grid grid-cols-3 gap-[10px] md:grid-cols-4 xl:gap-x-[20px] xl:gap-y-[29px]">
+          {data?.execs.map((exec) => (
+            <ExecCard
+              key={exec.id}
+              name={exec.name}
+              role={exec.role}
+              photo={exec.photo ?? undefined}
+            />
+          ))}
         </div>
+        {isError && (
+          <p className="sr-only" role="status">
+            The team could not be loaded.
+          </p>
+        )}
       </div>
     </section>
   )
