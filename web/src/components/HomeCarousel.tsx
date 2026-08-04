@@ -137,7 +137,7 @@ export default function HomeCarousel() {
                     variant="outline"
                     color="white"
                     size="short"
-                    arrowSize="h-[10.67px] w-4"
+                    arrowSide="right"
                     className="!px-6 !py-4 !border-[1.87px] !font-semibold !text-sm md:!text-base !leading-[21.33px] tracking-[-0.02em] uppercase"
                   >
                     View Album
