@@ -12,7 +12,7 @@ export default function ViewMoreButton({
   return (
     <button
       onClick={onClick}
-      className="flex h-[58px] w-[195px] shrink-0 items-center justify-center rounded-full bg-ssa-salmon font-be-vietnam-pro text-[20px] font-semibold uppercase leading-none text-white transition-opacity hover:opacity-90 cursor-pointer"
+      className="font-be-vietnam-pro text-[16px] font-semibold uppercase leading-[24px] tracking-[-0.02em] text-[#8c8880] transition-opacity hover:opacity-70 cursor-pointer"
     >
       View More
     </button>
