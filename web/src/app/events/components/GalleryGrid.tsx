@@ -40,7 +40,7 @@ export default function GalleryGrid({
   return (
     <>
       <div className="flex flex-col items-center gap-6 w-full px-4 sm:px-6 md:px-10 lg:px-16 py-10 md:py-32">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-[6.6px] w-full">
+        <div className="grid grid-cols-3 lg:grid-cols-5 gap-[6.6px] w-full">
           {visibleImages.map((img, index) => (
             <button
               type="button"

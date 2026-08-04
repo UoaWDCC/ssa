@@ -84,21 +84,21 @@ export default function PhotoAlbum({
             className="object-cover"
           />
 
-          <div className="absolute top-4 right-4 flex items-center gap-3">
+          <div className="absolute top-4 right-4 flex items-center gap-[6.25px]">
             <a
               href={current.url}
               download
               aria-label="Download"
-              className="flex h-[64.85px] w-[64.85px] items-center justify-center rounded-[6.48px] border-[1.62px] border-[#8c8880] bg-[#f2ebdd]/80 text-ssa-grey hover:bg-[#f2ebdd] transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-[#fffbf4] bg-[#8c8880]/50 text-white hover:bg-[#8c8880]/70 transition-colors cursor-pointer"
             >
               <DownloadIcon fontSize="small" />
             </a>
             <button
               aria-label="Close"
               onClick={onClose}
-              className="flex h-[48.64px] w-[48.64px] items-center justify-center rounded-full bg-transparent text-ssa-grey hover:bg-white/10 transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-[#fffbf4] bg-[#8c8880]/50 text-white hover:bg-[#8c8880]/70 transition-colors cursor-pointer"
             >
-              <ClearIcon sx={{ fontSize: '26.96px' }} />
+              <ClearIcon fontSize="small" />
             </button>
           </div>
 
