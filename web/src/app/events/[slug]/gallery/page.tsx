@@ -1,30 +1,37 @@
-import Link from 'next/link'
+import GalleryGrid from '@/app/events/components/GalleryGrid'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
 }
 
+// TODO: replace with real data once the backend tables are wired up (per Joe:
+// use a static array for now).
+const placeholderImages = Array.from({ length: 30 }, (_, i) => ({
+  id: i + 1,
+  url: i % 2 === 0 ? '/carousel_one.jpg' : '/carousel_two.jpg',
+  alt: `Event photo ${i + 1}`,
+}))
+
 export default async function EventGalleryPage({
   params,
 }: Readonly<GalleryPageProps>) {
   const { slug } = await params
+  const eventTitle = slug.replace(/-/g, ' ')
+  // TODO: pull the real event date once event data is available.
+  const eventDate = 'March 2026'
 
   return (
-    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-ssa-yellow-light px-6 py-16 text-center text-ssa-black">
-      <h1 className="font-averia text-3xl font-bold sm:text-4xl">
-        Gallery coming soon
-      </h1>
-      <p className="font-averia text-base text-ssa-black/70">
-        The photo gallery for{' '}
-        <span className="font-bold">{slug.replace(/-/g, ' ')}</span> is not
-        available yet. Check back later!
-      </p>
-      <Link
-        href="/events"
-        className="mt-4 inline-flex items-center rounded-full bg-ssa-red px-6 py-2.5 font-averia text-base font-bold text-white transition-colors hover:bg-ssa-red-light"
-      >
-        Back to Events
-      </Link>
+    <main className="min-h-[60vh] bg-ssa-yellow-light">
+      <div className="px-6 pt-16 text-center text-ssa-black">
+        <h1 className="font-averia text-3xl font-bold capitalize sm:text-4xl">
+          {eventTitle}
+        </h1>
+      </div>
+      <GalleryGrid
+        images={placeholderImages}
+        eventTitle={eventTitle}
+        eventDate={eventDate}
+      />
     </main>
   )
 }
