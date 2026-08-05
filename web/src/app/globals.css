@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --color-ssa-red: #f85b76;
   --color-ssa-red-light: #ff879c;
+  --color-ssa-salmon-pink: #ff8392;
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
@@ -42,6 +43,7 @@
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
+  --font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {

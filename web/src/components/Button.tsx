@@ -4,7 +4,7 @@ import { FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
-export type ButtonColor = 'red' | 'yellow' | 'skin'
+export type ButtonColor = 'red' | 'yellow' | 'skin' | 'salmon'
 export type ArrowSide = 'left' | 'right'
 
 /**
@@ -32,7 +32,8 @@ const base =
 // edges, so the label + arrow stay centred together at any pill width.
 const sizes: Record<ButtonSize, string> = {
   short: 'px-[2.2em] py-2.5 text-base md:py-3 md:text-lg',
-  long: 'w-full px-[2.2em] py-3.5 text-lg',
+  // 16px label + 12px vertical padding = the 44px-tall full-width CTA in Figma.
+  long: 'w-full px-[2.2em] py-3 text-base',
 }
 
 // Colour treatments — background + text colours swap on hover. Full literal class
@@ -43,18 +44,24 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-ssa-salmon-pink text-ssa-yellow-light hover:bg-ssa-yellow-light hover:text-ssa-salmon-pink',
   },
   light: {
     red: 'bg-ssa-yellow-light text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
     yellow:
       'bg-ssa-yellow-light text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-ssa-yellow-light text-ssa-salmon-pink hover:bg-ssa-salmon-pink hover:text-ssa-yellow-light',
   },
   outline: {
     red: 'bg-transparent border-[3px] border-ssa-red text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-transparent border-[3px] border-ssa-salmon-pink text-ssa-salmon-pink hover:bg-ssa-salmon-pink hover:text-ssa-yellow-light',
   },
 }
 

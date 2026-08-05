@@ -44,9 +44,9 @@ export default function Home() {
           imageAlt="Ice Kachang event artwork"
         />
       </section>
-      <JoinCard />
       {/* Image Carousel */}
       <HomeCarousel />
+      <JoinCard />
       <InstagramFeed />
       <Footer />
     </main>
