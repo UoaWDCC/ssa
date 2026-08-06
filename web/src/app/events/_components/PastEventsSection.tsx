@@ -42,7 +42,7 @@ export default function PastEventsSection() {
   const hasMore = visibleCount < filteredEvents.length
 
   return (
-    <section className="px-8 sm:px-14 md:px-20 lg:px-26 py-8 sm:py-10 md:py-12">
+    <section className="px-[14px] pb-8 sm:px-14 sm:pb-10 md:px-20 md:pb-12 lg:px-26">
       <div className="mx-auto w-full max-w-[1244px]">
         <h2 className="mb-4 font-be-vietnam-pro text-2xl font-bold tracking-[-1px] text-ssa-red">
           Past Events
@@ -63,7 +63,7 @@ export default function PastEventsSection() {
           className="mt-4"
         />
 
-        <div className="mt-14 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid grid-cols-[repeat(2,minmax(0,195px))] items-start justify-center gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {visibleEvents.map((event) => (
             <PastEventCard key={event.slug} event={event} />
           ))}
