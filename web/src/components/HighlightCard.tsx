@@ -80,7 +80,7 @@ export function HighlightCard({
   imageAlt,
 }: HighlightCardProps) {
   return (
-    <article className="mx-auto min-h-[366px] w-full max-w-[360px] overflow-hidden rounded-xl bg-ssa-yellow-light p-6 shadow-[0_1px_3px_1px_#00000026] md:max-w-[720px] xl:grid xl:h-[395px] xl:min-h-0 xl:max-w-[1250px] xl:grid-cols-2 xl:gap-9 xl:p-9">
+    <article className="mx-auto flex w-full max-w-[360px] flex-col overflow-hidden rounded-xl bg-ssa-yellow-light p-6 shadow-[0_1px_3px_1px_#00000026] md:max-w-[720px] xl:grid xl:max-w-[1250px] xl:grid-cols-2 xl:gap-9 xl:p-9">
       <div className="relative hidden min-h-0 w-full overflow-hidden rounded-[16px] xl:block xl:h-full">
         <Image
           src={imageSrc}
@@ -91,7 +91,7 @@ export function HighlightCard({
         />
       </div>
 
-      <div className="flex min-w-0 flex-col font-be-vietnam-pro xl:h-full">
+      <div className="flex min-w-0 flex-1 flex-col font-be-vietnam-pro xl:h-full">
         <div>
           <p className="font-dm-mono text-xs font-normal uppercase leading-4 tracking-[0.04em] text-ssa-muted-taupe xl:font-medium">
             {eyebrow}
@@ -128,17 +128,17 @@ export function HighlightCard({
           )}
         </div>
 
-        <div className="mt-4 flex flex-col gap-4 xl:mt-auto">
-          <div className="font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-grey [&_p]:m-0">
-            {description}
-          </div>
+        <div className="mt-4 font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-grey [&_p]:m-0">
+          {description}
+        </div>
 
+        <div className="mt-4 flex justify-center">
           <Button
             href={ctaHref}
             size="long"
             variant="filled"
             color="red"
-            className="max-w-[566px] shrink-0 !bg-ssa-salmon-pink !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white"
+            className="max-w-[566px] shrink-0 self-center !bg-ssa-salmon-pink !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white"
           >
             {ctaLabel}
           </Button>
