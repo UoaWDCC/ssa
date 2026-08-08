@@ -22,10 +22,11 @@ function isPayloadMedia(photo: PayloadExec['photo']): photo is PayloadMedia {
 }
 
 export async function GET() {
+  const currentYear = new Date().getFullYear()
   let data: PayloadListResponse<PayloadExec>
   try {
     data = await fetchFromCMS<PayloadListResponse<PayloadExec>>(
-      '/execs?depth=1&limit=100&sort=id',
+      `/execs?depth=1&limit=100&sort=id&where[year][equals]=${currentYear}`,
     )
   } catch (error: unknown) {
     const message =
