@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --color-ssa-salmon: #ff8392;
   --color-ssa-red: #f85b76;
+  --color-ssa-salmon: #ff8392;
   --color-ssa-red-light: #ff879c;
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
@@ -18,7 +19,7 @@
   --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
-  --color-ssa-white: #fefcf9;
+  --color-ssa-white: #ffffff;
   --color-ssa-black: #0a0805;
   --color-ssa-skin-yellow: #ffe3ac;
   --color-ssa-dark-skin-yellow: #ffd586;

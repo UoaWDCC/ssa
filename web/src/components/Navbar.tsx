@@ -84,13 +84,12 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0 shadow-lg'}`}
+        className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        <div className="relative w-full flex items-center justify-center">
-          {/* Logo — pinned to the left */}
+        <div className="w-full flex items-center justify-between">
           <Link
             href="/"
-            className="absolute left-0 shrink-0 flex items-center gap-2"
+            className="shrink-0 flex items-center gap-2"
             aria-label="SSA Home"
           >
             <Image
@@ -109,7 +108,7 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <ul className="group hidden md:flex items-center gap-1">
+          <ul className="group hidden md:flex items-center gap-1 flex-1 justify-center">
             {navLinks.map(({ label, href }) => {
               const isActive = pathname === href
               return (
@@ -126,7 +125,7 @@ export default function Navbar() {
             })}
           </ul>
 
-          <div className="absolute right-6 hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             {authResolved && isAuthenticated && (
               <Link
                 href="/profile"
@@ -149,9 +148,9 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Hamburger — pinned to the right on mobile */}
+          {/* Hamburger — normal flow on the right on mobile */}
           <button
-            className="md:hidden absolute right-0 flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
+            className="md:hidden flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
