@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import Link from 'next/link'
+import CtaLink from '@/components/CtaLink'
 
 type HeroVariant = 'fullscreen' | 'compact'
 type HeroLayout = 'centered' | 'split'
@@ -22,14 +22,16 @@ const containerStyles: Record<HeroVariant, string> = {
 }
 
 const titleStyles: Record<HeroVariant, string> = {
-  fullscreen: 'text-ssa-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl',
-  compact: 'text-ssa-white text-3xl sm:text-3xl md:text-4xl lg:text-5xl',
+  fullscreen:
+    'text-ssa-white text-[48px] leading-[40px] tracking-[-0.04em] sm:text-[88px] sm:leading-[72px] sm:tracking-[-0.08em]',
+  compact: 'text-ssa-white text-[48px] leading-[56px] tracking-[-2px]',
 }
 
 const subtitleStyles: Record<HeroVariant, string> = {
   fullscreen:
     'text-ssa-white font-bold text-sm sm:text-base md:text-lg lg:text-xl',
-  compact: 'text-ssa-white text-xs sm:text-sm md:text-base lg:text-lg',
+  compact:
+    'text-ssa-white font-normal text-[16px] leading-[24px] tracking-[-0.4px]',
 }
 
 const contentStyles: Record<HeroVariant, string> = {
@@ -101,7 +103,7 @@ export default function Hero({
           >
             <div className={splitContentStyles[variant]}>
               <h1
-                className={`font-be-vietnam-pro font-bold leading-tight wrap-break-word tracking-[-0.04em] leading-[40px] ${titleStyles[variant]}`}
+                className={`font-be-vietnam-pro font-bold wrap-break-word ${titleStyles[variant]}`}
               >
                 {title}
               </h1>
@@ -123,12 +125,9 @@ export default function Hero({
                 </ul>
               )}
               {ctaLabel && ctaHref && (
-                <Link
-                  href={ctaHref}
-                  className="mt-3 inline-flex w-fit min-w-0 items-center justify-center self-start rounded-[26px] border-2 border-ssa-yellow-light bg-ssa-yellow-light px-7 py-2 font-be-vietnam-pro text-base font-bold text-ssa-red hover:bg-ssa-white/20 hover:text-ssa-yellow-light sm:mt-4 sm:px-8 sm:py-2.5 sm:text-lg"
-                >
+                <CtaLink href={ctaHref} className="mt-3 sm:mt-4">
                   {ctaLabel}
-                </Link>
+                </CtaLink>
               )}
             </div>
           </div>
@@ -165,12 +164,12 @@ export default function Hero({
           >
             <div className={contentStyles[variant]}>
               <h1
-                className={`font-be-vietnam-pro font-bold leading-tight wrap-break-word ${titleStyles[variant]}`}
+                className={`font-be-vietnam-pro font-bold break-words ${titleStyles[variant]}`}
               >
                 {title}
               </h1>
               <p
-                className={`leading-tight wrap-break-word ${subtitleStyles[variant]}`}
+                className={`leading-tight break-words ${subtitleStyles[variant]}`}
               >
                 {subtitle}
               </p>
@@ -187,12 +186,12 @@ export default function Hero({
                 </ul>
               )}
               {ctaLabel && ctaHref && (
-                <Link
+                <CtaLink
                   href={ctaHref}
                   className="mt-3 inline-flex w-fit min-w-0 items-center justify-center self-center rounded-[26px] border-2 border-ssa-yellow-light bg-ssa-yellow-light px-7 py-2 font-be-vietnam-pro text-base font-bold text-ssa-red hover:bg-ssa-white/20 hover:text-ssa-yellow-light sm:mt-4 sm:px-8 sm:py-2.5 sm:text-lg"
                 >
                   {ctaLabel}
-                </Link>
+                </CtaLink>
               )}
             </div>
           </div>
