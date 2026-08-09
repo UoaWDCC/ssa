@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import CtaLink from '@/components/CtaLink'
+import Button from '@/components/Button'
 
 type HeroVariant = 'fullscreen' | 'compact'
 type HeroLayout = 'centered' | 'split'
@@ -125,9 +125,15 @@ export default function Hero({
                 </ul>
               )}
               {ctaLabel && ctaHref && (
-                <CtaLink href={ctaHref} className="mt-3 sm:mt-4">
+                <Button
+                  href={ctaHref}
+                  variant="light"
+                  color="red"
+                  arrow={false}
+                  className="mt-3 sm:mt-4"
+                >
                   {ctaLabel}
-                </CtaLink>
+                </Button>
               )}
             </div>
           </div>
@@ -186,12 +192,15 @@ export default function Hero({
                 </ul>
               )}
               {ctaLabel && ctaHref && (
-                <CtaLink
+                <Button
                   href={ctaHref}
-                  className="mt-3 inline-flex w-fit min-w-0 items-center justify-center self-center rounded-[26px] border-2 border-ssa-yellow-light bg-ssa-yellow-light px-7 py-2 font-be-vietnam-pro text-base font-bold text-ssa-red hover:bg-ssa-white/20 hover:text-ssa-yellow-light sm:mt-4 sm:px-8 sm:py-2.5 sm:text-lg"
+                  variant="light"
+                  color="red"
+                  arrow={false}
+                  className="mt-3 self-center sm:mt-4"
                 >
                   {ctaLabel}
-                </CtaLink>
+                </Button>
               )}
             </div>
           </div>
