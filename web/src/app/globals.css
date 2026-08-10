@@ -41,6 +41,8 @@
   --color-ssa-category-text: #968055;
   --color-ssa-badge-light: #fce6ba;
   --color-ssa-badge-light-text: #706f6f;
+  --color-ssa-overlay-grey: #8c8880;
+  --color-ssa-overlay-border: #fffbf4;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
