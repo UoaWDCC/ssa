@@ -23,7 +23,7 @@ export default function CategoryButton({
       } ${
         isActive
           ? 'bg-[#FF8392] text-[#FFFBF4]'
-          : 'bg-[#F2EBDD] text-[#8C8880] hover:bg-[#FF8392] hover:text-[#FFFBF4]'
+          : 'bg-ssa-cream text-ssa-grey hover:bg-[#FF8392] hover:text-[#FFFBF4]'
       }`}
     >
       {showPlusIcon &&

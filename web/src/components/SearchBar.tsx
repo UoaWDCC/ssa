@@ -19,7 +19,7 @@ export default function SearchBar({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="min-w-0 flex-1 bg-transparent font-inter text-xs font-normal leading-4 tracking-[-0.2px] text-ssa-grey/50 outline-none placeholder:text-ssa-grey/50 [&::-webkit-search-cancel-button]:appearance-none"
+        className="min-w-0 flex-1 bg-transparent font-inter text-xs font-normal leading-4 tracking-[-0.2px] text-ssa-grey outline-none placeholder:text-ssa-grey/50 [&::-webkit-search-cancel-button]:appearance-none"
       />
     </label>
   )

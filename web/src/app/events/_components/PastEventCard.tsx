@@ -26,7 +26,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
 
   return (
     <article className="group/card relative aspect-[195/240] w-full max-w-[195px] overflow-hidden rounded-[6px] focus-within:ring-2 focus-within:ring-ssa-red sm:aspect-[404/323] sm:max-w-[404px]">
-      <div className="absolute inset-0 overflow-hidden rounded-[6px] border-[1.6px] border-cream transition-[filter] duration-300 ease-out group-hover/card:blur-[4px] group-focus-within/card:blur-[4px]">
+      <div className="absolute inset-0 overflow-hidden rounded-[6px] border-[1.6px] border-ssa-cream transition-[filter] duration-300 ease-out group-hover/card:blur-[4px] group-focus-within/card:blur-[4px]">
         <Image
           src={thumbnail}
           alt={thumbnailAlt}
@@ -74,7 +74,7 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
                 {tags.map((tag) => (
                   <li
                     key={tag}
-                    className="inline-flex h-[18px] items-center justify-center rounded-[2px] bg-[rgba(255,251,244,0.8)] px-2 font-dm-mono text-[9px] font-normal uppercase leading-none tracking-[0.04em] text-[#8C8880] backdrop-blur-[4px] sm:h-[22px] sm:text-xs"
+                    className="inline-flex h-[18px] items-center justify-center rounded-[2px] bg-[rgba(255,251,244,0.8)] px-2 font-dm-mono text-[9px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-grey backdrop-blur-[4px] sm:h-[22px] sm:text-xs"
                   >
                     {tag}
                   </li>
