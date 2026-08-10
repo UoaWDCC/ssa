@@ -297,8 +297,22 @@ export default function SignupForm() {
       )}
 
       <div className="w-full max-w-5xl mx-auto mt-10">
-        <div className="mb-12">
+        <div className="mb-6">
           <ProgressBar step={step} total={TOTAL_STEPS} />
+
+          <div className="mt-3 flex items-center justify-between text-[12px] font-normal leading-3 tracking-[0.48px] font-dm-mono text-ssa-red">
+            <span>
+              {step === 1 && 'ACCOUNT SIGN UP'}
+              {step === 2 && 'CONTACT INFORMATION'}
+              {step === 3 && 'UNIVERSITY INFORMATION'}
+              {step === 4 && 'ADDITIONAL INFORMATION'}
+              {step === 5 && 'PAYMENT'}
+            </span>
+
+            <span>
+              STEP {step}/{TOTAL_STEPS}
+            </span>
+          </div>
         </div>
 
         <CardSection>
