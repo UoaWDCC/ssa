@@ -53,7 +53,7 @@
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
-  --font-inter: var(--font-inter);
+  --font-inter: var(--font-inter-source);
 }
 
 @media (prefers-color-scheme: dark) {
