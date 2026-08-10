@@ -1,5 +1,4 @@
 import type { FormData } from './types'
-import CardSection from '@/components/CardSection'
 import SelectField from '@/components/SelectField'
 
 export default function AdditionalInfoStep({
@@ -12,7 +11,7 @@ export default function AdditionalInfoStep({
   fieldErrors: Record<string, string>
 }) {
   return (
-    <CardSection title="Additional Information">
+    <div>
       <div className="grid grid-cols-2 gap-4">
         <SelectField
           label="Gender"
@@ -53,6 +52,6 @@ export default function AdditionalInfoStep({
           { value: 'no', label: 'No' },
         ]}
       />
-    </CardSection>
+    </div>
   )
 }

@@ -1,5 +1,4 @@
 import type { FormData } from './types'
-import CardSection from '@/components/CardSection'
 import InputField from '@/components/InputField'
 
 export default function ContactStep({
@@ -12,7 +11,7 @@ export default function ContactStep({
   fieldErrors: Record<string, string>
 }) {
   return (
-    <CardSection title="Contact Information">
+    <div>
       <div className="grid grid-cols-2 gap-4">
         <InputField
           label="First Name"
@@ -46,6 +45,6 @@ export default function ContactStep({
         onChange={(v) => onChange('phone', v)}
         error={fieldErrors.phone}
       />
-    </CardSection>
+    </div>
   )
 }
