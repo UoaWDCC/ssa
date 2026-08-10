@@ -8,27 +8,27 @@ import HomeCarousel from '@/components/HomeCarousel'
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-10 bg-ssa-yellow-light text-ssa-grey md:gap-14 lg:gap-30.25">
+    <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
         variant="fullscreen"
         title="Singapore Students' Association"
         subtitle="A home for people from the Little Red Dot."
         mascotImage="/ssa_merlion_full_body.svg"
         mascotAlt="SSA Merlion mascot"
-        ctaLabel="Join Us! →"
+        ctaLabel="JOIN SSA!"
         ctaHref="/signup"
         showSingaporeFlag
       />
-      <section className="px-6 md:px-10 lg:px-16">
+      <section className="px-[21px] md:px-10 lg:px-16">
         <HighlightCard
           eyebrow="Upcoming Event"
           title="Ice Kachang"
           details={[
-            { icon: FaClock, text: '2nd April - 6PM' },
             {
               icon: FaLocationDot,
               text: '401-318 Engineering Atrium (Level 3)',
             },
+            { icon: FaClock, text: '2nd April - 6:00 PM' },
           ]}
           badges={['$5 Members', { text: '$11 Non-Members', variant: 'light' }]}
           description={

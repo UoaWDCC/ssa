@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import {
+  Alegreya,
+  Averia_Serif_Libre,
+  Be_Vietnam_Pro,
+  DM_Mono,
   Geist,
   Geist_Mono,
-  Averia_Serif_Libre,
-  Alegreya,
-  Be_Vietnam_Pro,
   Inter,
 } from 'next/font/google'
 import './globals.css'
@@ -45,6 +46,18 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
 })
 
+const dmMono = DM_Mono({
+  variable: '--font-dm-mono',
+  subsets: ['latin'],
+  weight: ['400', '500'],
+})
+
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+  weight: ['400'],
+})
+
 export const metadata: Metadata = {
   title: "SSA | Singaporean Students' Association",
   description: "SSA | Singaporean Students' Association",
@@ -58,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable}  ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${dmMono.variable} ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />

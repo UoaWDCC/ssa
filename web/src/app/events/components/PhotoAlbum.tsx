@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import ClearIcon from '@mui/icons-material/Clear'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -29,12 +29,9 @@ export default function PhotoAlbum({
   isOpen,
   onClose,
   onNavigate,
-  eventTitle,
-  eventDate,
 }: PhotoAlbumProps) {
   const total = images.length
   const current = images[currentIndex]
-  const [imgAspect, setImgAspect] = useState<number | null>(null)
 
   const handlePrev = useCallback(() => {
     onNavigate(currentIndex === 0 ? total - 1 : currentIndex - 1)
@@ -67,96 +64,66 @@ export default function PhotoAlbum({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black"
       onClick={onClose}
     >
-      {/* Outer panel */}
       <div
         role="dialog"
         aria-modal="true"
-        aria-labelledby="modal-title"
-        className="relative w-full bg-ssa-yellow-light rounded-t-3xl animate-slide-up"
+        aria-label="Photo viewer"
+        className="relative mx-auto flex h-full w-full max-w-[1538px] items-center justify-center px-14 sm:px-16 md:aspect-[1538/771] md:h-auto md:px-0"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Inner content */}
-        <div
-          className="px-4 md:px-12 pt-12 pb-6 md:pb-12 mx-auto"
-          style={
-            imgAspect
-              ? { width: `min(${imgAspect * 60}vh, 100%)` }
-              : { width: '100%' }
-          }
-        >
-          {/* Close button */}
-          <button
-            aria-label="Close"
-            onClick={onClose}
-            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-ssa-light-grey/20 flex items-center justify-center text-ssa-white hover:bg-ssa-skin-yellow hover:text-ssa-light-brown transition-colors cursor-pointer"
-          >
-            <ClearIcon fontSize="small" />
-          </button>
+        {/* Photo box — positioning context for the download/close buttons and
+            the bottom counter, since those sit on the visible image itself */}
+        <div className="relative h-full max-h-full w-full overflow-hidden rounded-[10.13px] md:absolute md:inset-y-0 md:left-1/2 md:h-auto md:w-[78.94%] md:max-h-none md:-translate-x-1/2">
+          <Image
+            src={current.url}
+            alt={current.alt}
+            fill
+            className="object-contain md:object-cover"
+          />
 
-          {/* Header */}
-          <div className="flex items-start justify-between mb-4 pr-10">
-            <div>
-              <h2
-                id="modal-title"
-                className="text-xl font-bold font-averia text-ssa-black"
-              >
-                {eventTitle}
-              </h2>
-              <p className="text-sm font-averia text-ssa-black uppercase tracking-wide">
-                {eventDate}
-              </p>
-            </div>
-            <span className="text-lg md:text-2xl font-bold font-averia text-ssa-light-grey self-end">
-              {currentIndex + 1} / {total}
-            </span>
-          </div>
-
-          {/* Image */}
-          <div className="relative w-full h-[40vh] md:h-[60vh] rounded-2xl overflow-hidden">
-            <Image
-              src={current.url}
-              alt={current.alt}
-              fill
-              className="object-cover"
-              onLoad={(e) => {
-                const img = e.currentTarget
-                setImgAspect(img.naturalWidth / img.naturalHeight)
-              }}
-            />
-
-            {/* Left arrow */}
-            <button
-              aria-label="Previous photo"
-              onClick={handlePrev}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white cursor-pointer"
-            >
-              <ArrowBackIcon fontSize="small" />
-            </button>
-
-            {/* Right arrow */}
-            <button
-              aria-label="Next photo"
-              onClick={handleNext}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center text-ssa-grey bg-ssa-yellow-light/60 hover:bg-ssa-yellow-light/90 transition-colors duration-200 border border-white cursor-pointer"
-            >
-              <ArrowForwardIcon fontSize="small" />
-            </button>
-          </div>
-
-          {/* Footer download */}
-          <div className="flex items-center justify-end mt-4">
+          <div className="absolute top-4 right-4 flex items-center gap-[6.25px]">
             <a
               href={current.url}
               download
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-ssa-red-light text-white font-averia font-bold hover:bg-ssa-red transition-opacity border-[3px] border-ssa-red cursor-pointer"
+              aria-label="Download"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
             >
-              Download <DownloadIcon fontSize="small" />
+              <DownloadIcon fontSize="small" />
             </a>
+            <button
+              aria-label="Close"
+              onClick={onClose}
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
+            >
+              <ClearIcon fontSize="small" />
+            </button>
           </div>
+
+          <span className="absolute bottom-6 left-1/2 -translate-x-1/2 font-be-vietnam-pro text-lg font-semibold text-white/90">
+            {currentIndex + 1} / {total}
+          </span>
         </div>
+
+        {/* Arrows pinned to the outer stage edges, out in the black margin —
+            not centered over the photo. Pulled further in on small screens
+            (where there's no side margin) so they never sit on top of the image. */}
+        <button
+          aria-label="Previous photo"
+          onClick={handlePrev}
+          className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer sm:left-2 md:left-4"
+        >
+          <ArrowBackIcon sx={{ fontSize: { xs: 28, sm: 36, md: 48 } }} />
+        </button>
+        <button
+          aria-label="Next photo"
+          onClick={handleNext}
+          className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer sm:right-2 md:right-4"
+        >
+          <ArrowForwardIcon sx={{ fontSize: { xs: 28, sm: 36, md: 48 } }} />
+        </button>
       </div>
     </div>
   )
