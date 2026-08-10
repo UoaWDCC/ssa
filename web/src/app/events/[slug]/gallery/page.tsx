@@ -10,7 +10,7 @@ export default async function EventGalleryPage({
   const { slug } = await params
 
   return (
-    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-ssa-yellow-light px-6 py-16 text-center text-ssa-black">
+    <main className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-ssa-background px-6 py-16 text-center text-ssa-black">
       <h1 className="font-averia text-3xl font-bold sm:text-4xl">
         Gallery coming soon
       </h1>
