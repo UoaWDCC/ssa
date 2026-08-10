@@ -13,7 +13,7 @@ export default function Home() {
         variant="fullscreen"
         title="SINGAPORE STUDENTS' ASSOCIATION"
         subtitle="A home for people from the Little Red Dot."
-        ctaLabel="JOIN SSA! →"
+        ctaLabel="JOIN SSA!"
         ctaHref="/signup"
       />
       <section className="px-[21px] md:px-10 lg:px-16">

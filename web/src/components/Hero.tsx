@@ -18,7 +18,7 @@ const containerStyles: Record<HeroVariant, string> = {
   fullscreen:
     'items-center justify-center min-h-[calc(75svh-180px)] py-6 sm:min-h-[calc(100svh-88px)] sm:py-12 md:py-16',
   compact:
-    'items-center justify-center min-h-[12rem] py-4 sm:min-h-[clamp(14rem,40svh,24rem)] sm:py-8 md:py-10',
+    'items-center justify-center min-h-[18rem] py-6 sm:min-h-[clamp(18rem,45svh,28rem)] sm:py-10 md:py-12',
 }
 
 const titleStyles: Record<HeroVariant, string> = {
@@ -43,16 +43,16 @@ const contentStyles: Record<HeroVariant, string> = {
 
 const leftOrchidStyles: Record<HeroVariant, string> = {
   fullscreen:
-    'absolute bottom-0 left-[10%] h-48 w-auto pointer-events-none select-none sm:left-1/2 sm:h-60 sm:-translate-x-[190%] md:h-[26rem] lg:h-[30rem] xl:h-[34rem]',
+    'absolute bottom-0 left-[10%] h-48 w-auto pointer-events-none select-none sm:left-1/2 sm:h-52 sm:-translate-x-[190%] md:h-[23rem] lg:h-[27rem] xl:h-[31rem]',
   compact:
-    'absolute bottom-0 left-[-0.5rem] h-32 w-auto pointer-events-none select-none  sm:left-1/2 sm:h-56  md:h-80 lg:h-96',
+    'absolute bottom-0 left-[-0.5rem] h-32 w-auto pointer-events-none select-none sm:left-1/2 sm:h-48 md:h-72 lg:h-80',
 }
 
 const rightOrchidStyles: Record<HeroVariant, string> = {
   fullscreen:
-    'absolute bottom-0 right-[10%] h-48 w-auto pointer-events-none select-none sm:left-1/2 sm:right-auto sm:h-60 sm:translate-x-[90%]  md:h-[22rem] lg:h-[26rem] xl:h-[30rem]',
+    'absolute bottom-0 right-[10%] h-48 w-auto pointer-events-none select-none sm:left-1/2 sm:right-auto sm:h-52 sm:translate-x-[90%] md:h-[20rem] lg:h-[23rem] xl:h-[27rem]',
   compact:
-    'absolute bottom-0 right-[-0.5rem] h-28 w-auto pointer-events-none select-none  sm:left-1/2 sm:right-auto sm:h-48 sm:translate-x-[90%] md:h-72 lg:h-80',
+    'absolute bottom-0 right-[-0.5rem] h-28 w-auto pointer-events-none select-none sm:left-1/2 sm:right-auto sm:h-44 sm:translate-x-[90%] md:h-64 lg:h-72',
 }
 
 const layoutStyles: Record<HeroVariant, string> = {
@@ -76,9 +76,9 @@ const splitContentStyles: Record<HeroVariant, string> = {
 
 const orchidDuoStyles: Record<HeroVariant, string> = {
   fullscreen:
-    'absolute bottom-0 right-[5%] h-48 w-auto pointer-events-none select-none sm:right-[10%] sm:h-60 md:h-[22rem] lg:h-[26rem] xl:h-[30rem]',
+    'absolute bottom-0 right-[5%] h-48 w-auto pointer-events-none select-none sm:right-[10%] sm:h-40 md:h-48 lg:h-56 xl:h-64',
   compact:
-    'absolute bottom-[-2rem] right-[5%] h-48 w-auto pointer-events-none select-none z-0 sm:bottom-0 sm:right-[10%] sm:h-60 md:h-72 lg:h-80',
+    'absolute bottom-[-2rem] right-[5%] h-48 w-auto pointer-events-none select-none z-0 sm:bottom-0 sm:right-[10%] sm:h-36 md:h-44 lg:h-52',
 }
 
 export default function Hero({
@@ -137,7 +137,6 @@ export default function Hero({
               )}
             </div>
           </div>
-
           <Image
             src="/OrchidDuo.svg"
             alt="Orchid duo decoration"
@@ -195,8 +194,9 @@ export default function Hero({
                 <Button
                   href={ctaHref}
                   variant="light"
+                  size="short"
                   color="red"
-                  arrow={false}
+                  arrow={true}
                   className="mt-3 self-center sm:mt-4"
                 >
                   {ctaLabel}
