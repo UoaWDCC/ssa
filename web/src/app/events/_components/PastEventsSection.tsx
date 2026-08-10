@@ -71,7 +71,7 @@ export default function PastEventsSection() {
 
         {filteredEvents.length > 0 && (
           <div className="mt-14 text-center">
-            <p className="font-inter text-base font-normal tracking-[-0.4px] text-ssa-grey">
+            <p className="font-inter text-base font-normal tracking-[-0.4px] text-ssa-muted-grey">
               Showing {visibleEvents.length} of {filteredEvents.length} results
             </p>
 
@@ -81,7 +81,7 @@ export default function PastEventsSection() {
                 onClick={() =>
                   setVisibleCount((count) => count + LOAD_MORE_STEP)
                 }
-                className="mt-4 font-be-vietnam-pro text-base font-semibold uppercase tracking-[-0.02em] text-ssa-grey transition-colors duration-150 ease-out hover:text-ssa-red focus-visible:outline-none focus-visible:text-ssa-red"
+                className="mt-4 font-be-vietnam-pro text-base font-semibold uppercase tracking-[-0.02em] text-ssa-muted-grey transition-colors duration-150 ease-out hover:text-ssa-red focus-visible:outline-none focus-visible:text-ssa-red"
               >
                 View More
               </button>
