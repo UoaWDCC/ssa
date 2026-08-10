@@ -12,12 +12,6 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
 
-const inter = Inter({
-  subsets: ['latin'],
-  weight: ['600'],
-  variable: '--font-inter-source',
-})
-
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
