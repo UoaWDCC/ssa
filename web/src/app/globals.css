@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #fff1d5;
+  --background: #fffbf4;
   --foreground: #171717;
 }
 
@@ -11,6 +11,7 @@
   --color-ssa-red: #f85b76;
   --color-ssa-salmon: #ff8392;
   --color-ssa-red-light: #ff879c;
+  --color-ssa-salmon-pink: #ff8392;
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
@@ -24,9 +25,11 @@
   --color-ssa-dark-skin-yellow: #ffd586;
   --color-ssa-light-grey: #828282;
   --color-ssa-light-brown: #caaf7e;
+  --color-ssa-muted-cream: #ece8df;
+  --color-ssa-muted-taupe: #8c8880;
   --color-ssa-smoke-grey: #5e5e5e;
   --color-ssa-grey: #434242;
-  --color-ssa-background: #fff1d5;
+  --color-ssa-background: #fffbf4;
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
   --color-ssa-card-cta-hover: #ffdfab;
@@ -43,6 +46,8 @@
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
+  --font-dm-mono: var(--font-dm-mono);
+  --font-inter: var(--font-inter);
 }
 
 @media (prefers-color-scheme: dark) {
