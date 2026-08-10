@@ -22,7 +22,7 @@ export default function AccountSignUpStep({
       <button
         type="button"
         onClick={onGoogleAuth}
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-ssa-black transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
+        className="flex w-full items-center justify-center gap-2 rounded-[26px] border border-ssa-grey/30 bg-ssa-background px-3 py-2.5 text-sm font-medium text-ssa-black transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
       >
         <FcGoogle className="h-5 w-5" aria-hidden="true" />
         {isGoogleSignup

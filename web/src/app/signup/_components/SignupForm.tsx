@@ -8,7 +8,7 @@ import AccountSignUpStep from './AccountSignUpStep'
 import ContactStep from './ContactStep'
 import UniInfoStep from './UniInfoStep'
 import AdditionalInfoStep from './AdditionalInfoStep'
-import PaymentStep from '@/components/PaymentStep'
+import PaymentStep from '@/app/signup/_components/PaymentStep'
 import Button from '@/components/Button'
 import CardSection from '@/components/CardSection'
 
