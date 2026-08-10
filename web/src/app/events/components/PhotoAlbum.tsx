@@ -71,17 +71,17 @@ export default function PhotoAlbum({
         role="dialog"
         aria-modal="true"
         aria-label="Photo viewer"
-        className="relative mx-auto w-full max-w-[1538px] aspect-[1538/771]"
+        className="relative mx-auto flex h-full w-full max-w-[1538px] items-center justify-center px-14 sm:px-16 md:aspect-[1538/771] md:h-auto md:px-0"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Photo box — positioning context for the download/close buttons and
             the bottom counter, since those sit on the visible image itself */}
-        <div className="absolute inset-y-0 left-1/2 w-[78.94%] -translate-x-1/2 overflow-hidden rounded-[10.13px]">
+        <div className="relative h-full max-h-full w-full overflow-hidden rounded-[10.13px] md:absolute md:inset-y-0 md:left-1/2 md:h-auto md:w-[78.94%] md:max-h-none md:-translate-x-1/2">
           <Image
             src={current.url}
             alt={current.alt}
             fill
-            className="object-cover"
+            className="object-contain md:object-cover"
           />
 
           <div className="absolute top-4 right-4 flex items-center gap-[6.25px]">
@@ -89,14 +89,14 @@ export default function PhotoAlbum({
               href={current.url}
               download
               aria-label="Download"
-              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-[#fffbf4] bg-[#8c8880]/50 text-white hover:bg-[#8c8880]/70 transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
             >
               <DownloadIcon fontSize="small" />
             </a>
             <button
               aria-label="Close"
               onClick={onClose}
-              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-[#fffbf4] bg-[#8c8880]/50 text-white hover:bg-[#8c8880]/70 transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
             >
               <ClearIcon fontSize="small" />
             </button>
@@ -108,20 +108,21 @@ export default function PhotoAlbum({
         </div>
 
         {/* Arrows pinned to the outer stage edges, out in the black margin —
-            not centered over the photo */}
+            not centered over the photo. Pulled further in on small screens
+            (where there's no side margin) so they never sit on top of the image. */}
         <button
           aria-label="Previous photo"
           onClick={handlePrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer"
+          className="absolute left-1 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer sm:left-2 md:left-4"
         >
-          <ArrowBackIcon sx={{ fontSize: { xs: 32, md: 48 } }} />
+          <ArrowBackIcon sx={{ fontSize: { xs: 28, sm: 36, md: 48 } }} />
         </button>
         <button
           aria-label="Next photo"
           onClick={handleNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer"
+          className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center text-white/70 hover:text-white transition-colors cursor-pointer sm:right-2 md:right-4"
         >
-          <ArrowForwardIcon sx={{ fontSize: { xs: 32, md: 48 } }} />
+          <ArrowForwardIcon sx={{ fontSize: { xs: 28, sm: 36, md: 48 } }} />
         </button>
       </div>
     </div>
