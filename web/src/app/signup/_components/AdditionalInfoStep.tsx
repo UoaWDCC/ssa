@@ -11,7 +11,7 @@ export default function AdditionalInfoStep({
   fieldErrors: Record<string, string>
 }) {
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-4">
         <SelectField
           label="Gender"

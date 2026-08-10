@@ -296,7 +296,7 @@ export default function SignupForm() {
         </div>
       )}
 
-      <div className="w-full max-w-5xl mx-auto mt-10">
+      <div className="w-full max-w-5xl mx-auto mt-10 pb-10">
         <div className="mb-6">
           <ProgressBar step={step} total={TOTAL_STEPS} />
 
@@ -361,7 +361,7 @@ export default function SignupForm() {
                 onClick={handleBack}
                 size="short"
                 variant="outline"
-                color="red"
+                color="grey"
                 arrow={false}
               >
                 Back

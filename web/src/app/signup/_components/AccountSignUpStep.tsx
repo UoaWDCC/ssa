@@ -18,7 +18,7 @@ export default function AccountSignUpStep({
   const isGoogleSignup = data.authProvider === 'google'
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <button
         type="button"
         onClick={onGoogleAuth}
