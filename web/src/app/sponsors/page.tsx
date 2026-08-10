@@ -3,7 +3,7 @@ import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
 import CtaLink from '@/components/CtaLink'
 import Footer from '@/components/Footer'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import {
   HighlightCard,
   type HighlightCardDetail,
@@ -133,8 +133,7 @@ export default async function SponsorsPage() {
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
-      <Hero
-        layout="split"
+      <HeroSplit
         title="SPONSORS"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
       />

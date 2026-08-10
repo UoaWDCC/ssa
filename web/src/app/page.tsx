@@ -10,7 +10,6 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
-        variant="fullscreen"
         title="SINGAPORE STUDENTS' ASSOCIATION"
         subtitle="A home for people from the Little Red Dot."
         ctaLabel="JOIN SSA!"
