@@ -241,12 +241,12 @@ export default function Footer() {
           <div
             className="
               hidden
-              md:flex md:flex-nowrap md:items-start md:gap-x-8
+              md:flex md:flex-nowrap md:items-start md:gap-x-4
               lg:gap-x-16
             "
           >
             {/* Learn More */}
-            <div className="flex shrink-0 flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <p
                 className="
                   font-be-vietnam-pro
@@ -268,7 +268,7 @@ export default function Footer() {
             </div>
 
             {/* Explore */}
-            <div className="flex shrink-0 flex-col gap-2">
+            <div className="flex flex-col gap-2">
               <p
                 className="
                   font-be-vietnam-pro
@@ -286,7 +286,7 @@ export default function Footer() {
             </div>
 
             {/* Contact Us */}
-            <div className="flex shrink-0 flex-col gap-2">
+            <div className="flex flex-col gap-2 md:min-w-0">
               <p
                 className="
                   font-be-vietnam-pro
@@ -321,7 +321,7 @@ export default function Footer() {
           {/* Copyright */}
           <div
             className="
-              flex items-center gap-2 whitespace-nowrap
+              flex min-w-0 items-center gap-2
               font-be-vietnam-pro
               text-[11px] font-normal
               leading-4 tracking-[-0.2px]
