@@ -13,7 +13,7 @@ export default async function SignInPage({ searchParams }: Readonly<Props>) {
       : undefined
 
   return (
-    <main className="min-h-screen bg-ssa-yellow-light flex items-center justify-center px-4 pt-[88px]">
+    <main className="flex min-h-screen items-center justify-center bg-ssa-background px-4 pt-[88px]">
       <SignInForm isNewAccount={isNewAccount} googleError={googleError} />
     </main>
   )

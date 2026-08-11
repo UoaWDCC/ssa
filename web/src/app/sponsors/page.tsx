@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FaLocationDot } from 'react-icons/fa6'
+import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
@@ -52,7 +52,7 @@ function getSponsorLogoAlt(sponsor: Sponsor) {
 
 const sponsorOfTheWeekEntry: Sponsor = {
   id: 1,
-  name: 'SIP N CHILL',
+  name: 'Sip N Chill',
   logo: createSponsorMedia({
     id: 101,
     alt: 'Sip n Chill sponsor photo',
@@ -134,20 +134,14 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
 
 export default async function SponsorsPage() {
   const sponsors = sponsorEntries
-
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
-      ? [
-          {
-            icon: FaLocationDot,
-            text: sponsorOfTheWeekEntry.location,
-          },
-        ]
-      : []
-
-  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
-    ? [sponsorOfTheWeekEntry.memberPerks]
-    : []
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
+    ...(sponsorOfTheWeekEntry.location
+      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
+      : []),
+    ...(sponsorOfTheWeekEntry.memberPerks
+      ? [{ icon: FaStar, text: sponsorOfTheWeekEntry.memberPerks }]
+      : []),
+  ]
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
@@ -163,7 +157,6 @@ export default async function SponsorsPage() {
           eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeekEntry.name}
           details={sponsorOfTheWeekDetails}
-          badges={sponsorOfTheWeekBadges}
           description={<p>{sponsorOfTheWeekEntry.description}</p>}
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
