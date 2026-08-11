@@ -27,7 +27,7 @@ export interface Sponsor {
 export async function fetchSponsors(): Promise<Sponsor[]> {
   const res = await fetch(`${CMS_URL}/api/sponsors?depth=2`, {
     headers: { 'Content-Type': 'application/json' },
-    cache: 'no-store',
+    next: { revalidate: 300 },
   })
 
   if (!res.ok) {
