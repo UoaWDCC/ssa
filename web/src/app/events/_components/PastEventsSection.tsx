@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { FaArrowRight, FaMagnifyingGlass } from 'react-icons/fa6'
+import CategoryFilters from '@/components/CategoryFilters'
+import SearchBar from '@/components/SearchBar'
 import PastEventCard from './PastEventCard'
 import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
 
@@ -41,83 +42,59 @@ export default function PastEventsSection() {
   const hasMore = visibleCount < filteredEvents.length
 
   return (
-    <section className="px-8 sm:px-14 md:px-20 lg:px-26 py-8 sm:py-10 md:py-12">
-      <h2 className="font-averia font-bold text-ssa-black text-2xl sm:text-3xl md:text-4xl mb-4 sm:mb-6">
-        Past Events
-      </h2>
+    <section className="px-[14px] pb-8 sm:px-14 sm:pb-10 md:px-20 md:pb-12 lg:px-26">
+      <div className="mx-auto w-full max-w-[1244px]">
+        <h2 className="mb-4 font-be-vietnam-pro text-2xl font-bold tracking-[-1px] text-ssa-red">
+          Past Events
+        </h2>
 
-      {/* Search bar */}
-      <label className="relative block">
-        <span className="sr-only">Search events</span>
-        <FaMagnifyingGlass
-          className="pointer-events-none absolute left-5 top-1/2 h-4 w-4 -translate-y-1/2 text-ssa-black/40"
-          aria-hidden="true"
-        />
-        <input
-          type="search"
+        <SearchBar
           value={query}
-          onChange={(e) => handleQueryChange(e.target.value)}
-          placeholder="Search event..."
-          className="w-full rounded-xl border border-ssa-black/20 bg-ssa-white py-3 pl-12 pr-5 font-averia text-base text-ssa-black placeholder:text-ssa-black/40 focus:border-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red/30"
+          onChange={handleQueryChange}
+          placeholder="Search Event"
+          ariaLabel="Search events"
         />
-      </label>
+        <CategoryFilters
+          options={EVENT_FILTERS}
+          selectedOption={activeFilter}
+          onChange={handleFilterChange}
+          ariaLabel="Filter past events by category"
+          iconlessOption="All"
+          className="mt-4"
+        />
 
-      {/* Filter chips */}
-      <div
-        role="group"
-        aria-label="Filter past events by category"
-        className="mt-5 flex flex-wrap gap-3"
-      >
-        {EVENT_FILTERS.map((filter) => {
-          const isActive = activeFilter === filter
-          return (
-            <button
-              key={filter}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => handleFilterChange(filter)}
-              className={`rounded-xl px-8 py-2 font-averia text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2 ${
-                isActive
-                  ? 'bg-ssa-red text-ssa-white'
-                  : 'bg-ssa-yellow text-ssa-black/60 hover:bg-ssa-red-lighter hover:text-ssa-red'
-              }`}
-            >
-              {filter}
-            </button>
-          )
-        })}
-      </div>
-
-      {/* Grid */}
-      <div className="mt-8 -mx-8 flex gap-5 overflow-x-auto px-8 pb-2 snap-x snap-mandatory sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 md:gap-8 lg:grid-cols-3">
-        {visibleEvents.map((event) => (
-          <div
-            key={event.slug}
-            className="w-[82vw] flex-none snap-start sm:w-auto"
-          >
-            <PastEventCard event={event} />
-          </div>
-        ))}
-      </div>
-
-      {filteredEvents.length === 0 && (
-        <p className="mt-10 text-center font-averia text-ssa-black/60">
-          No events match your search.
-        </p>
-      )}
-
-      {hasMore && (
-        <div className="mt-10 flex justify-center">
-          <button
-            type="button"
-            onClick={() => setVisibleCount((count) => count + LOAD_MORE_STEP)}
-            className="inline-flex items-center gap-2 rounded-3xl bg-ssa-yellow px-10 py-3 font-averia text-base font-bold text-ssa-category-text transition-colors border-2 border-ssa-dark-skin-yellow hover:bg-ssa-dark-skin-yellow  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2"
-          >
-            View More
-            <FaArrowRight aria-hidden="true" />
-          </button>
+        <div className="mt-14 grid grid-cols-[repeat(2,minmax(0,195px))] items-start justify-center gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+          {visibleEvents.map((event) => (
+            <PastEventCard key={event.slug} event={event} />
+          ))}
         </div>
-      )}
+
+        {filteredEvents.length > 0 && (
+          <div className="mt-14 text-center">
+            <p className="font-inter text-base font-normal tracking-[-0.4px] text-ssa-muted-grey">
+              Showing {visibleEvents.length} of {filteredEvents.length} results
+            </p>
+
+            {hasMore && (
+              <button
+                type="button"
+                onClick={() =>
+                  setVisibleCount((count) => count + LOAD_MORE_STEP)
+                }
+                className="mt-4 font-be-vietnam-pro text-base font-semibold uppercase tracking-[-0.02em] text-ssa-muted-grey transition-colors duration-150 ease-out hover:text-ssa-red focus-visible:outline-none focus-visible:text-ssa-red"
+              >
+                View More
+              </button>
+            )}
+          </div>
+        )}
+
+        {filteredEvents.length === 0 && (
+          <p className="mt-10 text-center font-averia text-ssa-black/60">
+            No events match your search.
+          </p>
+        )}
+      </div>
     </section>
   )
 }
