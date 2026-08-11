@@ -150,7 +150,7 @@ export default async function SponsorsPage() {
     : []
 
   return (
-    <main className="flex flex-col bg-ssa-yellow-light text-ssa-grey">
+    <main className="flex flex-col bg-ssa-background text-ssa-grey">
       <Hero
         title="Sponsors"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."

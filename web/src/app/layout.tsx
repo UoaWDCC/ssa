@@ -6,12 +6,11 @@ import {
   Alegreya,
   Be_Vietnam_Pro,
   Inter,
+  DM_Mono,
 } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
-
-import { DM_Mono } from 'next/font/google'
 
 const dmMono = DM_Mono({
   variable: '--font-dm-mono',
@@ -21,7 +20,7 @@ const dmMono = DM_Mono({
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['600'],
+  weight: ['400', '600'],
   variable: '--font-inter-source',
 })
 

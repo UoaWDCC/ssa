@@ -57,7 +57,7 @@ export default function SponsorLogoTile({
   const opensInNewTab = isExternalUrl(websiteUrl)
 
   const className =
-    'group relative block aspect-square w-full overflow-hidden rounded-[6px] border-[1.6px] border-ssa-yellow bg-ssa-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2'
+    'group relative block aspect-square w-full overflow-hidden rounded-[6px] border-[1.6px] border-cream bg-ssa-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2'
 
   if (!opensInNewTab) {
     return (

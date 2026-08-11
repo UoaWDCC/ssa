@@ -131,7 +131,7 @@ export default function SponsorsGrid({
           className="mt-20 flex min-h-48 items-center justify-center text-center"
           role="status"
         >
-          <p className="font-inter text-base font-normal text-ssa-muted-text">
+          <p className="font-inter text-base font-normal text-grey">
             No sponsors found.
           </p>
         </div>
@@ -141,7 +141,7 @@ export default function SponsorsGrid({
         className="mt-16 flex flex-col items-center text-center"
         aria-live="polite"
       >
-        <p className="font-inter text-base font-normal leading-6 tracking-[-0.4px] text-ssa-muted-text">
+        <p className="font-inter text-base font-normal leading-6 tracking-[-0.4px] text-grey">
           Showing {displayedCount} of {filteredSponsors.length} results
         </p>
 
@@ -149,7 +149,7 @@ export default function SponsorsGrid({
           <button
             type="button"
             onClick={handleViewMore}
-            className="mt-3 font-be-vietnam-pro text-base font-semibold uppercase leading-6 tracking-[-0.32px] text-ssa-muted-text transition-colors duration-200 hover:text-ssa-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ssa-red"
+            className="mt-3 font-be-vietnam-pro text-base font-semibold uppercase leading-6 tracking-[-0.32px] text-grey transition-colors duration-200 hover:text-ssa-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ssa-red"
           >
             View More
           </button>
