@@ -29,6 +29,7 @@
   --color-ssa-muted-taupe: #8c8880;
   --color-ssa-smoke-grey: #5e5e5e;
   --color-ssa-grey: #434242;
+  --color-ssa-muted-grey: #8c8880;
   --color-ssa-background: #fffbf4;
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
@@ -54,6 +55,7 @@
   --color-cream: #f2ebdd;
   --color-grey: #8c8880;
   --color-ssa-overlay-border: #fffbf4;
+  --color-ssa-cream: #f2ebdd;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
