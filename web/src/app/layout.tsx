@@ -12,12 +12,6 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
 
-const dmMono = DM_Mono({
-  variable: '--font-dm-mono',
-  subsets: ['latin'],
-  weight: ['400'],
-})
-
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '600'],
@@ -56,12 +50,6 @@ const dmMono = DM_Mono({
   variable: '--font-dm-mono',
   subsets: ['latin'],
   weight: ['400', '500'],
-})
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  weight: ['400'],
 })
 
 export const metadata: Metadata = {
