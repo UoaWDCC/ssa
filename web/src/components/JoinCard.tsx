@@ -1,15 +1,22 @@
 import Image from 'next/image'
 import Button from '@/components/Button'
 
+// The polaroid is capped at 410px wide, which it reaches as soon as the viewport
+// clears 490px — 410 plus the 80px the wrapper's `px-4` and the cream panel's own
+// `px-6` take out of it. Narrower than that it is genuinely fluid, so quoting
+// `100vw` there would overstate the width and pull a larger source than needed.
+const POLAROID_SIZES = '(min-width: 490px) 410px, calc(100vw - 80px)'
+
 /**
  * "Join SSA" pill on the homepage (Figma: join ssa pill (F)).
  *
  * Desktop is a 1:1 split — red copy panel beside a cream panel holding the
- * polaroids — at a fixed 380px tall. `gap-8` is the CTA's *minimum* clearance and
- * `mt-auto` soaks up any leftover height on top of it: at the design's 1214px the
- * copy fills the panel exactly, so the gap lands on Figma's 32px, and between
- * `lg` and ~1240px (where the narrower column wraps one line further) the panel
- * grows instead of crushing the CTA against the paragraph.
+ * polaroids. 380px is a floor (`lg:min-h-[380px]`), not a fixed height: `gap-8`
+ * is the CTA's *minimum* clearance and `mt-auto` soaks up any leftover height on
+ * top of it, so at the design's 1214px the copy fills the panel exactly and the
+ * card lands on Figma's 380px with a 32px gap, while between `lg` and ~1240px
+ * (where the narrower column wraps one line further) the panel grows past 380px
+ * instead of crushing the CTA against the paragraph.
  * Below `lg` the two panels stack, since Figma has no mobile frame for this.
  */
 export default function JoinCard() {
@@ -41,7 +48,7 @@ export default function JoinCard() {
           <Button
             href="/signup"
             size="long"
-            color="salmon"
+            color="red-light"
             className="mt-auto tracking-[-0.02em]"
           >
             SIGN UP!
@@ -54,7 +61,7 @@ export default function JoinCard() {
               src="/polaroid.png"
               alt="Polaroid photos of SSA members at past events"
               fill
-              sizes="(min-width: 640px) 410px, 100vw"
+              sizes={POLAROID_SIZES}
               className="object-contain"
             />
           </div>
