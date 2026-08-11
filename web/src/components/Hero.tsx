@@ -15,7 +15,24 @@ export default function Hero({
   ctaHref,
 }: Readonly<HeroProps>) {
   return (
-    <div className="relative isolate flex w-full min-h-[calc(75svh-180px)] items-center justify-center overflow-hidden rounded-b-2xl bg-[linear-gradient(151deg,rgba(255,99,126,1)_49%,rgba(255,162,164,1)_78%,rgba(255,241,213,1)_100%)] px-4 py-6 sm:min-h-[calc(100svh-88px)] sm:px-8 sm:py-12 md:rounded-b-3xl md:px-12 md:py-16 lg:px-16">
+    <div
+      className="relative isolate flex w-full min-h-[calc(75svh-180px)] items-center justify-center overflow-hidden rounded-b-2xl px-4 py-6 sm:min-h-[calc(100svh-88px)] sm:px-8 sm:py-12 md:rounded-b-3xl md:px-12 md:py-16 lg:px-16"
+      style={{
+        background: `
+      linear-gradient(
+        151deg,
+        var(--color-footer-pink-1) 30%,
+        var(--color-footer-pink-2) 45%,
+        var(--color-footer-pink-3) 65%,
+        var(--color-footer-peach-1) 82%,
+        var(--color-footer-peach-2) 88%,
+        var(--color-footer-peach-3) 94%,
+        var(--color-footer-peach-4) 95%,
+        var(--color-footer-cream) 100%
+      )
+    `,
+      }}
+    >
       <Image
         src="/LOrchid.svg"
         alt="Left orchid decoration"

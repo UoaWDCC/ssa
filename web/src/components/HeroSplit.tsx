@@ -19,7 +19,22 @@ const orchidDuoStyles =
 export default function HeroSplit({ title, subtitle }: Readonly<HeroProps>) {
   return (
     <div
-      className={`relative isolate flex w-full overflow-hidden rounded-b-2xl bg-[linear-gradient(151deg,rgba(255,99,126,1)_49%,rgba(255,162,164,1)_78%,rgba(255,241,213,1)_100%)] px-4 sm:px-8 md:rounded-b-3xl md:px-10 lg:px-14 ${containerStyles}`}
+      className={`relative isolate flex w-full overflow-hidden rounded-b-2xl px-4 sm:px-8 md:rounded-b-3xl md:px-10 lg:px-14 ${containerStyles}`}
+      style={{
+        background: `
+      linear-gradient(
+        151deg,
+        var(--color-footer-pink-1) 30%,
+        var(--color-footer-pink-2) 45%,
+        var(--color-footer-pink-3) 65%,
+        var(--color-footer-peach-1) 82%,
+        var(--color-footer-peach-2) 88%,
+        var(--color-footer-peach-3) 94%,
+        var(--color-footer-peach-4) 95%,
+        var(--color-footer-cream) 100%
+      )
+    `,
+      }}
     >
       <div className="relative z-10 w-full sm:pl-8 md:pl-12 lg:pl-12">
         <h1
