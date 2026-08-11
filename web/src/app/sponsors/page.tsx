@@ -58,8 +58,8 @@ const sponsorOfTheWeekEntry: Sponsor = {
 export default async function SponsorsPage() {
   const sponsors = await fetchSponsors()
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
+    ...(sponsorOfTheWeekEntry.location
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
       : []),
     ...(sponsorOfTheWeekEntry.memberPerks
