@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import {
+  Alegreya,
+  Averia_Serif_Libre,
+  Be_Vietnam_Pro,
+  DM_Mono,
   Geist,
   Geist_Mono,
-  Averia_Serif_Libre,
-  Alegreya,
-  Be_Vietnam_Pro,
   Inter,
 } from 'next/font/google'
 import './globals.css'
@@ -39,10 +40,18 @@ const beVietnamPro = Be_Vietnam_Pro({
   weight: ['400', '500', '600', '700'],
 })
 
-// "I - Paragraph Text" in Figma — body copy across the UI overhaul.
+const dmMono = DM_Mono({
+  variable: '--font-dm-mono',
+  subsets: ['latin'],
+  weight: ['400', '500'],
+})
+
+// "I - Paragraph Text" in Figma — JoinCard's body copy. 400 is the only weight
+// it uses; add more here if a bolder Inter shows up in the design.
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],
+  weight: ['400'],
 })
 
 export const metadata: Metadata = {
@@ -58,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${dmMono.variable} ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
         <Navbar />

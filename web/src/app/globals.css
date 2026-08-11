@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
 :root {
-  --background: #fff1d5;
+  --background: #fffbf4;
   --foreground: #171717;
 }
 
@@ -9,7 +9,9 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-ssa-red: #f85b76;
+  --color-ssa-salmon: #ff8392;
   --color-ssa-red-light: #ff879c;
+  --color-ssa-salmon-pink: #ff8392;
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
@@ -17,15 +19,18 @@
   --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
-  --color-ssa-white: #fefcf9;
+  --color-ssa-white: #ffffff;
   --color-ssa-black: #0a0805;
   --color-ssa-skin-yellow: #ffe3ac;
   --color-ssa-dark-skin-yellow: #ffd586;
   --color-ssa-light-grey: #828282;
   --color-ssa-light-brown: #caaf7e;
+  --color-ssa-muted-cream: #ece8df;
+  --color-ssa-muted-taupe: #8c8880;
   --color-ssa-smoke-grey: #5e5e5e;
   --color-ssa-grey: #434242;
-  --color-ssa-background: #fff1d5;
+  --color-ssa-muted-grey: #8c8880;
+  --color-ssa-background: #fffbf4;
   --color-ssa-card: #fff8ec;
   --color-ssa-card-cta: #ffeccb;
   --color-ssa-card-cta-hover: #ffdfab;
@@ -37,11 +42,15 @@
   --color-ssa-category-text: #968055;
   --color-ssa-badge-light: #fce6ba;
   --color-ssa-badge-light-text: #706f6f;
+  --color-ssa-overlay-grey: #8c8880;
+  --color-ssa-overlay-border: #fffbf4;
+  --color-ssa-cream: #f2ebdd;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
+  --font-dm-mono: var(--font-dm-mono);
   --font-inter: var(--font-inter);
 }
 
