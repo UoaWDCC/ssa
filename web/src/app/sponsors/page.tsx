@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
@@ -10,7 +11,8 @@ import {
 } from '@/components/HighlightCard'
 import SponsorsGrid from './components/SponsorsGrid'
 import type { Media } from '@/types/payload-types'
-import { fetchSponsors, Sponsor } from '@/lib/sponsors'
+import { useSponsors } from '@/hooks/useSponsors'
+import type { Sponsor } from '@/lib/sponsors'
 
 type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
 
@@ -55,8 +57,8 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-export default async function SponsorsPage() {
-  const sponsors = await fetchSponsors()
+export default function SponsorsPage() {
+  const { sponsors, status } = useSponsors()
 
   const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
     ...(sponsorOfTheWeekEntry.location
@@ -92,9 +94,14 @@ export default async function SponsorsPage() {
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
               Our Sponsors
             </h2>
+            {status === 'error' ? (
+              <p className="mt-4 text-base text-ssa-grey/80 sm:text-lg">
+                Sponsor data is temporarily unavailable. Please check back soon.
+              </p>
+            ) : null}
           </div>
 
-          <SponsorsGrid sponsors={sponsors} />
+          {status !== 'error' && <SponsorsGrid sponsors={sponsors} />}
 
           <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
             <Image
