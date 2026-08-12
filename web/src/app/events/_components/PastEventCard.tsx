@@ -1,21 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaArrowRight, FaCalendarDays, FaLocationDot } from 'react-icons/fa6'
-import type { PastEvent, PastEventTag } from './pastEventsData'
+import { FaArrowRight, FaClock, FaLocationDot } from 'react-icons/fa6'
+import type { PastEvent } from './pastEventsData'
 
 interface PastEventCardProps {
   event: PastEvent
-}
-
-/**
- * Maps each tag to a Tailwind background utility from the project palette
- * (defined in globals.css). Keeps a tag's colour stable across cards.
- */
-const TAG_COLOURS: Record<PastEventTag, string> = {
-  Food: 'bg-ssa-red/80',
-  Community: 'bg-ssa-red/80',
-  Games: 'bg-ssa-red/80',
-  AGM: 'bg-ssa-red/80',
 }
 
 function formatEventDate(iso: string): string {
@@ -36,84 +25,90 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
   const formattedDate = formatEventDate(date)
 
   return (
-    <Link
-      href={`/events/${slug}/gallery`}
-      aria-label={`See photos for ${name} on ${formattedDate} at ${location}`}
-      className="group relative block aspect-5/6 overflow-hidden rounded-[25px] ring-[3px] ring-ssa-red-lighter transition-all duration-300 hover:ring-4 hover:ring-ssa-red focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ssa-red"
-    >
-      <Image
-        src={thumbnail}
-        alt={thumbnailAlt}
-        fill
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="object-cover transition-all duration-500 group-hover:scale-105 group-hover:blur-[6px] group-hover:brightness-65 group-hover:opacity-80"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-black/25"
-      />
-
-      {/* Top gradient + location */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-black/60 to-transparent"
-      />
-      <div className="absolute left-5 top-5 flex items-center gap-2 text-ssa-white">
-        <FaLocationDot
-          className="h-[0.8em] w-[0.8em] shrink-0"
-          aria-hidden="true"
-        />
-        <span className="font-averia text-base font-bold uppercase tracking-wide">
-          {location}
-        </span>
-      </div>
-
-      {/* Bottom gradient + info */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/80 via-black/40 to-transparent"
-      />
-      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-3 p-6">
-        <div className="flex items-center gap-2 text-ssa-white/90">
-          <FaCalendarDays
-            className="h-[0.9em] w-[0.9em] shrink-0"
-            aria-hidden="true"
+    <article className="w-full max-w-[195px] sm:max-w-[404px]">
+      <Link
+        href={`/events/${slug}/gallery`}
+        aria-label={`See photos for ${name} on ${formattedDate} at ${location}`}
+        className="group/card relative block aspect-[195/240] touch-manipulation overflow-hidden rounded-[6px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red sm:aspect-[404/323]"
+      >
+        <div className="absolute inset-0 overflow-hidden rounded-[6px] border-[1.6px] border-ssa-cream transition-[filter] duration-300 ease-out group-hover/card:blur-[4px] group-focus-within/card:blur-[4px]">
+          <Image
+            src={thumbnail}
+            alt={thumbnailAlt}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 404px"
+            className="object-cover"
           />
-          <time
-            dateTime={date}
-            className="font-averia text-lg font-bold tracking-wide"
-          >
-            {formattedDate}
-          </time>
+
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-ssa-black/35 transition-colors duration-300 ease-out group-hover/card:bg-ssa-black/50 group-focus-within/card:bg-ssa-black/50"
+          />
+
+          <div className="absolute inset-3 text-ssa-yellow-light sm:inset-6">
+            <div className="absolute left-0 top-0 flex items-center gap-1">
+              <FaLocationDot
+                className="size-[11px] shrink-0 sm:size-[13px]"
+                aria-hidden="true"
+              />
+              <span className="font-dm-mono text-[11px] font-normal uppercase leading-3 tracking-[0.04em] sm:text-[14px] sm:leading-4">
+                {location}
+              </span>
+            </div>
+
+            <div className="absolute inset-x-0 bottom-0">
+              <div className="flex items-center gap-1">
+                <FaClock
+                  className="size-[9px] shrink-0 sm:size-[11px]"
+                  aria-hidden="true"
+                />
+                <time
+                  dateTime={date}
+                  className="font-dm-mono text-[11px] font-normal uppercase leading-3 tracking-[0.04em] sm:text-[14px] sm:leading-4"
+                >
+                  {formattedDate}
+                </time>
+              </div>
+
+              <h3 className="mt-1 font-inter text-base font-bold leading-5 tracking-[-0.51px] sm:text-[21px] sm:leading-[26px] sm:tracking-[-0.67px]">
+                {name}
+              </h3>
+
+              {tags.length > 0 && (
+                <ul className="mt-2 flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <li
+                      key={tag}
+                      className="inline-flex h-[18px] items-center justify-center rounded-[2px] bg-ssa-background/80 px-2 font-dm-mono text-[9px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-muted-grey backdrop-blur-[4px] sm:h-[22px] sm:text-xs"
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
-        <h3 className="font-averia text-3xl font-bold leading-tight text-ssa-white">
-          {name}
-        </h3>
-        {tags.length > 0 && (
-          <ul className="mt-1 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <li
-                key={tag}
-                className={`rounded-xl px-4 py-1 font-averia text-base font-bold text-ssa-white ${TAG_COLOURS[tag]}`}
-              >
-                {tag}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
 
-      {/* Hover overlay: See Photos */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-focus-visible:opacity-100">
-        <span className="flex items-center gap-2.5 rounded-xl bg-ssa-red px-7 py-3 font-averia text-xl font-bold text-ssa-white shadow-lg">
-          See Photos
-          <FaArrowRight
-            className="h-[1em] w-[1em] shrink-0"
-            aria-hidden="true"
-          />
-        </span>
-      </div>
-    </Link>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 hidden items-center justify-center opacity-0 transition-opacity duration-300 ease-out group-hover/card:opacity-100 group-focus-visible/card:opacity-100 [@media(any-hover:hover)]:flex"
+        >
+          <span className="inline-flex h-12 w-[calc(100%_-_24px)] max-w-[178px] items-center justify-center rounded-full bg-ssa-red font-be-vietnam-pro text-base font-semibold text-ssa-white">
+            <span className="relative inline-flex items-center pr-[1.8em]">
+              <span className="absolute left-0 top-1/2 size-4 -translate-y-1/2 overflow-hidden">
+                <FaArrowRight className="size-4 -translate-x-full transition-transform duration-300 ease-out group-hover/card:translate-x-0 group-focus-visible/card:translate-x-0" />
+              </span>
+              <span className="transition-transform duration-300 ease-out group-hover/card:translate-x-[1.8em] group-focus-visible/card:translate-x-[1.8em]">
+                SEE PHOTOS
+              </span>
+              <span className="absolute right-0 top-1/2 size-4 -translate-y-1/2 overflow-hidden">
+                <FaArrowRight className="size-4 transition-transform duration-300 ease-out group-hover/card:translate-x-full group-focus-visible/card:translate-x-full" />
+              </span>
+            </span>
+          </span>
+        </div>
+      </Link>
+    </article>
   )
 }

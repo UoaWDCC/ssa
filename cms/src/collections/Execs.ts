@@ -2,6 +2,9 @@ import type { CollectionConfig } from 'payload'
 
 export const Execs: CollectionConfig = {
   slug: 'execs',
+  access: {
+    read: () => true,
+  },
   admin: {
     useAsTitle: 'name',
   },
@@ -28,6 +31,6 @@ export const Execs: CollectionConfig = {
     {
       name: 'year',
       type: 'number',
-    }
-  ]
+    },
+  ],
 }
