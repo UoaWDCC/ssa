@@ -351,20 +351,23 @@ export default function SignupForm() {
           )}
 
           {step === 5 && (
-            <PaymentStep onPay={handlePay} isLoading={isLoading} />
+            <PaymentStep
+              onPay={handlePay}
+              isLoading={isLoading}
+              onBack={handleBack}
+            />
           )}
-
-          {/* Inside the card */}
           <div className="flex items-center justify-between pt-4">
-            {step > 1 ? (
+            {step > 1 && step < 5 ? (
               <Button
                 onClick={handleBack}
                 size="short"
                 variant="outline"
                 color="grey"
-                arrow={false}
+                arrow={true}
+                arrowSide="left"
               >
-                Back
+                BACK
               </Button>
             ) : (
               <div />
@@ -378,7 +381,7 @@ export default function SignupForm() {
                 variant="filled"
                 color="red"
               >
-                {isCheckingEmail ? 'Checking...' : 'Next'}
+                {isCheckingEmail ? 'CHECKING...' : 'NEXT'}
               </Button>
             )}
           </div>

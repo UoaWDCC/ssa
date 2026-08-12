@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import type React from 'react'
-import { FiArrowRight } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
@@ -57,7 +57,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
-    grey: 'bg-transparent border-[3px] border-ssa-grey/30 text-ssa-grey/80 hover:bg-ssa-red-light hover:border-ssa-red-light hover:text-ssa-white',
+    grey: 'bg-transparent border-[2px] border-ssa-grey/30 text-ssa-grey/80 hover:bg-ssa-red-light hover:border-ssa-red-light hover:text-ssa-white',
   },
 }
 
@@ -138,20 +138,18 @@ export default function Button({
     .join(' ')
 
   const motion = arrowMotion[arrowSide]
+  const ArrowIcon = arrowSide === 'left' ? FiArrowLeft : FiArrowRight
+
   const content = arrow ? (
     <span className={`${arrowGroup} ${motion.reserve}`}>
       <span className={`${arrowSlot} left-0`}>
-        <FiArrowRight
-          aria-hidden
-          className={`${arrowIcon} ${motion.leftIcon}`}
-        />
+        <ArrowIcon aria-hidden className={`${arrowIcon} ${motion.leftIcon}`} />
       </span>
+
       <span className={motion.text}>{children}</span>
+
       <span className={`${arrowSlot} right-0`}>
-        <FiArrowRight
-          aria-hidden
-          className={`${arrowIcon} ${motion.rightIcon}`}
-        />
+        <ArrowIcon aria-hidden className={`${arrowIcon} ${motion.rightIcon}`} />
       </span>
     </span>
   ) : (
