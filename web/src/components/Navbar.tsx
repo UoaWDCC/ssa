@@ -5,17 +5,21 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { FaUserCircle } from 'react-icons/fa'
+import { FiArrowUpRight } from 'react-icons/fi'
 import { useAuth } from '@/hooks/useAuth'
+import Button from '@/components/Button'
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Events', href: '/events' },
-  { label: 'Sponsors', href: '/sponsors' },
+  { label: 'HOME', href: '/' },
+  { label: 'ABOUT US', href: '/about' },
+  { label: 'EVENTS', href: '/events' },
+  { label: 'SPONSORS', href: '/sponsors' },
 ]
 
-const ctaLink = { label: 'Join SSA!', href: '/signup' }
-const signInLink = { label: 'Sign In', href: '/sign-in' }
+const ctaLink = { label: 'JOIN SSA!', href: '/signup' }
+
+// Order for the mobile menu differs from the desktop nav (matches Figma)
+const mobileNavOrder = ['/', '/events', '/sponsors', '/about']
 
 export default function Navbar() {
   const [hidden, setHidden] = useState(false)
@@ -25,11 +29,12 @@ export default function Navbar() {
   const auth = useAuth()
   const isAuthenticated = auth.status === 'authenticated'
   const authResolved = auth.status !== 'loading'
+
   let mobileAuthLinks: { label: string; href: string }[] = []
   if (authResolved && isAuthenticated) {
     mobileAuthLinks = [{ label: 'Profile', href: '/profile' }]
   } else if (authResolved) {
-    mobileAuthLinks = [signInLink, ctaLink]
+    mobileAuthLinks = [ctaLink]
   }
 
   useEffect(() => {
@@ -37,10 +42,6 @@ export default function Navbar() {
   }, [menuOpen])
 
   useEffect(() => {
-    // Initial hidden state must be derived from window.scrollY at mount
-    // (page may load mid-scroll on refresh / deep link / back navigation),
-    // and window is unavailable during SSR so it can't go in a useState
-    // lazy initializer.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setHidden(window.scrollY > 80)
 
@@ -83,20 +84,31 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0 shadow-lg'}`}
+        className={`fixed top-0 left-0 right-0 z-50 h-[88px] bg-ssa-red border-b border-white/20 flex items-center px-4 sm:px-6 lg:px-10 transition-all duration-300 ${hidden ? '-translate-y-full' : 'translate-y-0'}`}
       >
-        <div className="w-full flex items-center gap-4">
-          <Link href="/" className="shrink-0" aria-label="SSA Home">
+        <div className="w-full flex items-center justify-between">
+          <Link
+            href="/"
+            className="shrink-0 flex items-center gap-2"
+            aria-label="SSA Home"
+          >
             <Image
-              src="/mascot.png"
+              src="/merlion_logo.png"
               alt="SSA Mascot"
               width={56}
               height={56}
               className="object-contain w-[46px] h-[46px] sm:w-[56px] sm:h-[56px]"
             />
+            <span className="flex flex-col justify-center w-[55px] h-[30px] sm:w-[62px] sm:h-[31px] font-be-vietnam-pro font-semibold text-[10.4px] leading-[10px] tracking-[-0.65px] sm:text-[11.73px] sm:leading-[10.27px] sm:tracking-[-0.73px] text-ssa-white lowercase">
+              singapore
+              <br />
+              student
+              <br />
+              association
+            </span>
           </Link>
 
-          <ul className="hidden md:flex items-center gap-1">
+          <ul className="group hidden md:flex items-center gap-1 flex-1 justify-center">
             {navLinks.map(({ label, href }) => {
               const isActive = pathname === href
               return (
@@ -104,19 +116,16 @@ export default function Navbar() {
                   <Link
                     href={href}
                     aria-current={isActive ? 'page' : undefined}
-                    className="group relative font-averia font-bold text-xl px-4 py-2 text-ssa-white transition-opacity whitespace-nowrap hover:opacity-90"
+                    className="relative font-be-vietnam-pro font-semibold text-base leading-6 tracking-[-0.02em] uppercase px-4 py-2 text-ssa-white transition-opacity duration-200 whitespace-nowrap group-hover:opacity-60 hover:!opacity-100"
                   >
                     {label}
-                    <span
-                      className={`absolute bottom-0 left-4 right-4 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                    />
                   </Link>
                 </li>
               )
             })}
           </ul>
 
-          <div className="hidden md:flex items-center ml-auto gap-3">
+          <div className="hidden md:flex items-center gap-3 shrink-0">
             {authResolved && isAuthenticated && (
               <Link
                 href="/profile"
@@ -127,25 +136,21 @@ export default function Navbar() {
               </Link>
             )}
             {authResolved && !isAuthenticated && (
-              <>
-                <Link
-                  href={signInLink.href}
-                  className="font-averia font-bold text-xl text-ssa-black border-2 border-ssa-black px-5 py-2 rounded-full hover:bg-ssa-black hover:text-ssa-red transition-colors shrink-0"
-                >
-                  {signInLink.label}
-                </Link>
-                <Link
-                  href={ctaLink.href}
-                  className="font-averia font-bold text-xl text-ssa-black bg-ssa-yellow-light px-5 py-2 rounded-full hover:bg-ssa-yellow transition-colors shrink-0"
-                >
-                  {ctaLink.label}
-                </Link>
-              </>
+              <Button
+                href={ctaLink.href}
+                variant="filled"
+                color="salmon"
+                size="short"
+                className="!w-[144.67px] !h-[44px] !rounded-[26.67px] !text-sm !whitespace-nowrap !gap-1 flex items-center justify-center"
+              >
+                {ctaLink.label}
+              </Button>
             )}
           </div>
 
+          {/* Hamburger — normal flow on the right on mobile */}
           <button
-            className="md:hidden ml-auto flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
+            className="md:hidden flex flex-col justify-center gap-[5px] w-10 h-10 p-1 shrink-0"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}
@@ -164,12 +169,19 @@ export default function Navbar() {
         </div>
       </nav>
 
+      {/* Mobile menu */}
       <div
         id="mobile-menu"
-        className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${menuOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'}`}
+        className={`fixed top-[88px] left-0 right-0 z-40 bg-ssa-red border-t border-white/20 transition-all duration-300 ease-in-out md:hidden ${
+          menuOpen
+            ? 'opacity-100 translate-y-0 pointer-events-auto'
+            : 'opacity-0 -translate-y-2 pointer-events-none'
+        }`}
       >
-        <ul className="flex flex-col">
-          {[...navLinks, ...mobileAuthLinks].map(({ label, href }) => {
+        <ul className="flex flex-col gap-6 px-6 py-6">
+          {mobileNavOrder.map((href) => {
+            const link = navLinks.find((l) => l.href === href)
+            if (!link) return null
             const isActive = pathname === href
             return (
               <li key={href}>
@@ -177,12 +189,26 @@ export default function Navbar() {
                   href={href}
                   onClick={() => setMenuOpen(false)}
                   aria-current={isActive ? 'page' : undefined}
-                  className="group relative block font-averia font-bold text-lg px-6 py-4 border-b border-white/10 text-ssa-white hover:opacity-90 transition-opacity"
+                  className="block font-be-vietnam-pro font-bold text-2xl leading-8 tracking-[-0.04em] text-white transition-opacity duration-200 hover:opacity-70"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            )
+          })}
+          {mobileAuthLinks.map(({ label, href }) => {
+            const isActive = pathname === href
+            const isCta = href === ctaLink.href
+            return (
+              <li key={href}>
+                <Link
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className="flex items-center justify-between font-be-vietnam-pro font-bold text-2xl leading-8 tracking-[-0.04em] text-white transition-opacity duration-200 hover:opacity-70"
                 >
                   {label}
-                  <span
-                    className={`absolute bottom-0 left-6 right-6 h-0.5 bg-ssa-white transition-transform duration-200 ${isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}
-                  />
+                  {isCta && <FiArrowUpRight className="w-6 h-6 shrink-0" />}
                 </Link>
               </li>
             )
@@ -190,6 +216,7 @@ export default function Navbar() {
         </ul>
       </div>
 
+      {/* Backdrop to close mobile menu on outside tap */}
       {menuOpen && (
         <button
           type="button"

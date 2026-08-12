@@ -4,7 +4,7 @@ import { FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
-export type ButtonColor = 'red' | 'yellow' | 'skin'
+export type ButtonColor = 'red' | 'yellow' | 'skin' | 'salmon'
 export type ArrowSide = 'left' | 'right'
 
 /**
@@ -43,18 +43,24 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-salmon',
   },
   light: {
     red: 'bg-ssa-yellow-light text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
     yellow:
       'bg-ssa-yellow-light text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
   },
   outline: {
     red: 'bg-transparent border-[3px] border-ssa-red text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    salmon:
+      'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
   },
 }
 
