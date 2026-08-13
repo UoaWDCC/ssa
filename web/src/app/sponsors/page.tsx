@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
@@ -8,28 +9,20 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import SponsorsGrid from './components/SponsorsGrid'
+import type { Media } from '@/types/payload-types'
+import { useSponsors } from '@/hooks/useSponsors'
+import type { Sponsor } from '@/lib/sponsors'
 
-import SponsorsGrid, {
-  type Sponsor,
-  type SponsorGridItem,
-} from './components/SponsorsGrid'
-import type { Media } from '../../../../cms/src/payload-types'
+type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
 
-type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url' | 'filename'>
-
-function createSponsorMedia({
-  id,
-  alt,
-  url,
-  filename,
-}: SponsorMediaSeedInput): Media {
+function createSponsorMedia({ id, alt, url }: SponsorMediaSeedInput): Media {
   return {
     id,
     alt,
     url,
-    filename,
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
+    width: null,
+    height: null,
   }
 }
 
@@ -52,7 +45,6 @@ const sponsorOfTheWeekEntry: Sponsor = {
     id: 101,
     alt: 'Sip n Chill sponsor photo',
     url: '/sponsors/sponsorcard.png',
-    filename: 'sponsorcard.png',
   }),
   websiteUrl:
     'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
@@ -65,63 +57,9 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      filename: 'kompass_coffee.png',
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-[#71717199]',
-    hoverTextClassName: 'text-white',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      filename: 'sipnchill.png',
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-ssa-yellow/60',
-    hoverTextClassName: 'text-ssa-grey',
-  },
-]
-//remove after milestone
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 20 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
+export default function SponsorsPage() {
+  const { sponsors, status } = useSponsors()
 
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-    }
-  },
-)
-
-export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
   const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
     ...(sponsorOfTheWeekEntry.location
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
@@ -156,9 +94,14 @@ export default async function SponsorsPage() {
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
               Our Sponsors
             </h2>
+            {status === 'error' ? (
+              <p className="mt-4 text-base text-ssa-grey/80 sm:text-lg">
+                Sponsor data is temporarily unavailable. Please check back soon.
+              </p>
+            ) : null}
           </div>
 
-          <SponsorsGrid sponsors={sponsors} />
+          {status !== 'error' && <SponsorsGrid sponsors={sponsors} />}
 
           <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
             <Image
