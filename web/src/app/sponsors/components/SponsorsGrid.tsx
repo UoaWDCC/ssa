@@ -26,7 +26,7 @@ export type SponsorGridItem = Sponsor & {
 type SponsorFilter = 'ALL' | SponsorCategory
 
 type SponsorsGridProps = {
-  sponsors: SponsorGridItem[]
+  sponsors?: SponsorGridItem[]
 }
 
 const FILTER_OPTIONS: readonly SponsorFilter[] = ['ALL', ...SPONSOR_CATEGORIES]
