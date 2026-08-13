@@ -43,7 +43,7 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
 }
 
 export default function SponsorsGrid({
-  sponsors,
+  sponsors = [],
 }: Readonly<SponsorsGridProps>) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<SponsorFilter>('ALL')
