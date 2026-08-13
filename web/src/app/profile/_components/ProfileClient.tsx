@@ -521,19 +521,22 @@ export default function ProfileClient({
       {/* ── header ── */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="min-w-0">
-          <h1 className="font-be-vietnam-pro text-2xl font-bold text-ssa-red sm:text-3xl">
+          {/* Figma "BVP - Topic Headers": Be Vietnam Pro 700, 24/32, -1px, Red - Primary. */}
+          <h1 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
             {displayName}
           </h1>
-          <p className="mt-1 truncate font-be-vietnam-pro text-sm text-ssa-badge-light-text">
+          {/* Figma "I - Paragraph Text": Inter 400, 16/24, -0.4px, Grey (Text). */}
+          <p className="truncate font-inter text-base leading-6 tracking-[-0.4px] text-ssa-muted-taupe">
             {user.email}
           </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3 pt-1">
+        {/* Figma Frame 853: 179×44 hug, 12px gap — a 44px circle, then a 123px pill. */}
+        <div className="flex shrink-0 items-center gap-3">
           <button
             onClick={() => (isEditing ? cancelEdit() : setIsEditing(true))}
             aria-label={isEditing ? 'Cancel editing' : 'Edit profile'}
-            className={`${headerControl} h-9 w-9 ${
+            className={`${headerControl} h-11 w-11 ${
               isEditing ? 'border-ssa-red text-ssa-red' : ''
             }`}
           >
@@ -546,7 +549,7 @@ export default function ProfileClient({
 
           <button
             onClick={handleLogout}
-            className={`${headerControl} h-9 px-5 font-be-vietnam-pro text-xs font-medium uppercase tracking-[0.06em]`}
+            className={`${headerControl} h-11 w-[123px] font-be-vietnam-pro text-xs font-medium uppercase tracking-[0.06em]`}
           >
             Log out
           </button>
