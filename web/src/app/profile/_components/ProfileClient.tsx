@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import CardSection from '@/components/CardSection'
+import ProfileCard from './ProfileCard'
 import {
   FiAlertTriangle,
   FiCheck,
@@ -66,18 +66,35 @@ const ETHNICITY_LABELS: Record<string, string> = Object.fromEntries(
   ETHNICITY_OPTIONS.map(({ value, label }) => [value, label]),
 )
 
+// ─── shared field styling ─────────────────────────────────────────────────────
+
+// Figma sets the field labels in DM Mono, matching the small uppercase captions on
+// the events cards, so this reuses that idiom. The greys are a shade darker than
+// the mock's #8c8880: at 11px that token only reaches 3.3:1 on the cream card, so
+// labels/placeholders use #706f6f (4.8:1) to clear WCAG AA for small text.
+const labelCls =
+  'font-dm-mono text-[11px] font-normal uppercase leading-3 tracking-[0.06em] text-ssa-badge-light-text'
+const valueCls = 'font-be-vietnam-pro text-sm text-ssa-grey'
+const placeholderCls =
+  'font-be-vietnam-pro text-sm italic text-ssa-badge-light-text'
+
+// Each field is a label stacked over its value; two per row on anything wider than
+// a phone, single column below that so long values (emails, areas of study) aren't
+// squeezed into ~140px.
+const fieldGrid = 'grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2'
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return <span className={labelCls}>{children}</span>
+}
+
 // ─── small read-only field ─────────────────────────────────────────────────────
 
 function ViewField({ label, value }: { label: string; value?: string | null }) {
   return (
-    <div className="flex flex-col gap-0.5">
-      <span className="text-xs font-medium text-ssa-black/50 uppercase tracking-wide">
-        {label}
-      </span>
-      <span className="text-sm text-ssa-black">
-        {value ?? (
-          <span className="italic text-ssa-black/30">Not provided</span>
-        )}
+    <div className="flex flex-col gap-2">
+      <FieldLabel>{label}</FieldLabel>
+      <span className={valueCls}>
+        {value ?? <span className={placeholderCls}>Not provided</span>}
       </span>
     </div>
   )
@@ -86,7 +103,7 @@ function ViewField({ label, value }: { label: string; value?: string | null }) {
 // ─── inline editable field components ─────────────────────────────────────────
 
 const inputCls =
-  'w-full rounded-lg px-3 py-2 text-sm text-ssa-black bg-white border border-ssa-red/40 focus:border-ssa-red outline-none transition-colors'
+  'w-full rounded-lg border border-ssa-muted-taupe/40 bg-ssa-white px-3 py-2 font-be-vietnam-pro text-sm text-ssa-grey outline-none transition-colors focus:border-ssa-red'
 
 function EditText({
   label,
@@ -100,10 +117,8 @@ function EditText({
   type?: string
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-ssa-black/50 uppercase tracking-wide">
-        {label}
-      </span>
+    <div className="flex flex-col gap-2">
+      <FieldLabel>{label}</FieldLabel>
       <input
         type={type}
         value={value}
@@ -126,15 +141,13 @@ function EditSelect({
   options: { value: string; label: string }[]
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-ssa-black/50 uppercase tracking-wide">
-        {label}
-      </span>
+    <div className="flex flex-col gap-2">
+      <FieldLabel>{label}</FieldLabel>
       <div className="relative">
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`${inputCls} appearance-none pr-8 ${value ? 'text-ssa-black' : 'text-gray-400'}`}
+          className={`${inputCls} appearance-none pr-8 ${value ? 'text-ssa-grey' : 'text-ssa-badge-light-text'}`}
         >
           <option value="">Not provided</option>
           {options.map((o) => (
@@ -144,7 +157,7 @@ function EditSelect({
           ))}
         </select>
         <svg
-          className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+          className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ssa-muted-taupe"
           width="16"
           height="16"
           viewBox="0 0 16 16"
@@ -174,21 +187,19 @@ function EditToggle({
   onChange: (v: boolean) => void
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-medium text-ssa-black/50 uppercase tracking-wide">
-        {label}
-      </span>
+    <div className="flex flex-col gap-2">
+      <FieldLabel>{label}</FieldLabel>
       <button
         type="button"
         role="switch"
         aria-checked={value}
         onClick={() => onChange(!value)}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-1 ${
-          value ? 'bg-ssa-red' : 'bg-gray-200'
+          value ? 'bg-ssa-red' : 'bg-ssa-muted-taupe/40'
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${
+          className={`inline-block h-4 w-4 transform rounded-full bg-ssa-white shadow transition-transform ${
             value ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
@@ -199,27 +210,50 @@ function EditToggle({
 
 // ─── status badge (membership — not editable) ─────────────────────────────────
 
+// Figma draws this as a filled pill spanning the whole column rather than hugging
+// its label, with a leading dot — so `w-full`, not an inline chip.
+const STATUS_STYLES: Record<string, { pill: string; dot: string }> = {
+  active: { pill: 'bg-green-100 text-green-800', dot: 'bg-green-600' },
+  expired: { pill: 'bg-ssa-pink-light text-ssa-red', dot: 'bg-ssa-red' },
+  pending: {
+    pill: 'bg-ssa-skin-yellow text-ssa-muted-gold',
+    dot: 'bg-ssa-muted-gold',
+  },
+}
+
+const STATUS_LABELS: Record<string, string> = {
+  active: 'Active',
+  expired: 'Expired',
+  pending: 'Pending',
+}
+
+const UNKNOWN_STATUS = {
+  pill: 'bg-ssa-muted-cream text-ssa-grey',
+  dot: 'bg-ssa-muted-taupe',
+}
+
 function StatusBadge({ status }: { status?: string }) {
-  const styles: Record<string, string> = {
-    active: 'bg-green-100 text-green-800',
-    expired: 'bg-red-100 text-red-800',
-    pending: 'bg-yellow-100 text-yellow-800',
-  }
-  const labels: Record<string, string> = {
-    active: 'Active',
-    expired: 'Expired',
-    pending: 'Pending',
-  }
+  // `status` is optional and can arrive as an empty string from a partial session,
+  // which is falsy — so normalise to `undefined` first rather than leaning on `??`,
+  // which would let `''` through as both the style object and the label.
+  const key = status || undefined
+  const style = (key && STATUS_STYLES[key]) || UNKNOWN_STATUS
   return (
     <span
-      className={`inline-block rounded-full px-3 py-1 text-xs font-semibold ${
-        (status && styles[status]) ?? 'bg-gray-100 text-gray-600'
-      }`}
+      className={`inline-flex w-full items-center gap-2 rounded-full px-3 py-1.5 font-be-vietnam-pro text-sm font-medium ${style.pill}`}
     >
-      {(status && labels[status]) ?? status ?? 'Unknown'}
+      <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${style.dot}`} />
+      {(key && STATUS_LABELS[key]) || key || 'Unknown'}
     </span>
   )
 }
+
+// ─── header controls ──────────────────────────────────────────────────────────
+
+// The pencil and LOG OUT controls in Figma are both hairline outlined pills in the
+// muted taupe, so they share one base and differ only in shape.
+const headerControl =
+  'inline-flex items-center justify-center rounded-full border border-ssa-muted-taupe/70 text-ssa-badge-light-text transition-colors hover:border-ssa-red hover:text-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
 
 // ─── toast ────────────────────────────────────────────────────────────────────
 
@@ -240,8 +274,8 @@ function Toast({
     <div
       role="status"
       aria-live="polite"
-      className={`fixed top-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-5 py-3 shadow-xl transition-all duration-300 ${
-        isSuccess ? 'bg-green-600 text-white' : 'bg-ssa-red text-white'
+      className={`fixed top-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-5 py-3 font-be-vietnam-pro shadow-xl transition-all duration-300 ${
+        isSuccess ? 'bg-green-600 text-ssa-white' : 'bg-ssa-red text-ssa-white'
       }`}
     >
       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20">
@@ -255,7 +289,7 @@ function Toast({
       <button
         onClick={onDismiss}
         aria-label="Dismiss notification"
-        className="ml-1 rounded-lg p-1 hover:bg-white/20 transition-colors"
+        className="ml-1 rounded-lg p-1 transition-colors hover:bg-white/20"
       >
         <FiX className="h-3.5 w-3.5" />
       </button>
@@ -284,29 +318,29 @@ function ConfirmDialog({
       aria-modal="true"
     >
       <button
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm cursor-default"
+        className="absolute inset-0 cursor-default bg-black/50 backdrop-blur-sm"
         aria-label="Close dialog"
         onClick={onCancel}
         tabIndex={-1}
       />
-      <div className="relative w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl">
+      <div className="relative w-full max-w-sm rounded-2xl bg-ssa-background p-6 shadow-2xl">
         {/* icon */}
         <div
           className={`mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full ${
-            isSave ? 'bg-ssa-red/10' : 'bg-red-100'
+            isSave ? 'bg-ssa-card-cta' : 'bg-ssa-pink-light'
           }`}
         >
           {isSave ? (
-            <FiSave className="h-7 w-7 text-ssa-red" />
+            <FiSave className="h-7 w-7 text-ssa-muted-gold" />
           ) : (
-            <FiAlertTriangle className="h-7 w-7 text-red-600" />
+            <FiAlertTriangle className="h-7 w-7 text-ssa-red" />
           )}
         </div>
 
-        <h2 className="text-center font-averia font-bold text-xl text-ssa-black">
+        <h2 className="text-center font-be-vietnam-pro text-xl font-bold text-ssa-grey">
           {isSave ? 'Save Changes' : 'Delete Account'}
         </h2>
-        <p className="mt-2 text-center text-sm text-ssa-black/60">
+        <p className="mt-2 text-center font-be-vietnam-pro text-sm text-ssa-badge-light-text">
           {isSave
             ? 'Are you sure you want to save these changes to your profile?'
             : 'This will permanently delete your account and all associated data. This action cannot be undone.'}
@@ -316,11 +350,7 @@ function ConfirmDialog({
           <button
             onClick={onConfirm}
             disabled={loading}
-            className={`flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm font-semibold text-white transition-opacity disabled:opacity-60 ${
-              isSave
-                ? 'bg-ssa-red hover:opacity-90'
-                : 'bg-red-600 hover:opacity-90'
-            }`}
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-2.5 font-be-vietnam-pro text-sm font-semibold text-ssa-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {loading && (
               <svg
@@ -352,7 +382,7 @@ function ConfirmDialog({
           <button
             onClick={onCancel}
             disabled={loading}
-            className="w-full rounded-full border-2 border-ssa-black/20 py-2.5 text-sm font-semibold text-ssa-black transition-colors hover:border-ssa-black/40 disabled:opacity-60"
+            className="w-full rounded-full border border-ssa-muted-taupe/70 py-2.5 font-be-vietnam-pro text-sm font-semibold text-ssa-grey transition-colors hover:border-ssa-grey disabled:opacity-60"
           >
             Cancel
           </button>
@@ -489,30 +519,22 @@ export default function ProfileClient({
       )}
 
       {/* ── header ── */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="font-averia font-bold text-3xl text-ssa-black">
-              {displayName}
-            </h1>
-            <button
-              onClick={handleLogout}
-              className="rounded border border-red-600 px-3 py-1 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
-            >
-              Log out
-            </button>
-          </div>
-          <p className="mt-1 text-sm text-ssa-black/50">{user.email}</p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-be-vietnam-pro text-2xl font-bold text-ssa-red sm:text-3xl">
+            {displayName}
+          </h1>
+          <p className="mt-1 truncate font-be-vietnam-pro text-sm text-ssa-badge-light-text">
+            {user.email}
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex shrink-0 items-center gap-3 pt-1">
           <button
             onClick={() => (isEditing ? cancelEdit() : setIsEditing(true))}
             aria-label={isEditing ? 'Cancel editing' : 'Edit profile'}
-            className={`flex h-9 w-9 items-center justify-center rounded-full transition-colors ${
-              isEditing
-                ? 'bg-ssa-black text-white hover:bg-ssa-black/80'
-                : 'bg-ssa-yellow hover:bg-ssa-yellow/70 text-ssa-black'
+            className={`${headerControl} h-9 w-9 ${
+              isEditing ? 'border-ssa-red text-ssa-red' : ''
             }`}
           >
             {isEditing ? (
@@ -523,22 +545,19 @@ export default function ProfileClient({
           </button>
 
           <button
-            onClick={() => setDialog('delete')}
-            aria-label="Delete account"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600 transition-colors hover:bg-red-200"
+            onClick={handleLogout}
+            className={`${headerControl} h-9 px-5 font-be-vietnam-pro text-xs font-medium uppercase tracking-[0.06em]`}
           >
-            <FiTrash2 className="h-4 w-4" />
+            Log out
           </button>
         </div>
       </div>
 
       {/* ── membership (read-only) ── */}
-      <CardSection title="Membership">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-medium text-ssa-black/50 uppercase tracking-wide">
-              Status
-            </span>
+      <ProfileCard title="Membership">
+        <div className={fieldGrid}>
+          <div className="flex flex-col gap-2">
+            <FieldLabel>Status</FieldLabel>
             <StatusBadge status={user.membershipStatus} />
           </div>
           <ViewField
@@ -575,11 +594,11 @@ export default function ProfileClient({
             }
           />
         </div>
-      </CardSection>
+      </ProfileCard>
 
       {/* ── personal details ── */}
-      <CardSection title="Personal Details">
-        <div className="grid grid-cols-2 gap-4">
+      <ProfileCard title="Personal Details">
+        <div className={fieldGrid}>
           {E ? (
             <>
               <EditText
@@ -593,7 +612,7 @@ export default function ProfileClient({
                 onChange={(v) => set('lastName', v)}
               />
               <EditText
-                label="Phone"
+                label="Phone Number"
                 value={form.phone}
                 onChange={(v) => set('phone', v)}
                 type="tel"
@@ -603,15 +622,15 @@ export default function ProfileClient({
             <>
               <ViewField label="First Name" value={form.firstName} />
               <ViewField label="Last Name" value={form.lastName} />
-              <ViewField label="Phone" value={form.phone} />
+              <ViewField label="Phone Number" value={form.phone} />
             </>
           )}
         </div>
-      </CardSection>
+      </ProfileCard>
 
       {/* ── university info ── */}
-      <CardSection title="University Info">
-        <div className="grid grid-cols-2 gap-4">
+      <ProfileCard title="University Information">
+        <div className={fieldGrid}>
           {E ? (
             <>
               <EditText
@@ -653,11 +672,11 @@ export default function ProfileClient({
             </>
           )}
         </div>
-      </CardSection>
+      </ProfileCard>
 
       {/* ── additional info ── */}
-      <CardSection title="Additional Info">
-        <div className="grid grid-cols-2 gap-4">
+      <ProfileCard title="Additional Information">
+        <div className={fieldGrid}>
           {E ? (
             <>
               <EditSelect
@@ -709,20 +728,35 @@ export default function ProfileClient({
             </>
           )}
         </div>
-      </CardSection>
+      </ProfileCard>
 
       {/* ── save changes button ── */}
       {isEditing && (
         <div className="sticky bottom-6">
           <button
             onClick={() => setDialog('save')}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-3 text-base font-semibold text-white shadow-lg shadow-ssa-red/30 transition-opacity hover:opacity-90"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-3 font-be-vietnam-pro text-base font-semibold text-ssa-white shadow-lg shadow-ssa-red/30 transition-opacity hover:opacity-90"
           >
             <FiSave className="h-5 w-5" />
             Save Changes
           </button>
         </div>
       )}
+
+      {/* ── delete account ──
+          Figma's header only carries the pencil and LOG OUT, so the destructive
+          action moves out of it rather than being dropped — the DELETE /api/auth/me
+          route is live and this is the only entry point to it. Kept deliberately
+          quiet and last in the tab order. */}
+      <div className="flex justify-center pt-2">
+        <button
+          onClick={() => setDialog('delete')}
+          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-be-vietnam-pro text-xs text-ssa-badge-light-text underline decoration-ssa-muted-taupe/50 underline-offset-4 transition-colors hover:text-ssa-red hover:decoration-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
+        >
+          <FiTrash2 className="h-3.5 w-3.5" />
+          Delete account
+        </button>
+      </div>
     </>
   )
 }
