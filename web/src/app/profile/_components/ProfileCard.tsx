@@ -15,8 +15,9 @@ export default function ProfileCard({
   children: React.ReactNode
 }) {
   return (
-    <section className="flex flex-col gap-5 rounded-xl bg-ssa-card p-6 shadow-[0_1px_2px_0_rgba(140,136,128,0.2)] sm:p-8">
-      <h2 className="font-be-vietnam-pro text-xl font-bold text-ssa-muted-taupe sm:text-2xl">
+    <section className="flex flex-col gap-5 rounded-xl bg-ssa-card p-6 shadow-[0_2.67px_6.93px_0_rgba(255,255,255,0.2),0_2px_2.67px_0.67px_rgba(84,84,84,0.1)] sm:p-9">
+      {/* Figma "BVP - Topic Headers" — the same 24/32/-1px style as the page title. */}
+      <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-muted-taupe">
         {title}
       </h2>
       {children}

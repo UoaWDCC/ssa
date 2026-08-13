@@ -250,10 +250,10 @@ function StatusBadge({ status }: { status?: string }) {
 
 // ─── header controls ──────────────────────────────────────────────────────────
 
-// The pencil and LOG OUT controls in Figma are both hairline outlined pills in the
-// muted taupe, so they share one base and differ only in shape.
+// Both controls are 44px tall outlined pills in Grey (Text), sharing a 1.87px border
+// (rounded to 2px) and a fully-round radius, so they differ only in width.
 const headerControl =
-  'inline-flex items-center justify-center rounded-full border border-ssa-muted-taupe/70 text-ssa-badge-light-text transition-colors hover:border-ssa-red hover:text-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
+  'inline-flex items-center justify-center rounded-full border-2 border-ssa-muted-taupe text-ssa-muted-taupe transition-colors hover:border-ssa-red hover:text-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
 
 // ─── toast ────────────────────────────────────────────────────────────────────
 
@@ -549,189 +549,192 @@ export default function ProfileClient({
 
           <button
             onClick={handleLogout}
-            className={`${headerControl} h-11 w-[123px] font-be-vietnam-pro text-xs font-medium uppercase tracking-[0.06em]`}
+            className={`${headerControl} h-11 w-[123px] font-be-vietnam-pro text-base font-semibold uppercase leading-[21.33px] tracking-[-0.02em]`}
           >
             Log out
           </button>
         </div>
       </div>
 
-      {/* ── membership (read-only) ── */}
-      <ProfileCard title="Membership">
-        <div className={fieldGrid}>
-          <div className="flex flex-col gap-2">
-            <FieldLabel>Status</FieldLabel>
-            <StatusBadge status={user.membershipStatus} />
-          </div>
-          <ViewField
-            label="Expiry Date"
-            value={
-              user.membershipExpiryDate
-                ? new Date(user.membershipExpiryDate).toLocaleDateString(
-                    'en-NZ',
-                    {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    },
-                  )
-                : null
-            }
-          />
-          <ViewField
-            label="Role"
-            value={
-              user.role
-                ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
-                : null
-            }
-          />
-          <ViewField
-            label="Auth Provider"
-            value={
-              user.authProvider === 'google'
-                ? 'Google'
-                : user.authProvider === 'email'
-                  ? 'Email & Password'
+      {/* Figma Frame 845 — the card stack, 24px between cards. */}
+      <div className="flex flex-col gap-6">
+        {/* ── membership (read-only) ── */}
+        <ProfileCard title="Membership">
+          <div className={fieldGrid}>
+            <div className="flex flex-col gap-2">
+              <FieldLabel>Status</FieldLabel>
+              <StatusBadge status={user.membershipStatus} />
+            </div>
+            <ViewField
+              label="Expiry Date"
+              value={
+                user.membershipExpiryDate
+                  ? new Date(user.membershipExpiryDate).toLocaleDateString(
+                      'en-NZ',
+                      {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      },
+                    )
                   : null
-            }
-          />
-        </div>
-      </ProfileCard>
-
-      {/* ── personal details ── */}
-      <ProfileCard title="Personal Details">
-        <div className={fieldGrid}>
-          {E ? (
-            <>
-              <EditText
-                label="First Name"
-                value={form.firstName}
-                onChange={(v) => set('firstName', v)}
-              />
-              <EditText
-                label="Last Name"
-                value={form.lastName}
-                onChange={(v) => set('lastName', v)}
-              />
-              <EditText
-                label="Phone Number"
-                value={form.phone}
-                onChange={(v) => set('phone', v)}
-                type="tel"
-              />
-            </>
-          ) : (
-            <>
-              <ViewField label="First Name" value={form.firstName} />
-              <ViewField label="Last Name" value={form.lastName} />
-              <ViewField label="Phone Number" value={form.phone} />
-            </>
-          )}
-        </div>
-      </ProfileCard>
-
-      {/* ── university info ── */}
-      <ProfileCard title="University Information">
-        <div className={fieldGrid}>
-          {E ? (
-            <>
-              <EditText
-                label="UPI"
-                value={form.upi}
-                onChange={(v) => set('upi', v)}
-              />
-              <EditText
-                label="Student ID"
-                value={form.studentId}
-                onChange={(v) => set('studentId', v)}
-              />
-              <EditText
-                label="Area of Study"
-                value={form.areaOfStudy}
-                onChange={(v) => set('areaOfStudy', v)}
-              />
-              <EditSelect
-                label="Year of Study"
-                value={form.yearOfUniversity}
-                onChange={(v) => set('yearOfUniversity', v)}
-                options={YEAR_OPTIONS}
-              />
-            </>
-          ) : (
-            <>
-              <ViewField label="UPI" value={form.upi} />
-              <ViewField label="Student ID" value={form.studentId} />
-              <ViewField label="Area of Study" value={form.areaOfStudy} />
-              <ViewField
-                label="Year of Study"
-                value={
-                  form.yearOfUniversity
-                    ? (YEAR_LABELS[form.yearOfUniversity] ??
-                      form.yearOfUniversity)
+              }
+            />
+            <ViewField
+              label="Role"
+              value={
+                user.role
+                  ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                  : null
+              }
+            />
+            <ViewField
+              label="Auth Provider"
+              value={
+                user.authProvider === 'google'
+                  ? 'Google'
+                  : user.authProvider === 'email'
+                    ? 'Email & Password'
                     : null
-                }
-              />
-            </>
-          )}
-        </div>
-      </ProfileCard>
+              }
+            />
+          </div>
+        </ProfileCard>
 
-      {/* ── additional info ── */}
-      <ProfileCard title="Additional Information">
-        <div className={fieldGrid}>
-          {E ? (
-            <>
-              <EditSelect
-                label="Gender"
-                value={form.gender}
-                onChange={(v) => set('gender', v)}
-                options={GENDER_OPTIONS}
-              />
-              <EditSelect
-                label="Ethnicity"
-                value={form.ethnicity}
-                onChange={(v) => set('ethnicity', v)}
-                options={ETHNICITY_OPTIONS}
-              />
-              <EditToggle
-                label="Returning Member"
-                value={form.returningMember}
-                onChange={(v) => set('returningMember', v)}
-              />
-            </>
-          ) : (
-            <>
-              <ViewField
-                label="Gender"
-                value={
-                  form.gender
-                    ? (GENDER_LABELS[form.gender] ?? form.gender)
-                    : null
-                }
-              />
-              <ViewField
-                label="Ethnicity"
-                value={
-                  form.ethnicity
-                    ? (ETHNICITY_LABELS[form.ethnicity] ?? form.ethnicity)
-                    : null
-                }
-              />
-              <ViewField
-                label="Returning Member"
-                value={
-                  form.returningMember === true
-                    ? 'Yes'
-                    : form.returningMember === false
-                      ? 'No'
+        {/* ── personal details ── */}
+        <ProfileCard title="Personal Details">
+          <div className={fieldGrid}>
+            {E ? (
+              <>
+                <EditText
+                  label="First Name"
+                  value={form.firstName}
+                  onChange={(v) => set('firstName', v)}
+                />
+                <EditText
+                  label="Last Name"
+                  value={form.lastName}
+                  onChange={(v) => set('lastName', v)}
+                />
+                <EditText
+                  label="Phone Number"
+                  value={form.phone}
+                  onChange={(v) => set('phone', v)}
+                  type="tel"
+                />
+              </>
+            ) : (
+              <>
+                <ViewField label="First Name" value={form.firstName} />
+                <ViewField label="Last Name" value={form.lastName} />
+                <ViewField label="Phone Number" value={form.phone} />
+              </>
+            )}
+          </div>
+        </ProfileCard>
+
+        {/* ── university info ── */}
+        <ProfileCard title="University Information">
+          <div className={fieldGrid}>
+            {E ? (
+              <>
+                <EditText
+                  label="UPI"
+                  value={form.upi}
+                  onChange={(v) => set('upi', v)}
+                />
+                <EditText
+                  label="Student ID"
+                  value={form.studentId}
+                  onChange={(v) => set('studentId', v)}
+                />
+                <EditText
+                  label="Area of Study"
+                  value={form.areaOfStudy}
+                  onChange={(v) => set('areaOfStudy', v)}
+                />
+                <EditSelect
+                  label="Year of Study"
+                  value={form.yearOfUniversity}
+                  onChange={(v) => set('yearOfUniversity', v)}
+                  options={YEAR_OPTIONS}
+                />
+              </>
+            ) : (
+              <>
+                <ViewField label="UPI" value={form.upi} />
+                <ViewField label="Student ID" value={form.studentId} />
+                <ViewField label="Area of Study" value={form.areaOfStudy} />
+                <ViewField
+                  label="Year of Study"
+                  value={
+                    form.yearOfUniversity
+                      ? (YEAR_LABELS[form.yearOfUniversity] ??
+                        form.yearOfUniversity)
                       : null
-                }
-              />
-            </>
-          )}
-        </div>
-      </ProfileCard>
+                  }
+                />
+              </>
+            )}
+          </div>
+        </ProfileCard>
+
+        {/* ── additional info ── */}
+        <ProfileCard title="Additional Information">
+          <div className={fieldGrid}>
+            {E ? (
+              <>
+                <EditSelect
+                  label="Gender"
+                  value={form.gender}
+                  onChange={(v) => set('gender', v)}
+                  options={GENDER_OPTIONS}
+                />
+                <EditSelect
+                  label="Ethnicity"
+                  value={form.ethnicity}
+                  onChange={(v) => set('ethnicity', v)}
+                  options={ETHNICITY_OPTIONS}
+                />
+                <EditToggle
+                  label="Returning Member"
+                  value={form.returningMember}
+                  onChange={(v) => set('returningMember', v)}
+                />
+              </>
+            ) : (
+              <>
+                <ViewField
+                  label="Gender"
+                  value={
+                    form.gender
+                      ? (GENDER_LABELS[form.gender] ?? form.gender)
+                      : null
+                  }
+                />
+                <ViewField
+                  label="Ethnicity"
+                  value={
+                    form.ethnicity
+                      ? (ETHNICITY_LABELS[form.ethnicity] ?? form.ethnicity)
+                      : null
+                  }
+                />
+                <ViewField
+                  label="Returning Member"
+                  value={
+                    form.returningMember === true
+                      ? 'Yes'
+                      : form.returningMember === false
+                        ? 'No'
+                        : null
+                  }
+                />
+              </>
+            )}
+          </div>
+        </ProfileCard>
+      </div>
 
       {/* ── save changes button ── */}
       {isEditing && (
