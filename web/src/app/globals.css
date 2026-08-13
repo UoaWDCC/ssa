@@ -61,7 +61,7 @@
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
   --font-dm-mono: var(--font-dm-mono);
-  --font-inter: var(--font-inter);
+  --font-inter: var(--font-inter-source);
 }
 
 @media (prefers-color-scheme: dark) {
