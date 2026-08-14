@@ -8,6 +8,7 @@ type SponsorLogoTileProps = {
   hoverTitle: string
   hoverDescription: string
   hoverTextClassName: string
+  onTouchSelect: () => void
 }
 
 function isExternalUrl(url?: string) {
@@ -21,7 +22,7 @@ function SponsorTileContent({
   hoverTitle,
   hoverDescription,
   hoverTextClassName,
-}: Omit<SponsorLogoTileProps, 'websiteUrl'>) {
+}: Omit<SponsorLogoTileProps, 'websiteUrl' | 'onTouchSelect'>) {
   return (
     <>
       <Image
@@ -33,10 +34,10 @@ function SponsorTileContent({
       />
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-md opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out group-hover:opacity-100 lg:rounded-[16px] ${hoverOverlayClassName}`}
+        className={`absolute inset-0 rounded-md opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out [@media(any-hover:hover)]:group-hover:opacity-100 lg:rounded-[16px] ${hoverOverlayClassName}`}
       />
       <span
-        className={`absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 sm:gap-2 sm:p-4 lg:gap-3 lg:p-5 ${hoverTextClassName}`}
+        className={`absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-500 ease-out [@media(any-hover:hover)]:group-hover:opacity-100 sm:gap-2 sm:p-4 lg:gap-3 lg:p-5 ${hoverTextClassName}`}
       >
         <span className="font-averia text-[8px] font-bold leading-tight sm:text-base lg:text-[21px]">
           {hoverTitle}
@@ -61,14 +62,31 @@ export default function SponsorLogoTile({
   hoverTitle,
   hoverDescription,
   hoverTextClassName,
+  onTouchSelect,
 }: SponsorLogoTileProps) {
   const opensInNewTab = isExternalUrl(websiteUrl)
   const className =
     'group relative block aspect-square w-full overflow-hidden rounded-lg border-2 border-ssa-pink-light bg-ssa-white lg:rounded-[20px] lg:border-4'
 
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const usesTouchPopup =
+      window.matchMedia('(max-width: 1023px)').matches ||
+      window.matchMedia('(hover: none), (pointer: coarse)').matches
+
+    if (!usesTouchPopup) return
+
+    event.preventDefault()
+    onTouchSelect()
+  }
+
   if (!opensInNewTab) {
     return (
-      <div className={className} aria-label={name}>
+      <button
+        type="button"
+        className={`${className} cursor-pointer`}
+        aria-label={`View ${name} details`}
+        onClick={handleClick}
+      >
         <SponsorTileContent
           name={name}
           logoUrl={logoUrl}
@@ -77,7 +95,7 @@ export default function SponsorLogoTile({
           hoverDescription={hoverDescription}
           hoverTextClassName={hoverTextClassName}
         />
-      </div>
+      </button>
     )
   }
 
@@ -88,6 +106,7 @@ export default function SponsorLogoTile({
       rel="noopener noreferrer"
       aria-label={`Visit ${name}`}
       className={className}
+      onClick={handleClick}
     >
       <SponsorTileContent
         name={name}
