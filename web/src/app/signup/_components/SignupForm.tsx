@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { TOTAL_STEPS, initialFormData, type FormData } from './types'
 import ProgressBar from '@/components/ProgressBar'
@@ -27,6 +27,7 @@ export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const errorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!googleStatus) return
@@ -91,6 +92,15 @@ export default function SignupForm() {
       isActive = false
     }
   }, [googleStatus])
+
+  useEffect(() => {
+    if (!error) return
+
+    errorRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
+  }, [error])
 
   function handleChange(field: keyof FormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -291,7 +301,12 @@ export default function SignupForm() {
       )}
 
       {(error || googleConnectionError) && (
-        <div className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
+        <div
+          ref={errorRef}
+          role="alert"
+          tabIndex={-1}
+          className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm"
+        >
           {error || googleConnectionError}
         </div>
       )}
@@ -358,7 +373,7 @@ export default function SignupForm() {
             />
           )}
           <div className="flex items-center justify-between pt-4">
-            {step > 1 && step < 5 ? (
+            {step > 1 && step < TOTAL_STEPS ? (
               <Button
                 onClick={handleBack}
                 size="short"

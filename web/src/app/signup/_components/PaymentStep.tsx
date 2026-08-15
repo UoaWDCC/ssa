@@ -19,8 +19,8 @@ export default function PaymentStep({
       "
     >
       <div className="flex flex-col gap-4 [grid-area:content]">
-        <h2 className="text-ssa-grey">Complete your SSA Membership!</h2>
-        <ul className="list-disc list-inside text-md text-ssa-overlay-grey space-y-1 ml-1">
+        <p className="text-ssa-grey">Complete your SSA Membership!</p>
+        <ul className="list-disc list-inside text-ssa-overlay-grey space-y-1 ml-1">
           <li>Get goodies & discounts from SSA sponsors...</li>
           <li>Become part of our community...</li>
           <li>
