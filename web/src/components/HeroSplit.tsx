@@ -14,7 +14,7 @@ const subtitleStyles =
   'text-ssa-white font-normal text-[16px] max-w-2xl leading-[24px] tracking-[-0.4px]'
 
 const orchidDuoStyles =
-  'absolute bottom-[-2rem] right-[-8%] z-[-1] h-52 w-auto pointer-events-none select-none sm:bottom-0 sm:right-[5%] sm:h-14 md:h-44 lg:h-52'
+  'absolute bottom-[-2rem] right-[-8%] z-[-1] h-52 w-auto pointer-events-none select-none sm:bottom-0 sm:right-[5%] sm:h-[clamp(9rem,18vw,13rem)]'
 
 export default function HeroSplit({ title, subtitle }: Readonly<HeroProps>) {
   return (

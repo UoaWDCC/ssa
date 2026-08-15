@@ -39,7 +39,7 @@ export default function Hero({
         width={2000}
         height={4000}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-[10%] z-0 h-48 w-auto select-none opacity-70 sm:left-1/2 sm:h-52 sm:-translate-x-[190%] sm:opacity-100 md:h-[23rem] lg:h-[27rem] xl:h-[31rem]"
+        className="pointer-events-none absolute bottom-0 left-[10%] z-0 h-45 w-auto select-none opacity-70 sm:left-1/2 sm:h-[18rem] sm:-translate-x-[190%] sm:opacity-100 md:h-[23rem] lg:h-[27rem] xl:h-[31rem]"
       />
 
       <Image
@@ -48,11 +48,11 @@ export default function Hero({
         width={200}
         height={500}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-[10%] z-0 h-48 w-auto select-none opacity-70 sm:left-1/2 sm:right-auto sm:h-52 sm:translate-x-[90%] sm:opacity-100 md:h-[20rem] lg:h-[23rem] xl:h-[27rem]"
+        className="pointer-events-none absolute bottom-0 right-[10%] z-0 h-45 w-auto select-none opacity-70 sm:left-1/2 sm:right-auto sm:h-[16rem] sm:translate-x-[90%] sm:opacity-100 md:h-[20rem] lg:h-[23rem] xl:h-[27rem]"
       />
 
       <div className="z-10 mx-auto flex w-full max-w-3xl flex-col items-center justify-center gap-4 text-center sm:gap-5 md:gap-6">
-        <h1 className="font-be-vietnam-pro text-[48px] font-bold leading-[40px] tracking-[-0.04em] text-ssa-white wrap-break-word sm:text-[88px] sm:leading-[72px] sm:tracking-[-0.08em]">
+        <h1 className="whitespace-pre-line font-be-vietnam-pro text-[48px] font-bold leading-[40px] tracking-[-0.04em] text-ssa-white sm:text-[88px] sm:leading-[72px] sm:tracking-[-0.08em]">
           {title}
         </h1>
 

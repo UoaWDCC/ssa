@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
-        title="SINGAPORE STUDENTS' ASSOCIATION"
+        title={"SINGAPORE\nSTUDENTS'\nASSOCIATION"}
         subtitle="A home for people from the Little Red Dot."
         ctaLabel="JOIN SSA!"
         ctaHref="/signup"
