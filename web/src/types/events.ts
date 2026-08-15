@@ -1,10 +1,4 @@
-export interface EventMedia {
-  id: number
-  url: string | null
-  alt: string
-  width: number | null
-  height: number | null
-}
+import type { Media } from './payload-types'
 
 export type EventCategory =
   | 'social'
@@ -15,7 +9,7 @@ export type EventCategory =
 
 export interface EventImage {
   id: string | null
-  image: EventMedia
+  image: Media
 }
 
 export interface Event {
@@ -23,7 +17,7 @@ export interface Event {
   title: string
   date: string
   description: string | null
-  coverImage: EventMedia | null
+  coverImage: Media | null
   category: EventCategory | null
   isUpcoming: boolean | null
   images: EventImage[] | null

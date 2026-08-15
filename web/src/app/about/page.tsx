@@ -1,20 +1,15 @@
 import Image from 'next/image'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import Footer from '@/components/Footer'
 import ExecGrid from './_components/ExecGrid'
 
 export default function AboutPage() {
   return (
     <main className="flex flex-col bg-[#fffbf4] text-[#434242]">
-      <div className="-mt-[88px] overflow-hidden rounded-2xl bg-ssa-red pt-[88px]">
-        <Hero
-          title="About Us"
-          subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
-          mascotImage="/ssa_nerd_merlion.svg"
-          mascotAlt="SSA Nerd Merlion mascot"
-        />
-      </div>
-
+      <HeroSplit
+        title="ABOUT US"
+        subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
+      />
       <section className="mx-auto w-full max-w-[1440px] px-[18px] pt-[32px] sm:px-8 md:px-12 md:pt-16 lg:px-16 xl:px-[clamp(24px,6.8056vw,98px)] xl:pt-[88px]">
         <div className="relative aspect-[366/236.6457] w-full overflow-hidden rounded-[4px] md:aspect-[1244/573] md:rounded-[12px]">
           <Image
