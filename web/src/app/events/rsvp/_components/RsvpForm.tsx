@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   type FormEvent,
   type HTMLInputTypeAttribute,
@@ -266,26 +266,18 @@ function SelectField({
 }
 
 export default function RsvpForm() {
+  const router = useRouter()
   const [step, setStep] = useState<Step>(1)
   const [values, setValues] = useState<FormValues>(initialValues)
   const [errors, setErrors] = useState<FieldErrors>({})
-  const [completed, setCompleted] = useState(false)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
-  const completionHeadingRef = useRef<HTMLHeadingElement>(null)
   const previousStep = useRef<Step>(step)
-  const previousCompleted = useRef(completed)
 
   useEffect(() => {
     if (previousStep.current === step) return
     stepHeadingRef.current?.focus()
     previousStep.current = step
   }, [step])
-
-  useEffect(() => {
-    if (completed) completionHeadingRef.current?.focus()
-    else if (previousCompleted.current) stepHeadingRef.current?.focus()
-    previousCompleted.current = completed
-  }, [completed])
 
   function handleChange(name: FieldName, value: string) {
     setValues((current) => ({ ...current, [name]: value }))
@@ -340,67 +332,13 @@ export default function RsvpForm() {
       return
     }
 
-    setCompleted(true)
+    router.push('/events/rsvp/success')
   }
 
   function handleBack() {
     if (step === 1) return
     setErrors({})
     setStep((step - 1) as Step)
-  }
-
-  function handleEditDetails() {
-    setCompleted(false)
-  }
-
-  if (completed) {
-    return (
-      <section
-        aria-labelledby="rsvp-complete-title"
-        className="min-w-0 lg:pt-0.5"
-      >
-        <ProgressBar step={TOTAL_STEPS} total={TOTAL_STEPS} />
-        <div className="mt-3 flex items-center justify-between gap-4 font-dm-mono text-xs font-medium uppercase tracking-[0.04em] text-ssa-form-accent">
-          <p>Details ready</p>
-          <p>Step 3/3</p>
-        </div>
-
-        <div className="mt-8 flex min-h-[440px] flex-col items-start justify-center rounded-[18px] border border-[#e6ded1] bg-ssa-card p-6 shadow-[0_1px_2px_#6d4f2b1a,0_14px_34px_#6d4f2b0a] sm:p-10">
-          <span className="flex size-14 items-center justify-center rounded-full bg-[#f8d8dd] text-ssa-form-accent">
-            <FiCheck aria-hidden="true" className="size-7" />
-          </span>
-          <h2
-            ref={completionHeadingRef}
-            id="rsvp-complete-title"
-            tabIndex={-1}
-            className="mt-6 max-w-[16ch] break-words rounded-sm font-be-vietnam-pro text-3xl font-bold leading-tight tracking-[-0.04em] text-ssa-grey outline-none focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 sm:text-4xl"
-          >
-            Details ready, {values.firstName}.
-          </h2>
-          <p className="mt-4 max-w-[52ch] text-base leading-7">
-            Your entries are still available on this page, but this frontend
-            preview has not stored or sent an RSVP.
-          </p>
-
-          <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row">
-            <button
-              type="button"
-              onClick={handleEditDetails}
-              className="inline-flex min-h-12 items-center justify-center rounded-full border border-ssa-form-border bg-transparent px-6 font-be-vietnam-pro text-sm font-semibold text-ssa-grey outline-none transition-colors duration-150 hover:bg-ssa-form-field focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2"
-            >
-              Edit details
-            </button>
-            <Link
-              href="/events"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ssa-form-accent px-6 font-be-vietnam-pro text-sm font-semibold text-white outline-none transition-[background-color,transform] duration-150 hover:-translate-y-0.5 hover:bg-[#bd2f4c] focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 active:translate-y-0"
-            >
-              Back to events
-              <FiArrowRight aria-hidden="true" className="size-4" />
-            </Link>
-          </div>
-        </div>
-      </section>
-    )
   }
 
   const currentStep = stepDetails[step]
