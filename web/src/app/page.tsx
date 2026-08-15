@@ -10,14 +10,10 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
-        variant="fullscreen"
-        title="Singapore Students' Association"
+        title={"SINGAPORE\nSTUDENTS'\nASSOCIATION"}
         subtitle="A home for people from the Little Red Dot."
-        mascotImage="/ssa_merlion_full_body.svg"
-        mascotAlt="SSA Merlion mascot"
         ctaLabel="JOIN SSA!"
         ctaHref="/signup"
-        showSingaporeFlag
       />
       <section className="px-[21px] md:px-10 lg:px-16">
         <HighlightCard
