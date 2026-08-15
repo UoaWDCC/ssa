@@ -1,14 +1,25 @@
-import type { Metadata } from 'next'
+'use client'
 
 import RsvpForm from './_components/RsvpForm'
+import { UpcomingEventResponse } from '@/types/events'
+import { useQuery } from '@tanstack/react-query'
 
-export const metadata: Metadata = {
-  title: 'RSVP for Ice Kachang | SSA',
-  description:
-    'RSVP for the Singapore Students’ Association Ice Kachang night.',
+async function fetchUpcomingEvent() {
+  const response = await fetch('/api/events/upcoming')
+
+  if (!response.ok) {
+    throw new Error(`Upcoming Event request failed: ${response.status}`)
+  }
+
+  return response.json() as Promise<UpcomingEventResponse>
 }
 
 export default function IceKachangRsvpPage() {
+  const { data } = useQuery({
+    queryKey: ['upcoming-event'],
+    queryFn: fetchUpcomingEvent,
+  })
+
   return (
     <main className="min-h-[calc(100vh-88px)] bg-ssa-background font-inter text-ssa-grey">
       <div className="mx-auto w-full max-w-[1250px] px-5 py-10 sm:px-8 sm:py-12 lg:px-16 lg:py-16 xl:px-0">
@@ -21,9 +32,8 @@ export default function IceKachangRsvpPage() {
               RSVP
             </h1>
             <p className="mt-4 max-w-[30ch] text-base leading-6">
-              Hot, stressed and over Uni already? Say less… we’ve got the
-              perfect cooldown for you. Come chill with SSA at our Ice Kachang
-              Night. Sweet, icy, colourful… but there’s a twist.
+              {data?.event?.description ||
+                'No description available for this event.'}
             </p>
 
             <dl className="mt-10 grid grid-cols-2 gap-5 sm:gap-6 lg:mt-16 lg:grid-cols-1">
@@ -31,7 +41,9 @@ export default function IceKachangRsvpPage() {
                 <dt className="font-dm-mono text-xs font-medium uppercase tracking-[0.06em] text-ssa-form-accent">
                   Event name
                 </dt>
-                <dd className="mt-1 text-base leading-6">Ice Kachang</dd>
+                <dd className="mt-1 text-base leading-6">
+                  {data?.event?.title || 'No Title'}
+                </dd>
               </div>
 
               <div>
@@ -40,7 +52,8 @@ export default function IceKachangRsvpPage() {
                 </dt>
                 <dd className="mt-1 text-base leading-6">
                   <time dateTime="2026-04-02T18:00:00+13:00">
-                    2 April 2026 · 6:00 pm
+                    {data?.event?.date || 'No Date'} -{' '}
+                    {data?.event?.time || 'No Time'}
                   </time>
                 </dd>
               </div>
@@ -50,7 +63,7 @@ export default function IceKachangRsvpPage() {
                   Location
                 </dt>
                 <dd className="mt-1 max-w-[30ch] text-base leading-6">
-                  401-318 Engineering Atrium (Level 3)
+                  {data?.event?.location || 'No Location'}
                 </dd>
               </div>
 
@@ -60,9 +73,9 @@ export default function IceKachangRsvpPage() {
                 </dt>
                 <dd className="mt-1 grid max-w-[14rem] grid-cols-[1fr_auto] gap-x-6 text-base leading-6">
                   <span>Member</span>
-                  <span>$5</span>
+                  <span>${data?.event?.memberPrice || '$0'}</span>
                   <span>Non-member</span>
-                  <span>$11</span>
+                  <span>${data?.event?.nonMemberPrice || '$11'}</span>
                 </dd>
               </div>
             </dl>
