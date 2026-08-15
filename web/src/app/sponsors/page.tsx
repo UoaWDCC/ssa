@@ -14,23 +14,27 @@ import SponsorsGrid, {
   type SponsorCategory,
   type SponsorGridItem,
 } from './components/SponsorsGrid'
-import type { Media } from '../../../../cms/src/payload-types'
 
-type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url' | 'filename'>
+import type { Media } from '@/types/payload-types'
+
+type SponsorMediaSeedInput = Pick<
+  Media,
+  'id' | 'alt' | 'url' | 'width' | 'height'
+>
 
 function createSponsorMedia({
   id,
   alt,
   url,
-  filename,
+  width,
+  height,
 }: SponsorMediaSeedInput): Media {
   return {
     id,
     alt,
     url,
-    filename,
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
+    width,
+    height,
   }
 }
 
@@ -57,7 +61,8 @@ const sponsorOfTheWeekEntry: Sponsor = {
     id: 101,
     alt: 'Sip n Chill sponsor photo',
     url: '/sponsors/sponsorcard.png',
-    filename: 'sponsorcard.png',
+    width: 400,
+    height: 400,
   }),
   websiteUrl:
     'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
@@ -79,7 +84,8 @@ const sponsorSeedEntries: SponsorGridItem[] = [
       id: 102,
       alt: 'Kompass Coffee logo',
       url: '/sponsors/kompass_coffee.png',
-      filename: 'kompass_coffee.png',
+      width: 400,
+      height: 400,
     }),
     websiteUrl: 'https://www.instagram.com/kompasscoffee/',
     isSponsorOfTheWeek: false,
@@ -97,7 +103,8 @@ const sponsorSeedEntries: SponsorGridItem[] = [
       id: 103,
       alt: 'Sip n Chill logo',
       url: '/sponsors/sipnchill.png',
-      filename: 'sipnchill.png',
+      width: 400,
+      height: 400,
     }),
     websiteUrl:
       'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',

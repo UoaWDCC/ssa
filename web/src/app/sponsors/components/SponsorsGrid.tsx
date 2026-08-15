@@ -5,10 +5,10 @@ import { useMemo, useState } from 'react'
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
 
-import type { Sponsor } from '../../../../../cms/src/payload-types'
+import type { Sponsor } from '@/lib/sponsors'
 import SponsorLogoTile from './SponsorLogoTile'
 
-export type { Sponsor } from '../../../../../cms/src/payload-types'
+export type { Sponsor } from '@/lib/sponsors'
 
 export const SPONSOR_CATEGORIES = [
   'FOOD',
