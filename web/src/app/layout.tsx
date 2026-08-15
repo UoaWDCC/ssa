@@ -46,6 +46,8 @@ const dmMono = DM_Mono({
   weight: ['400', '500'],
 })
 
+// "I - Paragraph Text" in Figma — JoinCard's body copy. 400 is the only weight
+// it uses; add more here if a bolder Inter shows up in the design.
 const inter = Inter({
   variable: '--font-inter',
   subsets: ['latin'],

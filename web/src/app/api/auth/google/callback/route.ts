@@ -6,7 +6,12 @@ import {
   googleOAuthStateCookie,
   googleSignupSessionCookie,
 } from '@/lib/googleSignupSession'
-import { createSession, sessionCookie, type SessionUser } from '@/lib/session'
+import {
+  createSession,
+  sessionCookie,
+  sessionCookieOptions,
+  toSessionUser,
+} from '@/lib/session'
 
 type GoogleTokenResponse = {
   access_token?: string
@@ -26,25 +31,6 @@ type GoogleTokenInfoResponse = {
   given_name?: string
   name?: string
   sub?: string
-}
-
-type CmsUser = {
-  id: number
-  email: string
-  firstName?: string | null
-  lastName?: string | null
-  phone?: string | null
-  role?: 'admin' | 'member'
-  authProvider?: 'email' | 'google' | null
-  membershipStatus?: 'active' | 'expired' | 'pending' | null
-  membershipExpiryDate?: string | null
-  upi?: string | null
-  studentId?: string | null
-  areaOfStudy?: string | null
-  yearOfUniversity?: string | null
-  gender?: string | null
-  ethnicity?: string | null
-  returningMember?: boolean | null
 }
 
 function getRedirectUri(request: NextRequest) {
@@ -167,37 +153,17 @@ export async function GET(request: NextRequest) {
       })
 
       if (cmsRes.ok) {
-        const { user } = (await cmsRes.json()) as { user: CmsUser }
-
-        const sessionUser: SessionUser = {
-          email: user.email,
-          userId: String(user.id),
-          firstName: user.firstName ?? undefined,
-          lastName: user.lastName ?? undefined,
-          phone: user.phone ?? undefined,
-          role: user.role,
-          authProvider: user.authProvider ?? undefined,
-          membershipStatus: user.membershipStatus ?? undefined,
-          membershipExpiryDate: user.membershipExpiryDate ?? undefined,
-          upi: user.upi ?? undefined,
-          studentId: user.studentId ?? undefined,
-          areaOfStudy: user.areaOfStudy ?? undefined,
-          yearOfUniversity: user.yearOfUniversity ?? undefined,
-          gender: user.gender ?? undefined,
-          ethnicity: user.ethnicity ?? undefined,
-          returningMember: user.returningMember ?? undefined,
+        const { user } = (await cmsRes.json()) as {
+          user: Parameters<typeof toSessionUser>[0]
         }
+        const sessionUser = toSessionUser(user)
 
         const response = NextResponse.redirect(
           new URL('/', request.nextUrl.origin),
         )
         clearOAuthCookies(response)
         response.cookies.set(sessionCookie, createSession(sessionUser), {
-          httpOnly: true,
-          sameSite: 'lax',
-          path: '/',
-          maxAge: 60 * 60 * 24 * 7,
-          secure: process.env.NODE_ENV === 'production',
+          ...sessionCookieOptions,
         })
         return response
       }

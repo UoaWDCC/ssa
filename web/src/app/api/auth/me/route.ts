@@ -4,6 +4,7 @@ import {
   createSession,
   getSession,
   sessionCookie,
+  sessionCookieOptions,
   type SessionUser,
 } from '@/lib/session'
 
@@ -64,11 +65,7 @@ export async function PATCH(request: Request) {
 
   const store = await cookies()
   store.set(sessionCookie, createSession(sessionUser), {
-    httpOnly: true,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7,
-    secure: process.env.NODE_ENV === 'production',
+    ...sessionCookieOptions,
   })
 
   return NextResponse.json({ user: sessionUser })

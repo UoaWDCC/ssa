@@ -1,35 +1,28 @@
+'use client'
 import Image from 'next/image'
 import { FaLocationDot, FaStar } from 'react-icons/fa6'
 
 import CtaLink from '@/components/CtaLink'
 import Footer from '@/components/Footer'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import SponsorsGrid from './components/SponsorsGrid'
+import type { Media } from '@/types/payload-types'
+import { useSponsors } from '@/hooks/useSponsors'
+import type { Sponsor } from '@/lib/sponsors'
 
-import SponsorsGrid, {
-  type Sponsor,
-  type SponsorGridItem,
-} from './components/SponsorsGrid'
-import type { Media } from '../../../../cms/src/payload-types'
+type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
 
-type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url' | 'filename'>
-
-function createSponsorMedia({
-  id,
-  alt,
-  url,
-  filename,
-}: SponsorMediaSeedInput): Media {
+function createSponsorMedia({ id, alt, url }: SponsorMediaSeedInput): Media {
   return {
     id,
     alt,
     url,
-    filename,
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
+    width: null,
+    height: null,
   }
 }
 
@@ -52,7 +45,6 @@ const sponsorOfTheWeekEntry: Sponsor = {
     id: 101,
     alt: 'Sip n Chill sponsor photo',
     url: '/sponsors/sponsorcard.png',
-    filename: 'sponsorcard.png',
   }),
   websiteUrl:
     'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
@@ -65,63 +57,9 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      filename: 'kompass_coffee.png',
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-[#71717199]',
-    hoverTextClassName: 'text-white',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      filename: 'sipnchill.png',
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-    hoverOverlayClassName: 'bg-ssa-yellow/60',
-    hoverTextClassName: 'text-ssa-grey',
-  },
-]
-//remove after milestone
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 20 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
+export default function SponsorsPage() {
+  const { sponsors, status } = useSponsors()
 
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-    }
-  },
-)
-
-export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
   const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
     ...(sponsorOfTheWeekEntry.location
       ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
@@ -133,13 +71,11 @@ export default async function SponsorsPage() {
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
-      <Hero
-        title="Sponsors"
+      <HeroSplit
+        title="SPONSORS"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
       />
-      <section className="mt-10 px-[18px] md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
+      <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
         <HighlightCard
           eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeekEntry.name}
@@ -151,32 +87,37 @@ export default async function SponsorsPage() {
           imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
         />
 
-        <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-10 w-full max-w-[1214px] sm:mb-12">
+        <section className="mt-12 md:mt-16 lg:mt-22.25">
+          <div className="mx-auto mb-10 w-full max-w-303.5 sm:mb-12">
             <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
               Our Sponsors
             </h2>
+            {status === 'error' ? (
+              <p className="mt-4 text-base text-ssa-grey/80 sm:text-lg">
+                Sponsor data is temporarily unavailable. Please check back soon.
+              </p>
+            ) : null}
           </div>
 
-          <SponsorsGrid sponsors={sponsors} />
+          {status !== 'error' && <SponsorsGrid sponsors={sponsors} />}
 
-          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
+          <section className="relative mx-auto mt-16 w-full max-w-303.5 overflow-visible pb-16.25 md:mt-20 lg:mt-35.75 lg:h-105 lg:pb-0">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="hidden min-[1200px]:absolute min-[1200px]:bottom-0 min-[1200px]:left-[84px] min-[1200px]:z-0 min-[1200px]:block min-[1200px]:w-[397px] min-[1200px]:translate-y-[30%]"
+              className="hidden min-[1200px]:absolute min-[1200px]:bottom-0 min-[1200px]:left-21 min-[1200px]:z-0 min-[1200px]:block min-[1200px]:w-99.25 min-[1200px]:translate-y-[30%]"
             />
 
-            <div className="mt-[65px] flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-[90px] lg:mt-0 lg:justify-end lg:pr-16">
-              <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
+            <div className="mt-16.25 flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-22.5 lg:mt-0 lg:justify-end lg:pr-16">
+              <div className="flex h-34.25 w-full max-w-97.5 flex-col items-center">
                 <p className="font-averia text-[34px] font-light leading-tight text-ssa-red lg:text-[40px]">
                   Keen to support SSA?
                 </p>
                 <CtaLink
                   href="/contact"
-                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-ssa-contact-cta px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-ssa-contact-cta-hover hover:bg-ssa-contact-cta-hover lg:text-[25px] lg:leading-[27px]"
+                  className="mt-7.5 h-16.25 w-full gap-3.75 border-[3px] border-transparent bg-ssa-contact-cta px-8.75 py-3.75 text-xl text-ssa-cta-text hover:border-ssa-contact-cta-hover hover:bg-ssa-contact-cta-hover lg:text-[25px] lg:leading-6.75"
                 >
                   <span>Contact Us</span>
                   <span aria-hidden="true">→</span>
