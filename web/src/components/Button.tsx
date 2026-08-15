@@ -11,6 +11,7 @@ export type ButtonColor =
   | 'skin'
   | 'salmon'
   | 'pink'
+  | 'white'
 export type ArrowSide = 'left' | 'right'
 
 /**
