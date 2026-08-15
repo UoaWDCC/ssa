@@ -3,7 +3,7 @@ import { FaLocationDot } from 'react-icons/fa6'
 
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import {
   HighlightCard,
   type HighlightCardDetail,
@@ -158,14 +158,11 @@ export default async function SponsorsPage() {
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
-      <Hero
-        title="Sponsors"
+      <HeroSplit
+        title="SPONSORS"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
       />
-
-      <section className="mt-10 px-[18px] md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
+      <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
         <HighlightCard
           eyebrow="Sponsor of the Week"
           title={sponsorOfTheWeekEntry.name}
