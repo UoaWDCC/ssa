@@ -1,12 +1,31 @@
+'use client'
+
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
 
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
 import { HighlightCard } from '@/components/HighlightCard'
+import type { UpcomingEventResponse } from '@/types/events'
 
 import PastEventsSection from './_components/PastEventsSection'
+import { useQuery } from '@tanstack/react-query'
+
+async function fetchUpcomingEvent() {
+  const response = await fetch('/api/events/upcoming')
+
+  if (!response.ok) {
+    throw new Error(`Upcoming Event request failed: ${response.status}`)
+  }
+
+  return response.json() as Promise<UpcomingEventResponse>
+}
 
 export default function EventsPage() {
+  const { data } = useQuery({
+    queryKey: ['upcoming-event'],
+    queryFn: fetchUpcomingEvent,
+  })
+
   return (
     <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-[121px]">
       <Hero
@@ -20,15 +39,17 @@ export default function EventsPage() {
         <div className="mx-auto flex w-full max-w-[1250px] flex-col gap-5 md:gap-8">
           <HighlightCard
             eyebrow="Upcoming Event"
-            title="Ice Kachang"
+            title={data?.event?.title || 'Ice Kachang'}
             details={[
               {
                 icon: FaLocationDot,
-                text: '401-318 Engineering Atrium (Level 3)',
+                text:
+                  data?.event?.location ||
+                  '401-318 Engineering Atrium (Level 3)',
               },
               {
                 icon: FaClock,
-                text: '2nd April - 6:00 PM',
+                text: data?.event?.date || '2nd April - 6:00 PM',
               },
             ]}
             badges={[

@@ -16,8 +16,50 @@ export const Events: CollectionConfig = {
     },
     {
       name: 'date',
+      label: 'Day',
       type: 'date',
       required: true,
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+          displayFormat: 'd MMM yyyy',
+        },
+      },
+    },
+    {
+      name: 'time',
+      type: 'date',
+      admin: {
+        date: {
+          pickerAppearance: 'timeOnly',
+          displayFormat: 'h:mm a',
+          timeIntervals: 15,
+        },
+      },
+    },
+    {
+      name: 'location',
+      type: 'text',
+    },
+    {
+      name: 'memberPrice',
+      label: 'Member Price',
+      type: 'number',
+      min: 0,
+      admin: {
+        description: 'Price in NZD',
+        step: 0.01,
+      },
+    },
+    {
+      name: 'nonMemberPrice',
+      label: 'Non-member Price',
+      type: 'number',
+      min: 0,
+      admin: {
+        description: 'Price in NZD',
+        step: 0.01,
+      },
     },
     {
       name: 'description',

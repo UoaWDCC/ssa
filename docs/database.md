@@ -2,7 +2,7 @@
 
 ## Overview
 
-The database is PostgreSQL, managed by [Payload CMS](https://payloadcms.com) using the `@payloadcms/db-postgres` adapter. The schema is defined through Payload collection configs in `cms/src/collections/` and registered in `cms/src/payload.config.ts`. Payload handles migrations automatically.
+The database is PostgreSQL, managed by [Payload CMS](https://payloadcms.com) using the `@payloadcms/db-postgres` adapter. The schema is defined through Payload collection configs in `cms/src/collections/` and registered in `cms/src/payload.config.ts`. Payload applies schema changes automatically in development; production changes must be applied with Payload migrations.
 
 The generated TypeScript types live in `cms/src/payload-types.ts` — regenerate them after any schema change:
 
@@ -67,6 +67,10 @@ erDiagram
         int id PK
         string title
         date date
+        datetime time
+        string location
+        decimal memberPrice
+        decimal nonMemberPrice
         richtext description
         int coverImage FK
         boolean isUpcoming

@@ -3,11 +3,22 @@
 import { useMemo, useState } from 'react'
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
+// import type { PastEventsResponse } from '@/types/events'
 import PastEventCard from './PastEventCard'
 import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
 
 const INITIAL_VISIBLE = 6
 const LOAD_MORE_STEP = 6
+
+// async function fetchPastEvents() {
+//   const response = await fetch('/api/events/past')
+
+//   if (!response.ok) {
+//     throw new Error(`Past Event request failed: ${response.status}`)
+//   }
+
+//   return response.json() as Promise<PastEventsResponse>
+// }
 
 export default function PastEventsSection() {
   const [query, setQuery] = useState('')
