@@ -4,7 +4,13 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
-export type ButtonColor = 'red' | 'red-light' | 'yellow' | 'skin' | 'salmon' | 'grey'
+export type ButtonColor =
+  | 'red'
+  | 'yellow'
+  | 'skin'
+  | 'grey'
+  | 'salmon'
+  | 'red-light'
 export type ArrowSide = 'left' | 'right'
 
 /**
