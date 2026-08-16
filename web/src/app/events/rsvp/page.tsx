@@ -73,9 +73,17 @@ export default function IceKachangRsvpPage() {
                 </dt>
                 <dd className="mt-1 grid max-w-[14rem] grid-cols-[1fr_auto] gap-x-6 text-base leading-6">
                   <span>Member</span>
-                  <span>${data?.event?.memberPrice || '$0'}</span>
+                  <span>
+                    {data?.event?.memberPrice == null
+                      ? '—'
+                      : `$${data.event.memberPrice}`}
+                  </span>
                   <span>Non-member</span>
-                  <span>${data?.event?.nonMemberPrice || '$11'}</span>
+                  <span>
+                    {data?.event?.nonMemberPrice == null
+                      ? '—'
+                      : `$${data.event.nonMemberPrice}`}
+                  </span>
                 </dd>
               </div>
             </dl>
@@ -83,7 +91,7 @@ export default function IceKachangRsvpPage() {
 
           <div aria-hidden="true" className="hidden bg-[#e9e1d5] lg:block" />
 
-          <RsvpForm />
+          <RsvpForm eventId={data?.event?.id} />
         </div>
       </div>
     </main>

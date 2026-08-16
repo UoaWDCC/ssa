@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import {
   type FormEvent,
   type HTMLInputTypeAttribute,
@@ -265,11 +264,12 @@ function SelectField({
   )
 }
 
-export default function RsvpForm() {
-  const router = useRouter()
+export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
   const [step, setStep] = useState<Step>(1)
   const [values, setValues] = useState<FormValues>(initialValues)
   const [errors, setErrors] = useState<FieldErrors>({})
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
   const previousStep = useRef<Step>(step)
 
@@ -281,6 +281,7 @@ export default function RsvpForm() {
 
   function handleChange(name: FieldName, value: string) {
     setValues((current) => ({ ...current, [name]: value }))
+    setSubmitError(null)
     setErrors((current) => {
       if (!current[name]) return current
       const nextErrors = { ...current }
@@ -310,8 +311,10 @@ export default function RsvpForm() {
     })
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (isSubmitting) return
+
     const normalizedValues = { ...values }
     for (const field of stepFields[step]) {
       normalizedValues[field] = values[field].trim()
@@ -327,17 +330,60 @@ export default function RsvpForm() {
     }
 
     setErrors({})
+    setSubmitError(null)
     if (step < TOTAL_STEPS) {
       setStep((step + 1) as Step)
       return
     }
 
-    router.push('/events/rsvp/success')
+    if (!eventId) {
+      setSubmitError('The event is still loading. Please try again shortly.')
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const response = await fetch('/api/event-registrations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: eventId,
+          firstName: normalizedValues.firstName,
+          lastName: normalizedValues.lastName,
+          email: normalizedValues.email,
+          phone: normalizedValues.phone,
+          emergencyContactName: normalizedValues.emergencyName,
+          emergencyContactPhone: normalizedValues.emergencyPhone,
+          emergencyContactRelationship: normalizedValues.relationship,
+          gender: normalizedValues.gender,
+          dietaryRequirements: normalizedValues.dietaryRequirements,
+          universityYear: normalizedValues.universityYear,
+        }),
+      })
+      const result = (await response.json().catch(() => ({}))) as {
+        checkoutUrl?: string
+        error?: string
+      }
+
+      if (!response.ok || !result.checkoutUrl) {
+        setSubmitError(
+          result.error ?? 'Unable to start payment. Please try again.',
+        )
+        return
+      }
+
+      globalThis.location.assign(result.checkoutUrl)
+    } catch {
+      setSubmitError('Unable to reach the payment service. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   function handleBack() {
     if (step === 1) return
     setErrors({})
+    setSubmitError(null)
     setStep((step - 1) as Step)
   }
 
@@ -365,10 +411,12 @@ export default function RsvpForm() {
       <form
         noValidate
         onSubmit={handleSubmit}
+        aria-busy={isSubmitting}
         className="mt-8 flex min-h-[440px] flex-col rounded-[18px] border border-[#e6ded1] bg-ssa-card p-5 shadow-[0_1px_2px_#6d4f2b1a,0_14px_34px_#6d4f2b0a] sm:p-8 lg:p-9"
       >
         <fieldset
           key={step}
+          disabled={isSubmitting}
           className="rsvp-step-enter flex min-w-0 flex-1 flex-col"
         >
           <legend className="sr-only">{currentStep.label}</legend>
@@ -522,6 +570,15 @@ export default function RsvpForm() {
             </div>
           )}
 
+          {submitError && (
+            <p
+              role="alert"
+              className="mt-6 rounded-xl border border-[#e6aab5] bg-[#fffafa] px-4 py-3 font-inter text-sm leading-5 text-[#a51d37]"
+            >
+              {submitError}
+            </p>
+          )}
+
           <div
             className={`mt-auto flex flex-col-reverse items-stretch gap-3 pt-10 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-4 ${
               step === 1 ? 'justify-end' : 'justify-between'
@@ -531,7 +588,8 @@ export default function RsvpForm() {
               <button
                 type="button"
                 onClick={handleBack}
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ssa-form-border bg-transparent px-5 font-be-vietnam-pro text-sm font-semibold text-ssa-grey outline-none transition-colors duration-150 hover:bg-ssa-form-field focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2"
+                disabled={isSubmitting}
+                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ssa-form-border bg-transparent px-5 font-be-vietnam-pro text-sm font-semibold text-ssa-grey outline-none transition-colors duration-150 hover:bg-ssa-form-field focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <FiArrowLeft aria-hidden="true" className="size-4" />
                 Back
@@ -540,9 +598,14 @@ export default function RsvpForm() {
 
             <button
               type="submit"
-              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ssa-form-accent px-6 font-be-vietnam-pro text-sm font-semibold uppercase tracking-[0.02em] text-white outline-none transition-[background-color,transform] duration-150 hover:-translate-y-0.5 hover:bg-[#bd2f4c] focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 active:translate-y-0"
+              disabled={isSubmitting}
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ssa-form-accent px-6 font-be-vietnam-pro text-sm font-semibold uppercase tracking-[0.02em] text-white outline-none transition-[background-color,transform] duration-150 hover:-translate-y-0.5 hover:bg-[#bd2f4c] focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 active:translate-y-0 disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0"
             >
-              {step === TOTAL_STEPS ? 'Go to Payment' : 'Next'}
+              {isSubmitting
+                ? 'Redirecting…'
+                : step === TOTAL_STEPS
+                  ? 'Go to Payment'
+                  : 'Next'}
               {step === TOTAL_STEPS ? (
                 <FiCheck aria-hidden="true" className="size-4" />
               ) : (
