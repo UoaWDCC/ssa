@@ -3,15 +3,6 @@
 import type { Media } from '@/types/payload-types'
 const CMS_URL = process.env.CMS_URL
 
-// Might need to move this to a utility file if we need to use it in multiple places
-function resolveMediaUrl(url: string | null | undefined): string | null {
-  if (!url) return null
-  if (url.startsWith('http://') || url.startsWith('https://')) {
-    return url
-  }
-  return `${CMS_URL}${url}`
-}
-
 export interface Sponsor {
   id: number
   name: string
@@ -36,26 +27,12 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
       next: { revalidate: 300 },
     })
 
+    if (!res.ok) {
+      throw new Error(`CMS request failed: ${res.status} ${res.statusText}`)
+    }
+
     const data = await res.json()
-
-    const sponsors = (data.docs as Sponsor[]).map((sponsor) => {
-      if (
-        sponsor.logo &&
-        typeof sponsor.logo === 'object' &&
-        sponsor.logo.url
-      ) {
-        return {
-          ...sponsor,
-          logo: {
-            ...sponsor.logo,
-            url: resolveMediaUrl(sponsor.logo.url),
-          },
-        }
-      }
-      return sponsor
-    })
-
-    return sponsors
+    return data.docs as Sponsor[]
   } catch (error) {
     throw new Error(
       `Failed to fetch sponsors: ${error instanceof Error ? error.message : String(error)}`,
