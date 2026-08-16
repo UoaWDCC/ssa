@@ -36,17 +36,6 @@ async function fetchPastEvents() {
   return response.json() as Promise<PastEventsResponse>
 }
 
-function slugify(value: string) {
-  return (
-    value
-      .normalize('NFKD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '') || 'event'
-  )
-}
-
 function resolveMediaUrl(url?: string | null) {
   if (!url) return null
   if (/^https?:\/\//.test(url)) return url
@@ -67,7 +56,6 @@ function toPastEvent(event: Event): PastEvent {
 
   return {
     id: event.id,
-    slug: slugify(event.title),
     name: event.title,
     location: event.location?.trim() || 'Location TBC',
     date: event.date,
