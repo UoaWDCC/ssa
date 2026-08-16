@@ -54,7 +54,9 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     grey: 'bg-ssa-grey text-ssa-white hover:bg-ssa-red hover:text-ssa-white',
     salmon:
-      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-salmon',
+      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    white:
+      'bg-ssa-white text-ssa-red hover:bg-ssa-yellow-light hover:text-ssa-red',
   },
   light: {
     red: 'bg-ssa-yellow-light text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
@@ -65,7 +67,9 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
     grey: 'bg-ssa-yellow-light text-ssa-grey hover:bg-ssa-grey hover:text-ssa-white',
     salmon:
-      'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
+      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    white:
+      'bg-ssa-white text-ssa-red hover:bg-ssa-yellow-light hover:text-ssa-red',
   },
   outline: {
     red: 'bg-transparent border-[3px] border-ssa-red text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
@@ -76,7 +80,12 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
     grey: 'bg-transparent border-[2px] border-ssa-grey/30 text-ssa-grey/80 hover:bg-ssa-red-light hover:border-ssa-red-light hover:text-ssa-white',
     salmon:
-      'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
+      'bg-transparent border-[3px] border-ssa-salmon text-ssa-white hover:bg-ssa-salmon hover:text-ssa-red',
+    // "View Album" style: transparent/invisible fill with a white border at rest,
+    // filling with light yellow (border matching) and switching text to red for
+    // contrast on hover.
+    white:
+      'bg-transparent border-[3px] border-ssa-white text-ssa-white hover:bg-ssa-yellow-light hover:border-ssa-yellow-light hover:text-ssa-red',
   },
 }
 
