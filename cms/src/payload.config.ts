@@ -42,7 +42,7 @@ export default buildConfig({
         media: {
           generateFileURL: ({ filename, prefix }) => {
             const filePath = prefix ? `${prefix}/${filename}` : filename
-            return `${process.env.SUPABASE_URL}/storage/v1/object/public/SSA-Media/${filePath}`
+            return `${process.env.SUPABASE_URL}/storage/v1/object/public/${process.env.S3_BUCKET}/${filePath}`
           },
         },
       },

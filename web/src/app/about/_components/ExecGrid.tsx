@@ -6,7 +6,6 @@ import { aboutHeadingFont, aboutParagraphFont } from './fonts'
 
 export default function ExecGrid() {
   const { execs, error } = useExecs()
-  console.log(execs)
 
   return (
     <section
