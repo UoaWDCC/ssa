@@ -2,6 +2,9 @@ import crypto from 'node:crypto'
 
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
+import Stripe from 'stripe'
+
+import { completePaidEventRegistration } from '../stripe/_lib/completePaidEventRegistration'
 
 const genderOptions = ['woman', 'man', 'non-binary', 'not-say'] as const
 const universityYearOptions = [
@@ -16,6 +19,28 @@ const universityYearOptions = [
 
 function getSecret() {
   return process.env.GOOGLE_OAUTH_COOKIE_SECRET || process.env.AUTH_SECRET
+}
+
+function getWebUrl() {
+  const candidates = [
+    process.env.WEB_URL,
+    process.env.NODE_ENV === 'production' ? null : 'http://localhost:3000',
+  ]
+
+  for (const candidate of candidates) {
+    if (!candidate) continue
+
+    try {
+      const url = new URL(candidate)
+      if (url.protocol === 'http:' || url.protocol === 'https:') {
+        return url.origin
+      }
+    } catch {
+      continue
+    }
+  }
+
+  return null
 }
 
 function secretsMatch(providedSecret?: string) {
@@ -52,6 +77,85 @@ function hasCurrentMembership(
   return !Number.isNaN(expiry) && expiry >= Date.now()
 }
 
+function isSuccessfulPayment(session: Stripe.Checkout.Session) {
+  return session.payment_status === 'paid' || session.payment_status === 'no_payment_required'
+}
+
+export async function GET(request: Request) {
+  if (!secretsMatch(request.headers.get('x-ssa-internal-secret') ?? undefined)) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const sessionId = new URL(request.url).searchParams.get('session_id')
+  if (!sessionId) {
+    return Response.json({ error: 'Missing session_id' }, { status: 400 })
+  }
+
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  if (!stripeSecretKey) {
+    return Response.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+
+  const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
+
+  let session: Stripe.Checkout.Session
+  try {
+    session = await stripe.checkout.sessions.retrieve(sessionId)
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to retrieve Stripe session'
+    return Response.json({ error: message }, { status: 502 })
+  }
+
+  if (session.metadata?.checkoutType !== 'event-registration') {
+    return Response.json({ error: 'Invalid event checkout session' }, { status: 422 })
+  }
+
+  if (!isSuccessfulPayment(session)) {
+    return Response.json({
+      confirmed: false,
+      paymentStatus: session.payment_status,
+    })
+  }
+
+  const payload = await getPayload({ config: configPromise })
+
+  try {
+    const registration = await completePaidEventRegistration({ payload, session })
+    const event =
+      typeof registration.event === 'number'
+        ? await payload.findByID({
+            collection: 'events',
+            id: registration.event,
+            depth: 0,
+            overrideAccess: true,
+          })
+        : registration.event
+
+    return Response.json({
+      confirmed: true,
+      paymentStatus: session.payment_status,
+      registration: {
+        id: registration.id,
+        firstName: registration.firstName,
+        lastName: registration.lastName,
+        amount: registration.amount,
+        currency: registration.currency,
+        createdAt: registration.createdAt,
+        paidAt: registration.paidAt,
+        event: {
+          id: event.id,
+          title: event.title,
+          date: event.date,
+        },
+      },
+    })
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to confirm event registration payment'
+    return Response.json({ error: message }, { status: 500 })
+  }
+}
+
 export async function POST(request: Request) {
   let body: Record<string, unknown>
   try {
@@ -66,6 +170,15 @@ export async function POST(request: Request) {
 
   if (!secretsMatch(requiredText(body.secret) ?? undefined)) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  const webUrl = getWebUrl()
+  if (!stripeSecretKey) {
+    return Response.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+  if (!webUrl) {
+    return Response.json({ error: 'WEB_URL not configured' }, { status: 500 })
   }
 
   const eventId = parseId(body.event)
@@ -154,8 +267,14 @@ export async function POST(request: Request) {
     return Response.json({ error: 'The event price is not configured' }, { status: 422 })
   }
 
+  const amountInCents = Math.round(amount * 100)
+  if (!Number.isSafeInteger(amountInCents) || amountInCents < 0) {
+    return Response.json({ error: 'The event price is invalid' }, { status: 422 })
+  }
+
+  let registration
   try {
-    const registration = await payload.create({
+    registration = await payload.create({
       collection: 'event-registrations',
       overrideAccess: true,
       data: {
@@ -177,10 +296,86 @@ export async function POST(request: Request) {
         status: 'pending',
       },
     })
-
-    return Response.json({ registration }, { status: 201 })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Failed to create event registration'
     return Response.json({ error: message }, { status: 400 })
   }
+
+  const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
+  const metadata = {
+    checkoutType: 'event-registration',
+    registrationId: String(registration.id),
+    eventId: String(event.id),
+    priceType: registration.priceType,
+  }
+
+  let session: Stripe.Checkout.Session
+  try {
+    session = await stripe.checkout.sessions.create(
+      {
+        mode: 'payment',
+        client_reference_id: String(registration.id),
+        ...(user?.stripeCustomerId
+          ? { customer: user.stripeCustomerId }
+          : { customer_email: email }),
+        line_items: [
+          {
+            quantity: 1,
+            price_data: {
+              currency: 'nzd',
+              unit_amount: amountInCents,
+              product_data: {
+                name: event.title,
+                description: `${isMember ? 'Member' : 'Non-member'} event registration`,
+              },
+            },
+          },
+        ],
+        metadata,
+        payment_intent_data: { metadata },
+        success_url: `${webUrl}/events/rsvp/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${webUrl}/events/rsvp?cancelled=true`,
+      },
+      { idempotencyKey: `event-registration-${registration.id}` },
+    )
+  } catch (error: unknown) {
+    await payload
+      .delete({ collection: 'event-registrations', id: registration.id, overrideAccess: true })
+      .catch(() => {})
+    const message = error instanceof Error ? error.message : 'Failed to create Stripe checkout'
+    return Response.json({ error: message }, { status: 502 })
+  }
+
+  if (!session.url) {
+    await stripe.checkout.sessions.expire(session.id).catch(() => {})
+    await payload
+      .delete({ collection: 'event-registrations', id: registration.id, overrideAccess: true })
+      .catch(() => {})
+    return Response.json({ error: 'Stripe did not provide a checkout URL' }, { status: 502 })
+  }
+
+  try {
+    registration = await payload.update({
+      collection: 'event-registrations',
+      id: registration.id,
+      overrideAccess: true,
+      data: { stripeCheckoutSessionId: session.id },
+    })
+  } catch (error: unknown) {
+    await stripe.checkout.sessions.expire(session.id).catch(() => {})
+    await payload
+      .delete({ collection: 'event-registrations', id: registration.id, overrideAccess: true })
+      .catch(() => {})
+    const message =
+      error instanceof Error ? error.message : 'Failed to save Stripe checkout session'
+    return Response.json({ error: message }, { status: 500 })
+  }
+
+  return Response.json(
+    {
+      checkoutUrl: session.url,
+      registration,
+    },
+    { status: 201 },
+  )
 }
