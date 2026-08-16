@@ -11,6 +11,7 @@ export type { Sponsor } from '../../../../../cms/src/payload-types'
 export type SponsorGridItem = Sponsor & {
   hoverOverlayClassName?: string
   hoverTextClassName?: string
+  categoryLabel?: string
 }
 
 type SponsorsGridProps = {
@@ -59,6 +60,8 @@ export default function SponsorsGrid({ sponsors }: SponsorsGridProps) {
           name={selectedSponsor.name}
           logoUrl={getSponsorLogoUrl(selectedSponsor.logo)}
           websiteUrl={selectedSponsor.websiteUrl ?? undefined}
+          memberPerk={selectedSponsor.memberPerks?.trim() || undefined}
+          categoryLabel={selectedSponsor.categoryLabel}
           onClose={closePopup}
         />
       )}
