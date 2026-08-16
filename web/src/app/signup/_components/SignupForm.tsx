@@ -381,6 +381,7 @@ export default function SignupForm() {
                 color="grey"
                 arrow={true}
                 arrowSide="left"
+                className="text-sm!"
               >
                 BACK
               </Button>
