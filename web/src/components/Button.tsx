@@ -11,6 +11,7 @@ export type ButtonColor =
   | 'grey'
   | 'salmon'
   | 'red-light'
+  | 'white'
 export type ArrowSide = 'left' | 'right'
 
 /**
