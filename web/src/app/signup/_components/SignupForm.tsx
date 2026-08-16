@@ -394,7 +394,8 @@ export default function SignupForm() {
                 disabled={isCheckingEmail}
                 size="short"
                 variant="filled"
-                color="red"
+                color="salmon"
+                className="text-sm! hover:bg-ssa-red! hover:text-ssa-white!"
               >
                 {isCheckingEmail ? 'CHECKING...' : 'NEXT'}
               </Button>
