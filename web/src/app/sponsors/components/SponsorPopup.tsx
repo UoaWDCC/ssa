@@ -86,7 +86,7 @@ export default function SponsorPopup({
 
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ssa-black/0 via-ssa-black/10 to-ssa-black/80"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ssa-black/0 to-ssa-black/80"
           />
 
           <span id="sponsor-popup-title" className="sr-only">

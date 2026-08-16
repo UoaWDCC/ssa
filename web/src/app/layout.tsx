@@ -12,6 +12,12 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
 
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  variable: '--font-inter-source',
+})
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -46,12 +52,6 @@ const dmMono = DM_Mono({
   weight: ['400', '500'],
 })
 
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  weight: ['400'],
-})
-
 export const metadata: Metadata = {
   title: "SSA | Singaporean Students' Association",
   description: "SSA | Singaporean Students' Association",
@@ -65,6 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
+        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${dmMono.variable} ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
