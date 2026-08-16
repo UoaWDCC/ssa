@@ -54,7 +54,7 @@ export default function ExecGrid() {
               key={exec.id}
               name={exec.name}
               role={exec.role}
-              photo={exec.photo ?? undefined}
+              photo={exec?.photo}
             />
           ))}
         </div>

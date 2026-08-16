@@ -7,7 +7,7 @@ export interface Exec {
   id: number
   name: string
   role: string
-  photo?: (number | null) | Media
+  photo: number | Media
   bio?: string | null
   year?: number | null
   updatedAt: string
@@ -15,7 +15,7 @@ export interface Exec {
 }
 
 export async function fetchExecs(): Promise<Exec[]> {
-  const res = await fetch(`${CMS_URL}/api/execs`, {
+  const res = await fetch(`${CMS_URL}/api/execs?depth=2`, {
     headers: { 'Content-Type': 'application/json' },
     next: { revalidate: 300 },
   })
