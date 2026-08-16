@@ -53,7 +53,7 @@ export default function PaymentStep({
         color="grey"
         arrow={true}
         arrowSide="left"
-        className="w-full justify-center md:w-fit self-end [grid-area:button]"
+        className="w-full justify-center md:w-fit self-end [grid-area:button] text-sm!""
       >
         BACK
       </Button>
