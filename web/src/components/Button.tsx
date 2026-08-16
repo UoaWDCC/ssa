@@ -4,7 +4,14 @@ import { FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
-export type ButtonColor = 'red' | 'red-light' | 'yellow' | 'skin' | 'salmon'
+export type ButtonColor =
+  | 'red'
+  | 'red-light'
+  | 'yellow'
+  | 'skin'
+  | 'salmon'
+  | 'pink'
+  | 'white'
 export type ArrowSide = 'left' | 'right'
 
 /**
@@ -46,6 +53,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-ssa-salmon text-ssa-white hover:bg-ssa-red hover:text-ssa-white',
     salmon:
       'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
     white:
@@ -58,6 +66,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-yellow-light text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
       'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
     white:
@@ -70,6 +79,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
       'bg-transparent border-[3px] border-ssa-salmon text-ssa-white hover:bg-ssa-salmon hover:text-ssa-red',
     // "View Album" style: transparent/invisible fill with a white border at rest,

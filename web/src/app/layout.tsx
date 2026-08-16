@@ -12,6 +12,12 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
 
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  variable: '--font-inter-source',
+})
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -44,14 +50,6 @@ const dmMono = DM_Mono({
   variable: '--font-dm-mono',
   subsets: ['latin'],
   weight: ['400', '500'],
-})
-
-// "I - Paragraph Text" in Figma — JoinCard's body copy. 400 is the only weight
-// it uses; add more here if a bolder Inter shows up in the design.
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  weight: ['400'],
 })
 
 export const metadata: Metadata = {

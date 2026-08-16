@@ -89,14 +89,14 @@ export default function PhotoAlbum({
               href={current.url}
               download
               aria-label="Download"
-              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-muted-grey/50 text-white hover:bg-ssa-muted-grey/70 transition-colors cursor-pointer"
             >
               <DownloadIcon fontSize="small" />
             </a>
             <button
               aria-label="Close"
               onClick={onClose}
-              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-overlay-grey/50 text-white hover:bg-ssa-overlay-grey/70 transition-colors cursor-pointer"
+              className="flex h-[41.24px] w-[41.24px] items-center justify-center rounded-full border-[1.75px] border-ssa-overlay-border bg-ssa-muted-grey/50 text-white hover:bg-ssa-muted-grey/70 transition-colors cursor-pointer"
             >
               <ClearIcon fontSize="small" />
             </button>
