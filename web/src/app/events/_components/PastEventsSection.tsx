@@ -1,29 +1,91 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
-// import type { PastEventsResponse } from '@/types/events'
+import type { Event, EventCategory, PastEventsResponse } from '@/types/events'
+
 import PastEventCard from './PastEventCard'
-import { EVENT_FILTERS, pastEvents, type EventFilter } from './pastEventsData'
+import {
+  EVENT_FILTERS,
+  type EventFilter,
+  type PastEvent,
+  type PastEventTag,
+} from './pastEventsData'
 
 const INITIAL_VISIBLE = 6
 const LOAD_MORE_STEP = 6
+const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL
 
-// async function fetchPastEvents() {
-//   const response = await fetch('/api/events/past')
+const CATEGORY_LABELS: Partial<Record<EventCategory, PastEventTag>> = {
+  games: 'Games',
+  community: 'Community',
+  food: 'Food',
+  agm: 'AGM',
+}
 
-//   if (!response.ok) {
-//     throw new Error(`Past Event request failed: ${response.status}`)
-//   }
+async function fetchPastEvents() {
+  const response = await fetch('/api/events/past')
 
-//   return response.json() as Promise<PastEventsResponse>
-// }
+  if (!response.ok) {
+    throw new Error(`Past Event request failed: ${response.status}`)
+  }
+
+  return response.json() as Promise<PastEventsResponse>
+}
+
+function slugify(value: string) {
+  return (
+    value
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '') || 'event'
+  )
+}
+
+function resolveMediaUrl(url?: string | null) {
+  if (!url) return null
+  if (/^https?:\/\//.test(url)) return url
+
+  const baseUrl =
+    CMS_URL ??
+    (process.env.NODE_ENV === 'production' ? null : 'http://localhost:3001')
+
+  return baseUrl
+    ? new URL(url, `${baseUrl.replace(/\/$/, '')}/`).toString()
+    : url
+}
+
+function toPastEvent(event: Event): PastEvent {
+  const coverImage =
+    typeof event.coverImage === 'object' ? event.coverImage : null
+  const category = event.category ? CATEGORY_LABELS[event.category] : undefined
+
+  return {
+    id: event.id,
+    slug: slugify(event.title),
+    name: event.title,
+    location: event.location?.trim() || 'Location TBC',
+    date: event.date,
+    thumbnail:
+      resolveMediaUrl(coverImage?.url) ?? '/events/highlight_mascot.png',
+    thumbnailAlt: coverImage?.alt?.trim() || `${event.title} event`,
+    tags: category ? [category] : [],
+  }
+}
 
 export default function PastEventsSection() {
   const [query, setQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState<EventFilter>('All')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE)
+  const { data, isError, isPending } = useQuery({
+    queryKey: ['past-events'],
+    queryFn: fetchPastEvents,
+  })
 
   const handleQueryChange = (next: string) => {
     setQuery(next)
@@ -37,6 +99,8 @@ export default function PastEventsSection() {
 
   const filteredEvents = useMemo(() => {
     const q = query.trim().toLowerCase()
+    const pastEvents = data?.events.map(toPastEvent) ?? []
+
     return pastEvents.filter((event) => {
       const matchesFilter =
         activeFilter === 'All' || event.tags.includes(activeFilter)
@@ -47,7 +111,7 @@ export default function PastEventsSection() {
         event.location.toLowerCase().includes(q)
       )
     })
-  }, [query, activeFilter])
+  }, [data?.events, query, activeFilter])
 
   const visibleEvents = filteredEvents.slice(0, visibleCount)
   const hasMore = visibleCount < filteredEvents.length
@@ -74,13 +138,33 @@ export default function PastEventsSection() {
           className="mt-4"
         />
 
-        <div className="mt-14 grid grid-cols-[repeat(2,minmax(0,195px))] items-start justify-center gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
-          {visibleEvents.map((event) => (
-            <PastEventCard key={event.slug} event={event} />
-          ))}
-        </div>
+        {isPending && (
+          <p
+            role="status"
+            className="mt-10 text-center font-inter text-base text-ssa-muted-grey"
+          >
+            Loading past events…
+          </p>
+        )}
 
-        {filteredEvents.length > 0 && (
+        {isError && (
+          <p
+            role="alert"
+            className="mt-10 text-center font-inter text-base text-ssa-muted-grey"
+          >
+            Past events are temporarily unavailable. Please try again later.
+          </p>
+        )}
+
+        {!isPending && !isError && (
+          <div className="mt-14 grid grid-cols-[repeat(2,minmax(0,195px))] items-start justify-center gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+            {visibleEvents.map((event) => (
+              <PastEventCard key={event.id} event={event} />
+            ))}
+          </div>
+        )}
+
+        {!isPending && !isError && filteredEvents.length > 0 && (
           <div className="mt-14 text-center">
             <p className="font-inter text-base font-normal tracking-[-0.4px] text-ssa-muted-grey">
               Showing {visibleEvents.length} of {filteredEvents.length} results
@@ -100,7 +184,7 @@ export default function PastEventsSection() {
           </div>
         )}
 
-        {filteredEvents.length === 0 && (
+        {!isPending && !isError && filteredEvents.length === 0 && (
           <p className="mt-10 text-center font-averia text-ssa-black/60">
             No events match your search.
           </p>

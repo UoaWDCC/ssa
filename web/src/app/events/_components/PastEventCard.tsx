@@ -36,6 +36,9 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
             src={thumbnail}
             alt={thumbnailAlt}
             fill
+            unoptimized={
+              /^https?:\/\//.test(thumbnail) || thumbnail.startsWith('/api/')
+            }
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 404px"
             className="object-cover"
           />
