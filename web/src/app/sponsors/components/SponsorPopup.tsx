@@ -43,16 +43,14 @@ export default function SponsorPopup({
     }
   }, [onClose])
 
-  const content = (
-    <>
-      <Image
-        src={logoUrl}
-        alt={`${name} logo`}
-        fill
-        sizes="354px"
-        className="object-cover"
-      />
-    </>
+  const sponsorImage = (
+    <Image
+      src={logoUrl}
+      alt={`${name} logo`}
+      fill
+      sizes="354px"
+      className="scale-[1.03] object-cover blur-[4px]"
+    />
   )
 
   return (
@@ -66,7 +64,7 @@ export default function SponsorPopup({
       <div
         ref={popupRef}
         tabIndex={-1}
-        className="animate-slide-up relative h-[min(417px,calc(100dvh-32px))] w-[min(366px,calc(100vw-32px))] rounded-[12px] bg-ssa-background p-[6px] shadow-[0_2.67px_6.93px_0_rgb(255_255_255_/_30%),0_2px_2.67px_0.67px_rgb(84_84_84_/_25%)] outline-none motion-reduce:animate-none"
+        className="animate-slide-up relative h-[min(417px,calc(100dvh-32px))] w-[min(366px,calc(100vw-32px))] rounded-xl bg-ssa-background p-1.5 shadow-[0_2.67px_6.93px_0_rgb(255_255_255_/_30%),0_2px_2.67px_0.67px_rgb(84_84_84_/_25%)] outline-none motion-reduce:animate-none"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="relative flex h-full w-full flex-row justify-between overflow-hidden rounded-[10px] bg-ssa-white shadow-[0_0_1.9px_0_rgb(67_66_66_/_40%)]">
@@ -78,15 +76,15 @@ export default function SponsorPopup({
               aria-label={`Visit ${name}`}
               className="absolute inset-0"
             >
-              {content}
+              {sponsorImage}
             </a>
           ) : (
-            content
+            sponsorImage
           )}
 
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ssa-black/0 to-ssa-black/80"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/0 from-[5%] to-black to-[85%]"
           />
 
           <span id="sponsor-popup-title" className="sr-only">
@@ -94,21 +92,21 @@ export default function SponsorPopup({
           </span>
         </div>
 
-        <div className="absolute bottom-[28px] left-1/2 z-10 flex w-[calc(100%_-_52px)] max-w-[314px] -translate-x-1/2 flex-col">
+        <div className="absolute bottom-7 left-1/2 z-10 flex w-[calc(100%_-_52px)] max-w-[314px] -translate-x-1/2 flex-col">
           <div className="flex flex-col items-start gap-2">
-            <h2 className="max-w-full break-words font-be-vietnam-pro text-[24px] font-bold leading-[29px] tracking-[-1px] text-ssa-white opacity-100">
+            <h2 className="max-w-full break-words font-be-vietnam-pro text-2xl font-bold leading-[29px] tracking-[-1px] text-ssa-white">
               {name}
             </h2>
 
             {categoryLabel && (
-              <span className="inline-flex h-5 max-w-full items-center justify-center overflow-hidden rounded-[2px] bg-ssa-background/80 px-[6px] font-dm-mono text-[11px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-muted-grey opacity-100 backdrop-blur-[4px]">
+              <span className="inline-flex h-5 max-w-full items-center justify-center overflow-hidden rounded-[2px] bg-ssa-background/80 px-1.5 font-dm-mono text-[11px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-muted-grey backdrop-blur-[4px]">
                 {categoryLabel}
               </span>
             )}
           </div>
 
           {memberPerk && (
-            <p className="mt-[25px] flex max-w-full items-center gap-[5px] font-inter text-base font-normal leading-6 text-ssa-white opacity-100">
+            <p className="mt-[25px] flex max-w-full items-center gap-[5px] font-inter text-base font-normal leading-6 text-ssa-white">
               <FaStar aria-hidden="true" className="size-4 shrink-0" />
               <span>{memberPerk}</span>
             </p>
@@ -122,7 +120,7 @@ export default function SponsorPopup({
               variant="light"
               color="yellow"
               arrow={false}
-              className="mt-[30px] !h-[44px] !w-full !bg-ssa-yellow-light !py-0 !text-ssa-muted-grey hover:!bg-ssa-yellow-light hover:!text-ssa-muted-grey"
+              className="mt-[30px] !h-11 !bg-ssa-yellow-light !py-0 !text-ssa-muted-grey hover:!bg-ssa-yellow-light hover:!text-ssa-muted-grey"
             >
               <span className="inline-flex items-center gap-4">
                 <span>CHECK US OUT</span>
