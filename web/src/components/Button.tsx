@@ -4,7 +4,14 @@ import { FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
-export type ButtonColor = 'red' | 'yellow' | 'skin' | 'salmon'
+export type ButtonColor =
+  | 'red'
+  | 'red-light'
+  | 'yellow'
+  | 'skin'
+  | 'salmon'
+  | 'pink'
+  | 'white'
 export type ArrowSide = 'left' | 'right'
 
 /**
@@ -32,7 +39,8 @@ const base =
 // edges, so the label + arrow stay centred together at any pill width.
 const sizes: Record<ButtonSize, string> = {
   short: 'px-[2.2em] py-2.5 text-base md:py-3 md:text-lg',
-  long: 'w-full px-[2.2em] py-3.5 text-lg',
+  // 16px label + 12px vertical padding = the 44px-tall full-width CTA in Figma.
+  long: 'w-full px-[2.2em] py-3 text-base',
 }
 
 // Colour treatments — background + text colours swap on hover. Full literal class
@@ -40,27 +48,45 @@ const sizes: Record<ButtonSize, string> = {
 const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
   filled: {
     red: 'bg-ssa-red text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    'red-light':
+      'bg-ssa-red-light text-ssa-yellow-light hover:bg-ssa-yellow-light hover:text-ssa-red-light',
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-ssa-salmon text-ssa-white hover:bg-ssa-red hover:text-ssa-white',
     salmon:
-      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-salmon',
+      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    white:
+      'bg-ssa-white text-ssa-red hover:bg-ssa-yellow-light hover:text-ssa-red',
   },
   light: {
     red: 'bg-ssa-yellow-light text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
+    'red-light':
+      'bg-ssa-yellow-light text-ssa-red-light hover:bg-ssa-red-light hover:text-ssa-yellow-light',
     yellow:
       'bg-ssa-yellow-light text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
-      'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
+      'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
+    white:
+      'bg-ssa-white text-ssa-red hover:bg-ssa-yellow-light hover:text-ssa-red',
   },
   outline: {
     red: 'bg-transparent border-[3px] border-ssa-red text-ssa-red hover:bg-ssa-red hover:text-ssa-white',
+    'red-light':
+      'bg-transparent border-[3px] border-ssa-red-light text-ssa-red-light hover:bg-ssa-red-light hover:text-ssa-yellow-light',
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    pink: 'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
-      'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
+      'bg-transparent border-[3px] border-ssa-salmon text-ssa-white hover:bg-ssa-salmon hover:text-ssa-red',
+    // "View Album" style: transparent/invisible fill with a white border at rest,
+    // filling with light yellow (border matching) and switching text to red for
+    // contrast on hover.
+    white:
+      'bg-transparent border-[3px] border-ssa-white text-ssa-white hover:bg-ssa-yellow-light hover:border-ssa-yellow-light hover:text-ssa-red',
   },
 }
 

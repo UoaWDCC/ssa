@@ -138,7 +138,7 @@ export function HighlightCard({
             size="long"
             variant="filled"
             color="red"
-            className="max-w-[566px] shrink-0 !bg-ssa-salmon-pink !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white md:max-w-none xl:max-w-[566px]"
+            className="max-w-[566px] shrink-0 !bg-ssa-salmon !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white md:max-w-none xl:max-w-[566px]"
           >
             {ctaLabel}
           </Button>

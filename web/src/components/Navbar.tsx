@@ -139,7 +139,7 @@ export default function Navbar() {
               <Button
                 href={ctaLink.href}
                 variant="filled"
-                color="salmon"
+                color="pink"
                 size="short"
                 className="!w-[144.67px] !h-[44px] !rounded-[26.67px] !text-sm !whitespace-nowrap !gap-1 flex items-center justify-center"
               >

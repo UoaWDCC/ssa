@@ -3,7 +3,7 @@
 import { FaClock, FaLocationDot } from 'react-icons/fa6'
 
 import Footer from '@/components/Footer'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import { HighlightCard } from '@/components/HighlightCard'
 import type { UpcomingEventResponse } from '@/types/events'
 
@@ -28,11 +28,9 @@ export default function EventsPage() {
 
   return (
     <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-[121px]">
-      <Hero
-        title="Events"
+      <HeroSplit
+        title="EVENTS"
         subtitle="Join us for exciting events, cultural celebrations, and community gatherings throughout the year."
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
       />
 
       <section className="px-[21px] md:px-10 lg:px-16">
