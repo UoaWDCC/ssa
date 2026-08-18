@@ -21,7 +21,7 @@ export const EVENT_FILTERS: EventFilter[] = [
   'AGM',
 ]
 
-// TODO: replace with CMS data once the events endpoint is available.
+// replace with CMS data once the events endpoint is available.
 export const pastEvents: PastEvent[] = [
   {
     slug: 'satay-by-the-park-march-2026',
@@ -81,35 +81,6 @@ export const pastEvents: PastEvent[] = [
     thumbnail: '/events/past/ssa-camp.png',
     thumbnailAlt:
       'SSA Camp event poster featuring two SSA Merlion mascots around a campfire',
-    tags: ['Community'],
-  },
-  {
-    slug: 'ssa-esa-cocktail-night-july-2026',
-    name: 'SSA x ESA: COCKTAIL NIGHT',
-    location: 'Wynyard Pavilion',
-    date: '2026-07-25',
-    thumbnail: '/events/past/ssa-esa-cocktail-night.png',
-    thumbnailAlt:
-      'SSA x ESA Cocktail Night cover photo featuring attendees at Wynyard Pavilion',
-    tags: ['Community'],
-  },
-  {
-    slug: 'ssa-o-week-club-expo-august-2026',
-    name: 'SSA O-Week Club Expo',
-    location: 'Club Expo – Stall 161',
-    date: '2026-08-04',
-    thumbnail: '/events/past/ssa-o-week-club-expo.png',
-    thumbnailAlt:
-      'SSA O-Week Club Expo cover image featuring the SSA stall and Merlion mascots',
-    tags: ['Community'],
-  },
-  {
-    slug: 'ssa-last-tag-august-2026',
-    name: 'SSA Last Tag',
-    location: 'Laserforce Auckland',
-    date: '2026-08-08',
-    thumbnail: '/events/past/ssa-last-tag.png',
-    thumbnailAlt: 'SSA Last Tag event poster featuring two laser tag blasters',
     tags: ['Community'],
   },
 ]
