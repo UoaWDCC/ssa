@@ -15,7 +15,7 @@ export interface Exec {
 }
 
 export async function fetchExecs(): Promise<Exec[]> {
-  const res = await fetch(`${CMS_URL}/api/execs?depth=2`, {
+  const res = await fetch(`${CMS_URL}/api/execs?depth=2&limit=32&sort=id`, {
     headers: { 'Content-Type': 'application/json' },
     next: { revalidate: 300 },
   })
