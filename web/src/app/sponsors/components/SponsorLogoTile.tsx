@@ -1,4 +1,9 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
+import { toExternalHref } from '@/lib/external-url'
 
 type SponsorLogoTileProps = {
   name: string
@@ -7,10 +12,6 @@ type SponsorLogoTileProps = {
   hoverTitle: string
   hoverDescription: string
   onTouchSelect?: (trigger: HTMLElement) => void
-}
-
-function isExternalUrl(url?: string) {
-  return url ? /^https?:\/\//.test(url) : false
 }
 
 function SponsorTileContent({
@@ -56,29 +57,40 @@ export default function SponsorLogoTile({
   hoverDescription,
   onTouchSelect,
 }: SponsorLogoTileProps) {
-  const opensInNewTab = isExternalUrl(websiteUrl)
+  const [usesTouchPopup, setUsesTouchPopup] = useState(false)
+  const externalHref = toExternalHref(websiteUrl)
+
+  useEffect(() => {
+    const touchMediaQuery = window.matchMedia(
+      '(hover: none), (pointer: coarse)',
+    )
+    const updateTouchCapability = () => {
+      setUsesTouchPopup(touchMediaQuery.matches)
+    }
+
+    updateTouchCapability()
+    touchMediaQuery.addEventListener('change', updateTouchCapability)
+
+    return () => {
+      touchMediaQuery.removeEventListener('change', updateTouchCapability)
+    }
+  }, [])
 
   const className =
     'group relative block aspect-square w-full overflow-hidden rounded-[6px] border-[1.6px] border-ssa-cream bg-ssa-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2'
 
-  function handleClick(event: React.MouseEvent<HTMLElement>) {
-    const usesTouchPopup =
-      window.matchMedia('(max-width: 1023px)').matches ||
-      window.matchMedia('(hover: none), (pointer: coarse)').matches
-
-    if (!usesTouchPopup || !onTouchSelect) return
-
-    event.preventDefault()
+  function handleTouchSelect(event: React.MouseEvent<HTMLButtonElement>) {
+    if (!onTouchSelect) return
     onTouchSelect(event.currentTarget)
   }
 
-  if (!opensInNewTab) {
+  if (usesTouchPopup && onTouchSelect) {
     return (
       <button
         type="button"
         className={`${className} cursor-pointer`}
         aria-label={`View ${name} details`}
-        onClick={handleClick}
+        onClick={handleTouchSelect}
       >
         <SponsorTileContent
           name={name}
@@ -90,14 +102,26 @@ export default function SponsorLogoTile({
     )
   }
 
+  if (!externalHref) {
+    return (
+      <div className={className} aria-label={name}>
+        <SponsorTileContent
+          name={name}
+          logoUrl={logoUrl}
+          hoverTitle={hoverTitle}
+          hoverDescription={hoverDescription}
+        />
+      </div>
+    )
+  }
+
   return (
     <a
-      href={websiteUrl}
+      href={externalHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Visit ${name}`}
       className={className}
-      onClick={handleClick}
     >
       <SponsorTileContent
         name={name}

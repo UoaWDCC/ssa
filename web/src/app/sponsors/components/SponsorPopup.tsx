@@ -6,6 +6,7 @@ import { FiArrowRight } from 'react-icons/fi'
 import { FaStar } from 'react-icons/fa6'
 
 import Button from '@/components/Button'
+import { toExternalHref } from '@/lib/external-url'
 
 type SponsorPopupProps = {
   name: string
@@ -25,6 +26,7 @@ export default function SponsorPopup({
   onClose,
 }: SponsorPopupProps) {
   const popupRef = useRef<HTMLDivElement>(null)
+  const externalHref = toExternalHref(websiteUrl)
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
@@ -49,7 +51,7 @@ export default function SponsorPopup({
       alt={`${name} logo`}
       fill
       sizes="354px"
-      className="scale-[1.03] object-cover blur-[4px]"
+      className="scale-[1.03] object-cover blur-[2px]"
     />
   )
 
@@ -68,9 +70,9 @@ export default function SponsorPopup({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="relative flex h-full w-full flex-row justify-between overflow-hidden rounded-[10px] bg-ssa-white shadow-[0_0_1.9px_0_rgb(67_66_66_/_40%)]">
-          {websiteUrl ? (
+          {externalHref ? (
             <a
-              href={websiteUrl}
+              href={externalHref}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Visit ${name}`}
@@ -112,9 +114,9 @@ export default function SponsorPopup({
             </p>
           )}
 
-          {websiteUrl && (
+          {externalHref && (
             <Button
-              href={websiteUrl}
+              href={externalHref}
               target="_blank"
               size="long"
               variant="light"
