@@ -4,14 +4,14 @@ import SignupForm from './_components/SignupForm'
 
 export default function SignupPage() {
   return (
-    <main>
+    <main className="min-h-screen bg-ssa-background">
       <HeroSplit
         title="Join SSA"
         subtitle="Become a member of the Singapore Students' Association."
       />
       <Suspense
         fallback={
-          <div className="flex min-h-screen items-center justify-center bg-ssa-background">
+          <div className="flex min-h-screen items-center justify-cente">
             Loading...
           </div>
         }
