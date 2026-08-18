@@ -11,7 +11,7 @@ export default function SignupPage() {
       />
       <Suspense
         fallback={
-          <div className="flex min-h-screen items-center justify-cente">
+          <div className="flex min-h-screen items-center justify-center">
             Loading...
           </div>
         }
