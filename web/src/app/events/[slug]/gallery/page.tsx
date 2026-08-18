@@ -1,4 +1,6 @@
 import GalleryGrid from '@/app/events/components/GalleryGrid'
+import { pastEvents } from '@/app/events/_components/pastEventsData'
+import { getGalleryImages } from './galleryData'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
@@ -12,13 +14,22 @@ const placeholderImages = Array.from({ length: 30 }, (_, i) => ({
   alt: `Event photo ${i + 1}`,
 }))
 
+function formatEventMonth(date: string): string {
+  return new Intl.DateTimeFormat('en-NZ', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(date))
+}
+
 export default async function EventGalleryPage({
   params,
 }: Readonly<GalleryPageProps>) {
   const { slug } = await params
-  const eventTitle = slug.replace(/-/g, ' ')
-  // TODO: pull the real event date once event data is available.
-  const eventDate = 'March 2026'
+  const event = pastEvents.find((pastEvent) => pastEvent.slug === slug)
+  const eventTitle = event?.name ?? slug.replace(/-/g, ' ')
+  const eventDate = event ? formatEventMonth(event.date) : ''
+  const galleryImages = getGalleryImages(slug) ?? placeholderImages
 
   return (
     <main className="min-h-[60vh] bg-ssa-yellow-light">
@@ -28,7 +39,7 @@ export default async function EventGalleryPage({
         </h1>
       </div>
       <GalleryGrid
-        images={placeholderImages}
+        images={galleryImages}
         eventTitle={eventTitle}
         eventDate={eventDate}
       />
