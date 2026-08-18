@@ -1,4 +1,5 @@
 import GalleryGrid from '@/app/events/components/GalleryGrid'
+import HeroGallery from '@/components/HeroGallery'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
@@ -18,15 +19,11 @@ export default async function EventGalleryPage({
   const { slug } = await params
   const eventTitle = slug.replace(/-/g, ' ')
   // TODO: pull the real event date once event data is available.
-  const eventDate = 'March 2026'
+  const eventDate = '11/03/26'
 
   return (
     <main className="min-h-[60vh] bg-ssa-yellow-light">
-      <div className="px-6 pt-16 text-center text-ssa-black">
-        <h1 className="font-averia text-3xl font-bold capitalize sm:text-4xl">
-          {eventTitle}
-        </h1>
-      </div>
+      <HeroGallery title={eventTitle} eventDate={eventDate} />
       <GalleryGrid
         images={placeholderImages}
         eventTitle={eventTitle}
