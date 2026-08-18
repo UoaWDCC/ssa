@@ -1,5 +1,6 @@
 import GalleryGrid from '@/app/events/components/GalleryGrid'
 import HeroGallery from '@/components/HeroGallery'
+import { pastEvents } from '../../_components/pastEventsData'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
@@ -17,7 +18,8 @@ export default async function EventGalleryPage({
   params,
 }: Readonly<GalleryPageProps>) {
   const { slug } = await params
-  const eventTitle = slug.replace(/-/g, ' ')
+  const event = pastEvents.find((item) => item.slug === slug)
+  const eventTitle = event?.name ?? slug.replace(/-/g, ' ')
   // TODO: pull the real event date once event data is available.
   const eventDate = '11/03/26'
 
