@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 :root {
+  color-scheme: light;
   --background: #fffbf4;
   --foreground: #171717;
 }
@@ -61,13 +62,6 @@
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
   --font-dm-mono: var(--font-dm-mono);
   --font-inter: var(--font-inter-source);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 @keyframes slide-up {
