@@ -65,7 +65,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} ${averiaSerif.variable} ${alegreya.variable} ${beVietnamPro.variable} ${dmMono.variable} ${inter.variable} antialiased`}
         style={{ paddingTop: '88px' }}
       >
