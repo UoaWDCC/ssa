@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 :root {
+  color-scheme: light;
   --background: #fffbf4;
   --foreground: #171717;
 }
@@ -18,6 +19,7 @@
   --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
+  --color-ssa-cream: #f2ebdd;
   --color-ssa-white: #ffffff;
   --color-ssa-black: #0a0805;
   --color-ssa-skin-yellow: #ffe3ac;
@@ -50,9 +52,9 @@
   --color-footer-peach-3: #ffdfca;
   --color-footer-peach-4: #ffe3cc;
   --color-footer-cream: #fff1d5;
+  --color-ssa-overlay-grey: #8c8880;
 
   --color-ssa-overlay-border: #fffbf4;
-  --color-ssa-cream: #f2ebdd;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
@@ -60,13 +62,6 @@
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
   --font-dm-mono: var(--font-dm-mono);
   --font-inter: var(--font-inter-source);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 @keyframes slide-up {
