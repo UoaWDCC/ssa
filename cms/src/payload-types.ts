@@ -71,6 +71,7 @@ export interface Config {
     users: User
     media: Media
     events: Event
+    'event-registrations': EventRegistration
     sponsors: Sponsor
     execs: Exec
     members: Member
@@ -84,6 +85,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
     events: EventsSelect<false> | EventsSelect<true>
+    'event-registrations': EventRegistrationsSelect<false> | EventRegistrationsSelect<true>
     sponsors: SponsorsSelect<false> | SponsorsSelect<true>
     execs: ExecsSelect<false> | ExecsSelect<true>
     members: MembersSelect<false> | MembersSelect<true>
@@ -218,6 +220,16 @@ export interface Event {
   id: number
   title: string
   date: string
+  time?: string | null
+  location?: string | null
+  /**
+   * Price in NZD
+   */
+  memberPrice?: number | null
+  /**
+   * Price in NZD
+   */
+  nonMemberPrice?: number | null
   description?: string | null
   coverImage?: (number | null) | Media
   category?: ('games' | 'community' | 'food' | 'agm' | 'all') | null
@@ -228,6 +240,40 @@ export interface Event {
         id?: string | null
       }[]
     | null
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations".
+ */
+export interface EventRegistration {
+  id: number
+  event: number | Event
+  /**
+   * The authenticated member account, when applicable.
+   */
+  user?: (number | null) | User
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  emergencyContactName: string
+  emergencyContactPhone: string
+  emergencyContactRelationship: string
+  gender: 'woman' | 'man' | 'non-binary' | 'not-say'
+  dietaryRequirements: string
+  universityYear: '1' | '2' | '3' | '4' | '5+' | 'postgraduate' | 'not-currently-studying'
+  priceType: 'member' | 'non-member'
+  /**
+   * Amount charged in NZD.
+   */
+  amount: number
+  currency: 'nzd'
+  status: 'pending' | 'paid' | 'cancelled' | 'refunded'
+  stripeCheckoutSessionId?: string | null
+  stripePaymentIntentId?: string | null
+  paidAt?: string | null
   updatedAt: string
   createdAt: string
 }
@@ -343,6 +389,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'events'
         value: number | Event
+      } | null)
+    | ({
+        relationTo: 'event-registrations'
+        value: number | EventRegistration
       } | null)
     | ({
         relationTo: 'sponsors'
@@ -472,6 +522,10 @@ export interface MediaSelect<T extends boolean = true> {
 export interface EventsSelect<T extends boolean = true> {
   title?: T
   date?: T
+  time?: T
+  location?: T
+  memberPrice?: T
+  nonMemberPrice?: T
   description?: T
   coverImage?: T
   category?: T
@@ -482,6 +536,33 @@ export interface EventsSelect<T extends boolean = true> {
         image?: T
         id?: T
       }
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-registrations_select".
+ */
+export interface EventRegistrationsSelect<T extends boolean = true> {
+  event?: T
+  user?: T
+  firstName?: T
+  lastName?: T
+  email?: T
+  phone?: T
+  emergencyContactName?: T
+  emergencyContactPhone?: T
+  emergencyContactRelationship?: T
+  gender?: T
+  dietaryRequirements?: T
+  universityYear?: T
+  priceType?: T
+  amount?: T
+  currency?: T
+  status?: T
+  stripeCheckoutSessionId?: T
+  stripePaymentIntentId?: T
+  paidAt?: T
   updatedAt?: T
   createdAt?: T
 }

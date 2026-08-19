@@ -21,13 +21,13 @@ function formatEventDate(iso: string): string {
 }
 
 export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
-  const { slug, name, location, date, thumbnail, thumbnailAlt, tags } = event
+  const { id, name, location, date, thumbnail, thumbnailAlt, tags } = event
   const formattedDate = formatEventDate(date)
 
   return (
     <article className="w-full max-w-[195px] sm:max-w-[404px]">
       <Link
-        href={`/events/${slug}/gallery`}
+        href={`/events/${id}/gallery`}
         aria-label={`See photos for ${name} on ${formattedDate} at ${location}`}
         className="group/card relative block aspect-[195/240] touch-manipulation overflow-hidden rounded-[6px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red sm:aspect-[404/323]"
       >
@@ -36,6 +36,9 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
             src={thumbnail}
             alt={thumbnailAlt}
             fill
+            unoptimized={
+              /^https?:\/\//.test(thumbnail) || thumbnail.startsWith('/api/')
+            }
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 404px"
             className="object-cover"
           />

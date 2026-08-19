@@ -8,7 +8,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 import DownloadIcon from '@mui/icons-material/Download'
 
 interface GalleryImage {
-  id: number
+  id: number | string
   url: string
   alt: string
 }
@@ -81,6 +81,10 @@ export default function PhotoAlbum({
             src={current.url}
             alt={current.alt}
             fill
+            unoptimized={
+              /^https?:\/\//.test(current.url) ||
+              current.url.startsWith('/api/')
+            }
             className="object-contain md:object-cover"
           />
 
