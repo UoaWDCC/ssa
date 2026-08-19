@@ -1,12 +1,13 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
 
 import type { Sponsor } from '@/lib/sponsors'
 import SponsorLogoTile from './SponsorLogoTile'
+import SponsorPopup from './SponsorPopup'
 
 export type { Sponsor } from '@/lib/sponsors'
 
@@ -48,6 +49,9 @@ export default function SponsorsGrid({
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<SponsorFilter>('ALL')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT)
+  const [selectedSponsor, setSelectedSponsor] =
+    useState<SponsorGridItem | null>(null)
+  const selectedTriggerRef = useRef<HTMLElement | null>(null)
 
   const filteredSponsors = useMemo(() => {
     const normalizedSearchQuery = searchQuery.trim().toLowerCase()
@@ -95,6 +99,11 @@ export default function SponsorsGrid({
     )
   }
 
+  const closePopup = useCallback(() => {
+    setSelectedSponsor(null)
+    requestAnimationFrame(() => selectedTriggerRef.current?.focus())
+  }, [])
+
   return (
     <div className="mx-auto w-full max-w-[1244px]">
       <SearchBar
@@ -123,6 +132,10 @@ export default function SponsorsGrid({
               websiteUrl={sponsor.websiteUrl ?? undefined}
               hoverTitle={sponsor.name}
               hoverDescription={sponsor.memberPerks?.trim() || 'Visit website'}
+              onTouchSelect={(trigger) => {
+                selectedTriggerRef.current = trigger
+                setSelectedSponsor(sponsor)
+              }}
             />
           ))}
         </div>
@@ -155,6 +168,17 @@ export default function SponsorsGrid({
           </button>
         )}
       </div>
+
+      {selectedSponsor && (
+        <SponsorPopup
+          name={selectedSponsor.name}
+          logoUrl={getSponsorLogoUrl(selectedSponsor.logo)}
+          websiteUrl={selectedSponsor.websiteUrl ?? undefined}
+          memberPerk={selectedSponsor.memberPerks?.trim() || undefined}
+          categoryLabel={selectedSponsor.category}
+          onClose={closePopup}
+        />
+      )}
     </div>
   )
 }
