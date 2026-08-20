@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { TOTAL_STEPS, initialFormData, type FormData } from './types'
 import ProgressBar from '@/components/ProgressBar'
@@ -8,7 +8,9 @@ import AccountSignUpStep from './AccountSignUpStep'
 import ContactStep from './ContactStep'
 import UniInfoStep from './UniInfoStep'
 import AdditionalInfoStep from './AdditionalInfoStep'
-import PaymentStep from '@/components/PaymentStep'
+import PaymentStep from '@/app/signup/_components/PaymentStep'
+import Button from '@/components/Button'
+import CardSection from '@/components/CardSection'
 
 export default function SignupForm() {
   const searchParams = useSearchParams()
@@ -25,6 +27,7 @@ export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const errorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (!googleStatus) return
@@ -89,6 +92,15 @@ export default function SignupForm() {
       isActive = false
     }
   }, [googleStatus])
+
+  useEffect(() => {
+    if (!error) return
+
+    errorRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    })
+  }, [error])
 
   function handleChange(field: keyof FormData, value: string) {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -281,23 +293,44 @@ export default function SignupForm() {
   }
 
   return (
-    <div className="bg-ssa-yellow-light min-h-screen flex flex-col">
-      <div className="flex-1 flex flex-col items-center px-4 py-8">
-        <div className="w-full max-w-xl flex flex-col gap-6">
-          {wasCancelled && (
-            <div className="rounded-lg bg-yellow-50 border border-yellow-200 p-3 text-yellow-800 text-sm">
-              Payment was cancelled. You can try again below.
-            </div>
-          )}
+    <div className="w-full px-4 md:px-8 lg:px-12">
+      {wasCancelled && (
+        <div className="mb-4 rounded-lg bg-yellow-50 border border-yellow-200 p-3 text-yellow-800 text-sm">
+          Payment was cancelled. You can try again below.
+        </div>
+      )}
 
-          {(error || googleConnectionError) && (
-            <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm">
-              {error || googleConnectionError}
-            </div>
-          )}
+      {(error || googleConnectionError) && (
+        <div
+          ref={errorRef}
+          role="alert"
+          tabIndex={-1}
+          className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-red-800 text-sm"
+        >
+          {error || googleConnectionError}
+        </div>
+      )}
 
+      <div className="w-full max-w-5xl mx-auto mt-10 pb-10">
+        <div className="mb-6">
           <ProgressBar step={step} total={TOTAL_STEPS} />
 
+          <div className="mt-3 flex items-center justify-between text-[12px] font-normal leading-3 tracking-[0.48px] font-dm-mono text-ssa-red">
+            <span>
+              {step === 1 && 'ACCOUNT SIGN UP'}
+              {step === 2 && 'CONTACT INFORMATION'}
+              {step === 3 && 'UNIVERSITY INFORMATION'}
+              {step === 4 && 'ADDITIONAL INFORMATION'}
+              {step === 5 && 'PAYMENT'}
+            </span>
+
+            <span>
+              STEP {step}/{TOTAL_STEPS}
+            </span>
+          </div>
+        </div>
+
+        <CardSection>
           {step === 1 && (
             <AccountSignUpStep
               data={formData}
@@ -307,6 +340,7 @@ export default function SignupForm() {
               onUseEmailAuth={handleUseEmailAuth}
             />
           )}
+
           {step === 2 && (
             <ContactStep
               data={formData}
@@ -314,6 +348,7 @@ export default function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
+
           {step === 3 && (
             <UniInfoStep
               data={formData}
@@ -321,6 +356,7 @@ export default function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
+
           {step === 4 && (
             <AdditionalInfoStep
               data={formData}
@@ -328,32 +364,45 @@ export default function SignupForm() {
               fieldErrors={fieldErrors}
             />
           )}
-          {step === 5 && (
-            <PaymentStep onPay={handlePay} isLoading={isLoading} />
-          )}
 
-          <div className="flex justify-between items-center">
-            {step > 1 ? (
-              <button
+          {step === 5 && (
+            <PaymentStep
+              onPay={handlePay}
+              isLoading={isLoading}
+              onBack={handleBack}
+            />
+          )}
+          <div className="flex items-center justify-between pt-4">
+            {step > 1 && step < TOTAL_STEPS ? (
+              <Button
                 onClick={handleBack}
-                className="px-6 py-2 rounded-full border border-ssa-black text-sm font-medium text-ssa-black bg-white hover:bg-gray-50"
+                size="short"
+                variant="outline"
+                color="grey"
+                arrow={true}
+                arrowSide="left"
+                className="text-sm!"
               >
-                Back
-              </button>
+                BACK
+              </Button>
             ) : (
               <div />
             )}
+
             {step < TOTAL_STEPS && (
-              <button
+              <Button
                 onClick={handleNext}
                 disabled={isCheckingEmail}
-                className="px-6 py-2 rounded-full bg-ssa-red text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-60"
+                size="short"
+                variant="filled"
+                color="salmon"
+                className="text-sm! hover:bg-ssa-red! hover:text-ssa-white!"
               >
-                {isCheckingEmail ? 'Checking...' : 'Next'}
-              </button>
+                {isCheckingEmail ? 'CHECKING...' : 'NEXT'}
+              </Button>
             )}
           </div>
-        </div>
+        </CardSection>
       </div>
     </div>
   )
