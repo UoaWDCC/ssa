@@ -1,4 +1,5 @@
 import GalleryGrid from '@/app/events/components/GalleryGrid'
+import HeroGallery from '@/components/HeroGallery'
 import { pastEvents } from '@/app/events/_components/pastEventsData'
 import { getGalleryImages } from './galleryData'
 
@@ -33,11 +34,7 @@ export default async function EventGalleryPage({
 
   return (
     <main className="min-h-[60vh] bg-ssa-yellow-light">
-      <div className="px-6 pt-16 text-center text-ssa-black">
-        <h1 className="font-averia text-3xl font-bold capitalize sm:text-4xl">
-          {eventTitle}
-        </h1>
-      </div>
+      <HeroGallery title={eventTitle} eventDate={eventDate} />
       <GalleryGrid
         images={galleryImages}
         eventTitle={eventTitle}
