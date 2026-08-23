@@ -21,7 +21,7 @@ export const SPONSOR_CATEGORIES = [
 export type SponsorCategory = (typeof SPONSOR_CATEGORIES)[number]
 
 export type SponsorGridItem = Sponsor & {
-  category: SponsorCategory
+  category?: SponsorCategory | undefined
 }
 
 type SponsorFilter = 'ALL' | SponsorCategory
