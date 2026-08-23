@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
@@ -15,6 +16,7 @@ import SponsorsGrid, {
   type SponsorGridItem,
 } from './components/SponsorsGrid'
 
+import useSponsors from '@/hooks/useSponsors'
 import type { Media } from '@/types/payload-types'
 
 type SponsorMediaSeedInput = Pick<
@@ -139,8 +141,8 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
   },
 )
 
-export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
+export default function SponsorsPage() {
+  const { sponsors } = useSponsors()
 
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
     sponsorOfTheWeekEntry.location

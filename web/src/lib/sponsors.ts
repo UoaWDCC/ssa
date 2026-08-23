@@ -12,6 +12,7 @@ export interface Sponsor {
   description?: string | null
   location?: string | null
   memberPerks?: string | null
+  category?: "FOOD" | "RETAIL" | "SERVICES" | "ENTERTAINMENT"
   updatedAt: string
   createdAt: string
 }
