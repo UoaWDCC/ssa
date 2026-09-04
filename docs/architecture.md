@@ -48,9 +48,13 @@ Nginx is the single entry point. All traffic hits port 80 (force-HTTPS on Fly.io
 graph TD
     REQ[Incoming request] --> CHECK{Path prefix?}
     CHECK -->|"/admin/*"| CMS_ADMIN[CMS :3001<br/>Admin panel]
+    CHECK -->|"/stripe/webhook"| CMS_HOOK[CMS :3001<br/>Stripe webhook]
+    CHECK -->|"/api/auth/* /api/checkout/*<br/>/api/about-us/* /api/signup/*"| WEB_API[Web :3000<br/>Auth + checkout routes]
     CHECK -->|"/api/*"| CMS_API[CMS :3001<br/>REST + GraphQL API]
     CHECK -->|Everything else| WEB_APP[Web :3000<br/>Public website]
 ```
+
+Both apps serve routes under `/api`, so the web app's own route handlers are matched first with `^~` prefixes; everything else under `/api` belongs to Payload. A new web route under `/api` needs a matching `location` block in `nginx.conf`, or the CMS will answer it with a 404.
 
 ## Docker multi-stage build
 
