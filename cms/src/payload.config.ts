@@ -14,6 +14,7 @@ import { Sponsors } from './collections/Sponsors'
 import { Execs } from './collections/Execs'
 import { Members } from './collections/Members'
 import { EventRegistrations } from './collections/EventRegistrations'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -32,6 +33,9 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    // Bundle migrations into the standalone server and apply them before
+    // Payload serves database requests in production.
+    prodMigrations: process.env.PAYLOAD_MIGRATING === 'true' ? undefined : migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },

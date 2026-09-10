@@ -35,7 +35,7 @@ export default function Home() {
             </>
           }
           ctaLabel="RSVP"
-          ctaHref="/events/ice-kachang/rsvp"
+          ctaHref="/events/rsvp"
           imageSrc="/events/highlight_mascot.png"
           imageAlt="Ice Kachang event artwork"
         />

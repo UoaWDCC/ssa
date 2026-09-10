@@ -146,6 +146,7 @@ export async function GET(request: Request) {
           id: event.id,
           title: event.title,
           date: event.date,
+          time: event.time,
         },
       },
     })

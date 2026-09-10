@@ -3,6 +3,7 @@
 import RsvpForm from './_components/RsvpForm'
 import { UpcomingEventResponse } from '@/types/events'
 import { useQuery } from '@tanstack/react-query'
+import { eventDateTime, formatEventDate } from '@/lib/eventDate'
 
 async function fetchUpcomingEvent() {
   const response = await fetch('/api/events/upcoming')
@@ -14,7 +15,7 @@ async function fetchUpcomingEvent() {
   return response.json() as Promise<UpcomingEventResponse>
 }
 
-export default function IceKachangRsvpPage() {
+export default function RsvpPage() {
   const { data } = useQuery({
     queryKey: ['upcoming-event'],
     queryFn: fetchUpcomingEvent,
@@ -51,9 +52,13 @@ export default function IceKachangRsvpPage() {
                   Date
                 </dt>
                 <dd className="mt-1 text-base leading-6">
-                  <time dateTime="2026-04-02T18:00:00+13:00">
-                    {data?.event?.date || 'No Date'} -{' '}
-                    {data?.event?.time || 'No Time'}
+                  <time
+                    dateTime={eventDateTime(
+                      data?.event?.date,
+                      data?.event?.time,
+                    )}
+                  >
+                    {formatEventDate(data?.event?.date, data?.event?.time)}
                   </time>
                 </dd>
               </div>

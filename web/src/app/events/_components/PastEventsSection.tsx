@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
+import { resolveMediaUrl } from '@/lib/media'
 import type { Event, EventCategory, PastEventsResponse } from '@/types/events'
 
 import PastEventCard from './PastEventCard'
@@ -17,7 +18,6 @@ import {
 
 const INITIAL_VISIBLE = 6
 const LOAD_MORE_STEP = 6
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL
 
 const CATEGORY_LABELS: Partial<Record<EventCategory, PastEventTag>> = {
   games: 'Games',
@@ -34,19 +34,6 @@ async function fetchPastEvents() {
   }
 
   return response.json() as Promise<PastEventsResponse>
-}
-
-function resolveMediaUrl(url?: string | null) {
-  if (!url) return null
-  if (/^https?:\/\//.test(url)) return url
-
-  const baseUrl =
-    CMS_URL ??
-    (process.env.NODE_ENV === 'production' ? null : 'http://localhost:3001')
-
-  return baseUrl
-    ? new URL(url, `${baseUrl.replace(/\/$/, '')}/`).toString()
-    : url
 }
 
 function toPastEvent(event: Event): PastEvent {

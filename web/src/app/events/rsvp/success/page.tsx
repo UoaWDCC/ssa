@@ -1,6 +1,7 @@
 import Image from 'next/image'
 
 import Button from '@/components/Button'
+import { eventDateTime, formatDate, formatEventDate } from '@/lib/eventDate'
 
 interface Props {
   searchParams: Promise<{ session_id?: string }>
@@ -18,6 +19,7 @@ type Registration = {
     id: number
     title: string
     date: string
+    time?: string | null
   }
 }
 
@@ -82,18 +84,6 @@ async function confirmEventPayment(sessionId?: string): Promise<Confirmation> {
   } catch {
     return { status: 'unavailable' }
   }
-}
-
-function formatDate(value: string) {
-  const date = new Date(value)
-  if (Number.isNaN(date.getTime())) return '—'
-
-  return new Intl.DateTimeFormat('en-NZ', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    timeZone: 'Pacific/Auckland',
-  }).format(date)
 }
 
 function formatPrice(amount: number, currency: string) {
@@ -170,8 +160,14 @@ export default async function PaymentSuccessPage({
         },
         {
           label: 'Event date',
-          value: formatDate(confirmation.registration.event.date),
-          dateTime: confirmation.registration.event.date,
+          value: formatEventDate(
+            confirmation.registration.event.date,
+            confirmation.registration.event.time,
+          ),
+          dateTime: eventDateTime(
+            confirmation.registration.event.date,
+            confirmation.registration.event.time,
+          ),
         },
         {
           label: 'Paid',
