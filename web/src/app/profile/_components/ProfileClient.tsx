@@ -89,12 +89,16 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 
 // ─── small read-only field ─────────────────────────────────────────────────────
 
+// `userToForm` normalises every missing session field to `''`, so the placeholder
+// has to be chosen on truthiness: `??` only catches null/undefined and would let an
+// empty string through, rendering a blank line where "Not provided" belongs. Same
+// reason `StatusBadge` below uses `||`.
 function ViewField({ label, value }: { label: string; value?: string | null }) {
   return (
     <div className="flex flex-col gap-2">
       <FieldLabel>{label}</FieldLabel>
       <span className={valueCls}>
-        {value ?? <span className={placeholderCls}>Not provided</span>}
+        {value || <span className={placeholderCls}>Not provided</span>}
       </span>
     </div>
   )
@@ -252,8 +256,21 @@ function StatusBadge({ status }: { status?: string }) {
 
 // Both controls are 44px tall outlined pills in Grey (Text), sharing a 1.87px border
 // (rounded to 2px) and a fully-round radius, so they differ only in width.
+//
+// Each is a two-variant component set in Figma, and the second variant inverts the
+// fill: the outline fills solid and the icon/label flips to white. So hover fills
+// rather than recolouring the outline red — the shared base deliberately carries no
+// hover of its own, so each state contributes exactly one `hover:bg-*` and there are
+// no competing utilities to resolve.
 const headerControl =
-  'inline-flex items-center justify-center rounded-full border-2 border-ssa-muted-taupe text-ssa-muted-taupe transition-colors hover:border-ssa-red hover:text-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
+  'inline-flex items-center justify-center rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
+
+const headerControlIdle =
+  'border-ssa-muted-taupe text-ssa-muted-taupe hover:bg-ssa-muted-taupe hover:text-ssa-white'
+
+// Cancel-editing reuses the same inversion in red, so the affordance reads the same.
+const headerControlActive =
+  'border-ssa-red text-ssa-red hover:bg-ssa-red hover:text-ssa-white'
 
 // ─── toast ────────────────────────────────────────────────────────────────────
 
@@ -537,7 +554,7 @@ export default function ProfileClient({
             onClick={() => (isEditing ? cancelEdit() : setIsEditing(true))}
             aria-label={isEditing ? 'Cancel editing' : 'Edit profile'}
             className={`${headerControl} h-11 w-11 ${
-              isEditing ? 'border-ssa-red text-ssa-red' : ''
+              isEditing ? headerControlActive : headerControlIdle
             }`}
           >
             {isEditing ? (
@@ -549,7 +566,7 @@ export default function ProfileClient({
 
           <button
             onClick={handleLogout}
-            className={`${headerControl} h-11 w-[123px] font-be-vietnam-pro text-base font-semibold uppercase leading-[21.33px] tracking-[-0.02em]`}
+            className={`${headerControl} ${headerControlIdle} h-11 w-[123px] font-be-vietnam-pro text-base font-semibold uppercase leading-[21.33px] tracking-[-0.02em]`}
           >
             Log out
           </button>
