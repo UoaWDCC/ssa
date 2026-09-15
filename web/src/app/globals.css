@@ -10,6 +10,9 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-ssa-red: #f85b76;
+  /* Darker ssa-red for white text on a red fill: #f85b76 gives white only
+     3.11:1, below WCAG AA's 4.5:1 for normal text. Same hue, 5.23:1. */
+  --color-ssa-red-dark: #c8324c;
   --color-ssa-salmon: #ff8392;
   --color-ssa-red-light: #ff879c;
   --color-ssa-pink: #ffb4c1;
