@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation'
 
 import GalleryGrid from '@/app/events/components/GalleryGrid'
 import type { Event } from '@/types/events'
+import HeroGallery from '@/components/HeroGallery'
+import { pastEvents } from '@/app/events/_components/pastEventsData'
+import { getGalleryImages } from './galleryData'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
@@ -44,6 +47,14 @@ function formatEventDate(value: string) {
     year: 'numeric',
     timeZone: 'Pacific/Auckland',
   }).format(date)
+}
+
+function formatEventMonth(date: string): string {
+  return new Intl.DateTimeFormat('en-NZ', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(date))
 }
 
 export default async function EventGalleryPage({

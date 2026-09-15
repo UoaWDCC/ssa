@@ -35,7 +35,7 @@ export default function SelectField({
           required={required}
           aria-invalid={!!error}
           aria-describedby={error ? errorId : undefined}
-          className={`w-full rounded-lg px-3 py-2 pr-8 text-sm outline-none border border-transparent focus:border-ssa-red bg-white appearance-none ${value ? 'text-ssa-black' : 'text-gray-400'}`}
+          className={`w-full rounded-[26px] px-3 py-3 pr-8 text-sm outline-none border border-ssa-grey/30 focus:border-ssa-red bg-ssa-background appearance-none ${value ? 'text-ssa-black' : 'text-ssa-grey/50'}`}
         >
           <option value="" disabled hidden>
             {placeholder ?? 'Select an option'}
@@ -47,7 +47,7 @@ export default function SelectField({
           ))}
         </select>
         <svg
-          className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+          className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ssa-grey/50"
           width="16"
           height="16"
           viewBox="0 0 16 16"

@@ -1,5 +1,4 @@
 import type { FormData } from './types'
-import CardSection from '@/components/CardSection'
 import InputField from '@/components/InputField'
 import { FcGoogle } from 'react-icons/fc'
 
@@ -19,11 +18,11 @@ export default function AccountSignUpStep({
   const isGoogleSignup = data.authProvider === 'google'
 
   return (
-    <CardSection title="Account Sign Up">
+    <div className="flex flex-col gap-6">
       <button
         type="button"
         onClick={onGoogleAuth}
-        className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-ssa-black transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
+        className="flex w-full items-center justify-center gap-2 rounded-[26px] border border-ssa-grey/30 bg-ssa-background px-3 py-2.5 text-sm font-medium text-ssa-black transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
       >
         <FcGoogle className="h-5 w-5" aria-hidden="true" />
         {isGoogleSignup
@@ -32,7 +31,7 @@ export default function AccountSignUpStep({
       </button>
 
       {isGoogleSignup && (
-        <div className="rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-800">
+        <div className="rounded-lg border bg-green-50 px-3 py-2 text-sm text-green-800">
           Google account connected for {data.email}.
         </div>
       )}
@@ -95,6 +94,6 @@ export default function AccountSignUpStep({
           Use email and password instead
         </button>
       )}
-    </CardSection>
+    </div>
   )
 }

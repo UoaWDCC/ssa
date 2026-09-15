@@ -1,7 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react'
 import Button from '@/components/Button'
 
 const carouselImages = [
@@ -41,6 +47,14 @@ const carouselImages = [
     albumHref: 'https://example.com/album5',
   },
 ]
+
+// Slide frame ratio, named once instead of repeated as an arbitrary value: the
+// desktop slide is Figma's 1244x580, and below `sm` it falls back to 4:3 so the
+// frame keeps some height on narrow screens.
+const SLIDE_RATIO = {
+  '--slide-ratio': '1244 / 580',
+  '--slide-ratio-mobile': '4 / 3',
+} as CSSProperties
 
 export default function HomeCarousel() {
   const [current, setCurrent] = useState(0)
@@ -102,10 +116,11 @@ export default function HomeCarousel() {
   )
 
   return (
-    <section className="px-4 sm:px-6 md:px-10 lg:px-16">
-      <div className="relative drop-shadow-xl">
+    <section className="px-[21px] md:px-10 lg:px-16">
+      <div className="relative mx-auto w-full max-w-[1250px] drop-shadow-xl">
         <div
-          className="relative w-full aspect-4/3 sm:aspect-[1244/580] overflow-hidden rounded-[12px]"
+          className="relative w-full aspect-(--slide-ratio-mobile) sm:aspect-(--slide-ratio) overflow-hidden rounded-[12px]"
+          style={SLIDE_RATIO}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={stopTimer}

@@ -4,7 +4,7 @@ import SignupForm from './_components/SignupForm'
 
 export default function SignupPage() {
   return (
-    <main>
+    <main className="min-h-screen bg-ssa-background">
       <HeroSplit
         title="Join SSA"
         subtitle="Become a member of the Singapore Students' Association."

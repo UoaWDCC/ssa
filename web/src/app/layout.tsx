@@ -11,6 +11,7 @@ import {
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import { QueryProvider } from '@/providers/QueryProvider'
+export const PAGE_PADDING_X = 'px-[21px] md:px-10 lg:px-16'
 
 const inter = Inter({
   subsets: ['latin'],

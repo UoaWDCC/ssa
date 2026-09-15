@@ -1,15 +1,16 @@
 import Link from 'next/link'
 import type React from 'react'
-import { FiArrowRight } from 'react-icons/fi'
+import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
 
 export type ButtonSize = 'short' | 'long'
 export type ButtonVariant = 'filled' | 'light' | 'outline'
 export type ButtonColor =
   | 'red'
-  | 'red-light'
   | 'yellow'
   | 'skin'
+  | 'grey'
   | 'salmon'
+  | 'red-light'
   | 'pink'
   | 'white'
 export type ArrowSide = 'left' | 'right'
@@ -53,6 +54,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-dark-skin-yellow text-ssa-cta-text hover:bg-ssa-yellow-light hover:text-ssa-muted-gold',
     skin: 'bg-ssa-skin-yellow text-ssa-category-text hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
+    grey: 'bg-ssa-grey text-ssa-white hover:bg-ssa-red hover:text-ssa-white',
     pink: 'bg-ssa-salmon text-ssa-white hover:bg-ssa-red hover:text-ssa-white',
     salmon:
       'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
@@ -66,6 +68,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-ssa-yellow-light text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-cta-text',
     skin: 'bg-ssa-yellow-light text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    grey: 'bg-ssa-yellow-light text-ssa-grey hover:bg-ssa-grey hover:text-ssa-white',
     pink: 'bg-ssa-yellow-light text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
       'bg-ssa-salmon text-ssa-white hover:bg-ssa-yellow-light hover:text-ssa-red',
@@ -79,6 +82,7 @@ const treatments: Record<ButtonVariant, Record<ButtonColor, string>> = {
     yellow:
       'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-muted-gold hover:bg-ssa-dark-skin-yellow hover:text-ssa-white',
     skin: 'bg-transparent border-[3px] border-ssa-dark-skin-yellow text-ssa-category-text hover:bg-ssa-skin-yellow hover:text-ssa-cta-text',
+    grey: 'bg-transparent border-[2px] border-ssa-grey/30 text-ssa-grey/80 hover:bg-ssa-red-light hover:border-ssa-red-light hover:text-ssa-white',
     pink: 'bg-transparent border-[3px] border-ssa-salmon text-ssa-salmon hover:bg-ssa-salmon hover:text-ssa-white',
     salmon:
       'bg-transparent border-[3px] border-ssa-salmon text-ssa-white hover:bg-ssa-salmon hover:text-ssa-red',
@@ -167,20 +171,18 @@ export default function Button({
     .join(' ')
 
   const motion = arrowMotion[arrowSide]
+  const ArrowIcon = arrowSide === 'left' ? FiArrowLeft : FiArrowRight
+
   const content = arrow ? (
     <span className={`${arrowGroup} ${motion.reserve}`}>
       <span className={`${arrowSlot} left-0`}>
-        <FiArrowRight
-          aria-hidden
-          className={`${arrowIcon} ${motion.leftIcon}`}
-        />
+        <ArrowIcon aria-hidden className={`${arrowIcon} ${motion.leftIcon}`} />
       </span>
+
       <span className={motion.text}>{children}</span>
+
       <span className={`${arrowSlot} right-0`}>
-        <FiArrowRight
-          aria-hidden
-          className={`${arrowIcon} ${motion.rightIcon}`}
-        />
+        <ArrowIcon aria-hidden className={`${arrowIcon} ${motion.rightIcon}`} />
       </span>
     </span>
   ) : (

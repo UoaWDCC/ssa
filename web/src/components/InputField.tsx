@@ -48,7 +48,7 @@ export default function InputField({
         autoComplete={autoComplete}
         disabled={disabled}
         readOnly={readOnly}
-        className="w-full rounded-lg px-3 py-2 text-sm text-gray-900 outline-none border border-transparent focus:border-ssa-red bg-white placeholder:text-gray-400"
+        className="w-full rounded-[26px] px-4 py-3 text-sm text-gray-900 outline-none border border-ssa-grey/30 focus:border-ssa-red bg-ssa-background placeholder:text-ssa-grey/50"
       />
       {error && (
         <p id={errorId} className="text-xs text-red-600">
