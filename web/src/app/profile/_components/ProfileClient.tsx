@@ -246,11 +246,15 @@ function EditToggle({
 
 // Figma draws this as a filled pill spanning the whole column rather than hugging
 // its label, with a leading dot — so `w-full`, not an inline chip.
+// The dot carries the status hue; the label is a dark token in every variant.
+// Figma's own pill colours put #f85b76 on #ffccd5 (2.20:1) and #9f7d32 on
+// #ffe3ac (3.09:1), both well under AA for 14px text, so the text darkens to
+// #633c3c (6.62:1 / 7.51:1) and the dots keep the mock's red and gold.
 const STATUS_STYLES: Record<string, { pill: string; dot: string }> = {
   active: { pill: 'bg-green-100 text-green-800', dot: 'bg-green-600' },
-  expired: { pill: 'bg-ssa-pink-light text-ssa-red', dot: 'bg-ssa-red' },
+  expired: { pill: 'bg-ssa-pink-light text-ssa-cta-text', dot: 'bg-ssa-red' },
   pending: {
-    pill: 'bg-ssa-skin-yellow text-ssa-muted-gold',
+    pill: 'bg-ssa-skin-yellow text-ssa-cta-text',
     dot: 'bg-ssa-muted-gold',
   },
 }
@@ -296,7 +300,7 @@ const headerControl =
   'inline-flex items-center justify-center rounded-full border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2'
 
 const headerControlIdle =
-  'border-ssa-muted-taupe text-ssa-muted-taupe hover:bg-ssa-muted-taupe hover:text-ssa-white'
+  'border-ssa-badge-light-text text-ssa-badge-light-text hover:bg-ssa-badge-light-text hover:text-ssa-white'
 
 // Cancel-editing reuses the same inversion in red, so the affordance reads the same.
 const headerControlActive =
@@ -322,7 +326,9 @@ function Toast({
       role="status"
       aria-live="polite"
       className={`fixed top-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-2xl px-5 py-3 font-be-vietnam-pro shadow-xl transition-all duration-300 ${
-        isSuccess ? 'bg-green-600 text-ssa-white' : 'bg-ssa-red text-ssa-white'
+        isSuccess
+          ? 'bg-green-600 text-ssa-white'
+          : 'bg-ssa-red-dark text-ssa-white'
       }`}
     >
       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20">
@@ -397,7 +403,7 @@ function ConfirmDialog({
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-2.5 font-be-vietnam-pro text-sm font-semibold text-ssa-white transition-opacity hover:opacity-90 disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red-dark py-2.5 font-be-vietnam-pro text-sm font-semibold text-ssa-white transition-opacity hover:opacity-90 disabled:opacity-60"
           >
             {loading && (
               <svg
@@ -573,7 +579,7 @@ export default function ProfileClient({
             {displayName}
           </h1>
           {/* Figma "I - Paragraph Text": Inter 400, 16/24, -0.4px, Grey (Text). */}
-          <p className="truncate font-inter text-base leading-6 tracking-[-0.4px] text-ssa-muted-taupe">
+          <p className="truncate font-inter text-base leading-6 tracking-[-0.4px] text-ssa-badge-light-text">
             {user.email}
           </p>
         </div>
@@ -788,7 +794,7 @@ export default function ProfileClient({
         <div className="sticky bottom-6">
           <button
             onClick={() => setDialog('save')}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-3 font-be-vietnam-pro text-base font-semibold text-ssa-white shadow-lg shadow-ssa-red/30 transition-opacity hover:opacity-90"
+            className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red-dark py-3 font-be-vietnam-pro text-base font-semibold text-ssa-white shadow-lg shadow-ssa-red-dark/30 transition-opacity hover:opacity-90"
           >
             <FiSave className="h-5 w-5" />
             Save Changes
@@ -804,7 +810,7 @@ export default function ProfileClient({
       <div className="flex justify-center pt-2">
         <button
           onClick={() => setDialog('delete')}
-          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-be-vietnam-pro text-xs text-ssa-badge-light-text underline decoration-ssa-muted-taupe/50 underline-offset-4 transition-colors hover:text-ssa-red hover:decoration-ssa-red focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
+          className="inline-flex items-center gap-2 rounded-full px-3 py-1.5 font-be-vietnam-pro text-xs text-ssa-badge-light-text underline decoration-ssa-muted-taupe/50 underline-offset-4 transition-colors hover:text-ssa-red-dark hover:decoration-ssa-red-dark focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
         >
           <FiTrash2 className="h-3.5 w-3.5" />
           Delete account
