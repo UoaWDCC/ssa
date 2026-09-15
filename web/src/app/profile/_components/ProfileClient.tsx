@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import ProfileCard from './ProfileCard'
 import {
   FiAlertTriangle,
@@ -83,8 +83,32 @@ const placeholderCls =
 // squeezed into ~140px.
 const fieldGrid = 'grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2'
 
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className={labelCls}>{children}</span>
+// Renders a real `<label>` when it captions a control (`htmlFor`), so clicking the
+// caption focuses the field and screen readers announce it. `ViewField` has nothing
+// to point at, so it stays a `<span>`; `EditToggle`'s switch is a button, which
+// `htmlFor` cannot target, so that one takes an `id` and is referenced by
+// `aria-labelledby` instead.
+function FieldLabel({
+  children,
+  htmlFor,
+  id,
+}: {
+  children: React.ReactNode
+  htmlFor?: string
+  id?: string
+}) {
+  if (htmlFor) {
+    return (
+      <label htmlFor={htmlFor} className={labelCls}>
+        {children}
+      </label>
+    )
+  }
+  return (
+    <span id={id} className={labelCls}>
+      {children}
+    </span>
+  )
 }
 
 // ─── small read-only field ─────────────────────────────────────────────────────
@@ -120,10 +144,12 @@ function EditText({
   onChange: (v: string) => void
   type?: string
 }) {
+  const id = useId()
   return (
     <div className="flex flex-col gap-2">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <input
+        id={id}
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -144,11 +170,13 @@ function EditSelect({
   onChange: (v: string) => void
   options: { value: string; label: string }[]
 }) {
+  const id = useId()
   return (
     <div className="flex flex-col gap-2">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel htmlFor={id}>{label}</FieldLabel>
       <div className="relative">
         <select
+          id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           className={`${inputCls} appearance-none pr-8 ${value ? 'text-ssa-grey' : 'text-ssa-badge-light-text'}`}
@@ -190,13 +218,15 @@ function EditToggle({
   value: boolean
   onChange: (v: boolean) => void
 }) {
+  const labelId = useId()
   return (
     <div className="flex flex-col gap-2">
-      <FieldLabel>{label}</FieldLabel>
+      <FieldLabel id={labelId}>{label}</FieldLabel>
       <button
         type="button"
         role="switch"
         aria-checked={value}
+        aria-labelledby={labelId}
         onClick={() => onChange(!value)}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-1 ${
           value ? 'bg-ssa-red' : 'bg-ssa-muted-taupe/40'
