@@ -9,7 +9,7 @@ const INITIAL_COUNT = 25
 const LOAD_MORE_COUNT = 25
 
 interface GalleryImage {
-  id: number
+  id: number | string
   url: string
   alt: string
 }
@@ -52,6 +52,9 @@ export default function GalleryGrid({
                 src={img.url}
                 alt={img.alt}
                 fill
+                unoptimized={
+                  /^https?:\/\//.test(img.url) || img.url.startsWith('/api/')
+                }
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

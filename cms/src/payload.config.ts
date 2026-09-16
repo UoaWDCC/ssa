@@ -13,6 +13,8 @@ import { Events } from './collections/Events'
 import { Sponsors } from './collections/Sponsors'
 import { Execs } from './collections/Execs'
 import { Members } from './collections/Members'
+import { EventRegistrations } from './collections/EventRegistrations'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -24,13 +26,16 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Events, Sponsors, Execs, Members],
+  collections: [Users, Media, Events, EventRegistrations, Sponsors, Execs, Members],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    // Bundle migrations into the standalone server and apply them before
+    // Payload serves database requests in production.
+    prodMigrations: process.env.PAYLOAD_MIGRATING === 'true' ? undefined : migrations,
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },

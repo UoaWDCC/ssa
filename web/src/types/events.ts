@@ -1,28 +1,35 @@
 import type { Media } from './payload-types'
 
-export type EventCategory =
-  | 'social'
-  | 'cultural'
-  | 'academic'
-  | 'sports'
-  | 'other'
+export type EventCategory = 'games' | 'community' | 'food' | 'agm' | 'all'
 
 export interface EventImage {
-  id: string | null
-  image: Media
+  id?: string | null
+  image: number | Media
 }
 
 export interface Event {
   id: number
   title: string
   date: string
-  description: string | null
-  coverImage: Media | null
-  category: EventCategory | null
-  isUpcoming: boolean | null
-  images: EventImage[] | null
+  time?: string | null
+  location?: string | null
+  memberPrice?: number | null
+  nonMemberPrice?: number | null
+  description?: string | null
+  coverImage?: number | Media | null
+  category?: EventCategory | null
+  isUpcoming?: boolean | null
+  images?: EventImage[] | null
   updatedAt: string
   createdAt: string
+}
+
+export interface UpcomingEventResponse {
+  event: Event | null
+}
+
+export interface PastEventsResponse {
+  events: Event[]
 }
 
 export interface EventsResponse {

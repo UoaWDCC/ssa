@@ -37,6 +37,7 @@ jobs:
       - run: pnpm --filter web lint
       - run: pnpm --filter web format:check
       - run: pnpm --filter web exec tsc --noEmit
+      - run: pnpm --filter web test
       - run: pnpm --filter web build
 
   cms:

@@ -1,45 +1,98 @@
+import { notFound } from 'next/navigation'
+
 import GalleryGrid from '@/app/events/components/GalleryGrid'
+import type { Event } from '@/types/events'
 import HeroGallery from '@/components/HeroGallery'
-import { pastEvents } from '@/app/events/_components/pastEventsData'
-import { getGalleryImages } from './galleryData'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
 }
 
-// TODO: replace with real data once the backend tables are wired up (per Joe:
-// use a static array for now).
-const placeholderImages = Array.from({ length: 30 }, (_, i) => ({
-  id: i + 1,
-  url: i % 2 === 0 ? '/carousel_one.jpg' : '/carousel_two.jpg',
-  alt: `Event photo ${i + 1}`,
-}))
+async function fetchEvent(eventId: number) {
+  const cmsUrl = process.env.CMS_URL?.replace(/\/$/, '')
+  if (!cmsUrl) throw new Error('CMS_URL is not configured')
 
-function formatEventMonth(date: string): string {
+  const response = await fetch(`${cmsUrl}/api/events/${eventId}?depth=1`, {
+    cache: 'no-store',
+  })
+
+  if (response.status === 404) return null
+  if (!response.ok) {
+    throw new Error(`Event request failed: ${response.status}`)
+  }
+
+  return response.json() as Promise<Event>
+}
+
+function resolveMediaUrl(url: string, cmsUrl: string) {
+  if (/^https?:\/\//.test(url)) return url
+
+  const publicCmsUrl = process.env.NEXT_PUBLIC_CMS_URL
+  const baseUrl =
+    publicCmsUrl ?? (process.env.NODE_ENV === 'production' ? null : cmsUrl)
+
+  return baseUrl
+    ? new URL(url, `${baseUrl.replace(/\/$/, '')}/`).toString()
+    : url
+}
+
+function formatEventDate(value: string) {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+
   return new Intl.DateTimeFormat('en-NZ', {
     month: 'long',
     year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(date))
+    timeZone: 'Pacific/Auckland',
+  }).format(date)
 }
 
 export default async function EventGalleryPage({
   params,
 }: Readonly<GalleryPageProps>) {
   const { slug } = await params
-  const event = pastEvents.find((pastEvent) => pastEvent.slug === slug)
-  const eventTitle = event?.name ?? slug.replace(/-/g, ' ')
-  const eventDate = event ? formatEventMonth(event.date) : ''
-  const galleryImages = getGalleryImages(slug) ?? placeholderImages
+  const eventId = Number(slug)
+
+  if (!Number.isInteger(eventId) || eventId <= 0) notFound()
+
+  const event = await fetchEvent(eventId)
+  if (!event || event.isUpcoming !== false) notFound()
+
+  const cmsUrl = process.env.CMS_URL?.replace(/\/$/, '')
+  if (!cmsUrl) throw new Error('CMS_URL is not configured')
+
+  const images = (event.images ?? []).flatMap((row, index) => {
+    const media = typeof row.image === 'object' ? row.image : null
+    if (!media?.url) return []
+
+    return [
+      {
+        id: row.id ?? `${media.id}-${index}`,
+        url: resolveMediaUrl(media.url, cmsUrl),
+        alt: media.alt?.trim() || `${event.title} photo ${index + 1}`,
+      },
+    ]
+  })
+
+  const eventDate = formatEventDate(event.date)
 
   return (
     <main className="min-h-[60vh] bg-ssa-yellow-light">
-      <HeroGallery title={eventTitle} eventDate={eventDate} />
-      <GalleryGrid
-        images={galleryImages}
-        eventTitle={eventTitle}
-        eventDate={eventDate}
-      />
+      <HeroGallery title={event.title} eventDate={eventDate} />
+
+      {images.length > 0 ? (
+        <GalleryGrid
+          images={images}
+          eventTitle={event.title}
+          eventDate={eventDate}
+        />
+      ) : (
+        <section className="px-6 py-20 text-center text-ssa-black/60 md:py-32">
+          <p className="font-inter text-base">
+            No photos have been added for this event yet.
+          </p>
+        </section>
+      )}
     </main>
   )
 }

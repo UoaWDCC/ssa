@@ -86,6 +86,9 @@ export function HighlightCard({
           src={imageSrc}
           alt={imageAlt}
           fill
+          unoptimized={
+            /^https?:\/\//.test(imageSrc) || imageSrc.startsWith('/api/')
+          }
           sizes="(min-width: 1400px) 571px, (min-width: 1280px) calc(50vw - 82px), (min-width: 768px) calc(100vw - 144px), calc(100vw - 96px)"
           className="object-cover"
         />
