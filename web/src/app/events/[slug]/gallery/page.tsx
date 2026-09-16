@@ -3,8 +3,6 @@ import { notFound } from 'next/navigation'
 import GalleryGrid from '@/app/events/components/GalleryGrid'
 import type { Event } from '@/types/events'
 import HeroGallery from '@/components/HeroGallery'
-import { pastEvents } from '@/app/events/_components/pastEventsData'
-import { getGalleryImages } from './galleryData'
 
 interface GalleryPageProps {
   params: Promise<{ slug: string }>
@@ -49,14 +47,6 @@ function formatEventDate(value: string) {
   }).format(date)
 }
 
-function formatEventMonth(date: string): string {
-  return new Intl.DateTimeFormat('en-NZ', {
-    month: 'long',
-    year: 'numeric',
-    timeZone: 'UTC',
-  }).format(new Date(date))
-}
-
 export default async function EventGalleryPage({
   params,
 }: Readonly<GalleryPageProps>) {
@@ -88,11 +78,7 @@ export default async function EventGalleryPage({
 
   return (
     <main className="min-h-[60vh] bg-ssa-yellow-light">
-      <div className="px-6 pt-16 text-center text-ssa-black">
-        <h1 className="font-averia text-3xl font-bold capitalize sm:text-4xl">
-          {event.title}
-        </h1>
-      </div>
+      <HeroGallery title={event.title} eventDate={eventDate} />
 
       {images.length > 0 ? (
         <GalleryGrid
