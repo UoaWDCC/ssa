@@ -48,6 +48,31 @@ flowchart TD
 
 `--remote-only` means the Docker build runs on Fly.io's infrastructure, not in the GitHub Actions runner — no large image transfer required.
 
+Two health checks (`/` for web, `/health` for the CMS) run against the machine. A deploy where either app fails to boot is rolled back instead of reporting success and serving 502s. `/health` is a CMS route that deliberately does not initialise Payload or touch Postgres, so a database outage degrades the site rather than rolling back every deploy.
+
+## Runtime configuration
+
+Non-secret config lives in `fly.toml` under `[env]`:
+
+| Variable | Value | Why |
+| --- | --- | --- |
+| `CMS_URL` | `http://localhost:3001` | The web app calls the CMS over localhost inside the container |
+| `WEB_URL` | `https://ssa-prod.fly.dev` | Stripe success/cancel redirects |
+| `GOOGLE_OAUTH_REDIRECT_URI` | `https://ssa-prod.fly.dev/api/auth/google/callback` | Must match the URI registered in Google Cloud Console |
+
+`NEXT_PUBLIC_CMS_URL` is **not** a runtime variable — Next inlines `NEXT_PUBLIC_*` into the browser bundle at build time, so it is a Docker build arg (defaulting to the production origin) in the `web-builder` stage.
+
+Everything else is a Fly secret, set once with `flyctl secrets set KEY=value`:
+
+```
+DATABASE_URL  PAYLOAD_SECRET  SIGNUP_ENCRYPTION_KEY
+STRIPE_SECRET_KEY  STRIPE_WEBHOOK_SECRET  STRIPE_PRICE_ID
+S3_ENDPOINT  S3_ACCESS_KEY_ID  S3_SECRET_ACCESS_KEY  S3_BUCKET  S3_REGION  SUPABASE_URL
+GOOGLE_CLIENT_ID  GOOGLE_CLIENT_SECRET  GOOGLE_OAUTH_COOKIE_SECRET
+```
+
+Check what is currently set with `flyctl secrets list` (names only — Fly never shows values).
+
 ## PR notifications
 
 When a PR is opened, reopened, or merged, a Discord webhook posts a message to the team channel.
