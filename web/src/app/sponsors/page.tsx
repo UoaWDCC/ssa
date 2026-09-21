@@ -10,35 +10,10 @@ import {
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
 
-import SponsorsGrid, {
-  type Sponsor,
-  type SponsorCategory,
-  type SponsorGridItem,
-} from './components/SponsorsGrid'
+import SponsorsGrid from './components/SponsorsGrid'
+import { type Sponsor } from '@/lib/sponsors'
 
 import useSponsors from '@/hooks/useSponsors'
-import type { Media } from '@/types/payload-types'
-
-type SponsorMediaSeedInput = Pick<
-  Media,
-  'id' | 'alt' | 'url' | 'width' | 'height'
->
-
-function createSponsorMedia({
-  id,
-  alt,
-  url,
-  width,
-  height,
-}: SponsorMediaSeedInput): Media {
-  return {
-    id,
-    alt,
-    url,
-    width,
-    height,
-  }
-}
 
 function getSponsorLogoUrl(logo: Sponsor['logo']) {
   if (typeof logo === 'number') {
@@ -56,96 +31,19 @@ function getSponsorLogoAlt(sponsor: Sponsor) {
   return sponsor.logo.alt
 }
 
-const sponsorOfTheWeekEntry: Sponsor = {
-  id: 1,
-  name: 'SIP N CHILL',
-  logo: createSponsorMedia({
-    id: 101,
-    alt: 'Sip n Chill sponsor photo',
-    url: '/sponsors/sponsorcard.png',
-    width: 400,
-    height: 400,
-  }),
-  websiteUrl:
-    'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-  isSponsorOfTheWeek: true,
-  description:
-    'Sip n Chill offers icy desserts, refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
-  location: 'Newmarket 432 Khyber Pass Road',
-  memberPerks: '10% OFF FOR SSA MEMBERS',
-  updatedAt: '2026-05-18T00:00:00.000Z',
-  createdAt: '2026-05-18T00:00:00.000Z',
-}
-
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-]
-
-const temporaryCategories: readonly SponsorCategory[] = [
-  'FOOD',
-  'RETAIL',
-  'SERVICES',
-  'ENTERTAINMENT',
-]
-
-// Remove when Payload CMS sponsors are connected.
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 45 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
-
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-      category: temporaryCategories[index % temporaryCategories.length],
-    }
-  },
-)
-
 export default function SponsorsPage() {
   const { sponsors } = useSponsors()
 
+  console.log('Sponsors', sponsors)
+
+  const sponsorOfTheWeekEntry = sponsors.find(
+    (sponsor) => sponsor.isSponsorOfTheWeek === true,
+  )
+
+  console.log('Sponsor of the week', sponsorOfTheWeekEntry)
+
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
+    sponsorOfTheWeekEntry?.location
       ? [
           {
             icon: FaLocationDot,
@@ -154,7 +52,7 @@ export default function SponsorsPage() {
         ]
       : []
 
-  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
+  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry?.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
     : []
 
@@ -165,20 +63,22 @@ export default function SponsorsPage() {
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
       />
       <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
-        <HighlightCard
-          eyebrow="Sponsor of the Week"
-          title={sponsorOfTheWeekEntry.name}
-          details={sponsorOfTheWeekDetails}
-          badges={sponsorOfTheWeekBadges}
-          description={<p>{sponsorOfTheWeekEntry.description}</p>}
-          ctaLabel="CHECK US OUT!"
-          ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
-        />
+        {sponsorOfTheWeekEntry && (
+          <HighlightCard
+            eyebrow="Sponsor of the Week"
+            title={sponsorOfTheWeekEntry.name}
+            details={sponsorOfTheWeekDetails}
+            badges={sponsorOfTheWeekBadges}
+            description={<p>{sponsorOfTheWeekEntry.description}</p>}
+            ctaLabel="CHECK US OUT!"
+            ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
+            imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
+            imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
+          />
+        )}
 
-        <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-4 w-full max-w-[1244px]">
+        <section className="mt-12 md:mt-16 lg:mt-22.5">
+          <div className="mx-auto mb-4 w-full max-w-311">
             <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
               Sponsors
             </h2>
@@ -186,16 +86,16 @@ export default function SponsorsPage() {
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-32 flex w-full max-w-[756px] flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-[184px] lg:block lg:h-[215px]">
+          <section className="relative mx-auto mt-32 flex w-full max-w-189 flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-46 lg:block lg:h-53.75">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="pointer-events-none h-auto w-[210px] select-none lg:absolute lg:bottom-[-120px] lg:left-[-45px] lg:z-0 lg:w-[300px] lg:max-w-none"
+              className="pointer-events-none h-auto w-52.5 select-none lg:absolute lg:-bottom-30 lg:-left-11.25 lg:z-0 lg:w-75 lg:max-w-none"
             />
 
-            <div className="relative z-10 flex w-full max-w-[260px] flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
+            <div className="relative z-10 flex w-full max-w-65 flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
               <p className="w-full text-center font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
                 Keen to support SSA?
               </p>
