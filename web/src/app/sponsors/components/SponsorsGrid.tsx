@@ -20,14 +20,10 @@ export const SPONSOR_CATEGORIES = [
 
 export type SponsorCategory = (typeof SPONSOR_CATEGORIES)[number]
 
-export type SponsorGridItem = Sponsor & {
-  category: SponsorCategory
-}
-
 type SponsorFilter = 'ALL' | SponsorCategory
 
 type SponsorsGridProps = {
-  sponsors?: SponsorGridItem[]
+  sponsors?: Sponsor[]
 }
 
 const FILTER_OPTIONS: readonly SponsorFilter[] = ['ALL', ...SPONSOR_CATEGORIES]
@@ -49,8 +45,7 @@ export default function SponsorsGrid({
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<SponsorFilter>('ALL')
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE_COUNT)
-  const [selectedSponsor, setSelectedSponsor] =
-    useState<SponsorGridItem | null>(null)
+  const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null)
   const selectedTriggerRef = useRef<HTMLElement | null>(null)
 
   const filteredSponsors = useMemo(() => {
@@ -105,7 +100,7 @@ export default function SponsorsGrid({
   }, [])
 
   return (
-    <div className="mx-auto w-full max-w-[1244px]">
+    <div className="mx-auto w-full max-w-311">
       <SearchBar
         value={searchQuery}
         onChange={handleSearchChange}
@@ -123,7 +118,7 @@ export default function SponsorsGrid({
       />
 
       {visibleSponsors.length > 0 ? (
-        <div className="mt-20 grid w-full grid-cols-3 gap-[7px] sm:gap-4 md:grid-cols-4 xl:grid-cols-6 xl:gap-[20.87px]">
+        <div className="mt-20 grid w-full grid-cols-3 gap-1.75 sm:gap-4 md:grid-cols-4 xl:grid-cols-6 xl:gap-[20.87px]">
           {visibleSponsors.map((sponsor) => (
             <SponsorLogoTile
               key={sponsor.id}
@@ -162,7 +157,7 @@ export default function SponsorsGrid({
           <button
             type="button"
             onClick={handleViewMore}
-            className="mt-3 font-be-vietnam-pro text-base font-semibold uppercase leading-6 tracking-[-0.32px] text-ssa-muted-grey transition-colors duration-200 hover:text-ssa-red focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ssa-red"
+            className="mt-3 font-be-vietnam-pro text-base font-semibold uppercase leading-6 tracking-[-0.32px] text-ssa-muted-grey transition-colors duration-200 hover:text-ssa-red focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ssa-red"
           >
             View More
           </button>
