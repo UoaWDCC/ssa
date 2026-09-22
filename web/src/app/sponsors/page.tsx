@@ -44,9 +44,7 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
     return '/sponsors/sponsorcard.png'
   }
 
-  return logo.url?.startsWith('http')
-    ? logo.url
-    : '/sponsors/sponsorcard.png'
+  return logo.url?.startsWith('http') ? logo.url : '/sponsors/sponsorcard.png'
 }
 
 function getSponsorLogoAlt(sponsor: Sponsor) {

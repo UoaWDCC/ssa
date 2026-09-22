@@ -20,8 +20,7 @@ export const Sponsors: CollectionConfig = {
           req,
         })
 
-        const currentSponsorId =
-          operation === 'update' ? originalDoc?.id : undefined
+        const currentSponsorId = operation === 'update' ? originalDoc?.id : undefined
 
         await Promise.all(
           weeklySponsors.docs

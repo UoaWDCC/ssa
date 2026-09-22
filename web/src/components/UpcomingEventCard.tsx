@@ -65,9 +65,7 @@ export default function UpcomingEventCard() {
         },
       ]}
       badges={[
-        ...(event.memberPrice == null
-          ? []
-          : [`$${event.memberPrice} MEMBERS`]),
+        ...(event.memberPrice == null ? [] : [`$${event.memberPrice} MEMBERS`]),
         ...(event.nonMemberPrice == null
           ? []
           : [
@@ -77,9 +75,7 @@ export default function UpcomingEventCard() {
               },
             ]),
       ]}
-      description={
-        <p>{event.description || 'More details coming soon.'}</p>
-      }
+      description={<p>{event.description || 'More details coming soon.'}</p>}
       ctaLabel="RSVP"
       ctaHref="/events/rsvp"
       imageSrc={

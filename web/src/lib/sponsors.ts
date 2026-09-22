@@ -3,11 +3,7 @@
 import type { Media } from '@/types/payload-types'
 const CMS_URL = process.env.CMS_URL
 
-export type SponsorCategory =
-  | 'FOOD'
-  | 'RETAIL'
-  | 'SERVICES'
-  | 'ENTERTAINMENT'
+export type SponsorCategory = 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
 
 export interface Sponsor {
   id: number
