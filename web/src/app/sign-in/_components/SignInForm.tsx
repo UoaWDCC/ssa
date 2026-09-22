@@ -65,9 +65,7 @@ export default function SignInForm({
           }
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm font-medium text-ssa-black transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-ssa-red focus:ring-offset-2"
         >
-          <span className="h-5 w-5">
-            <FcGoogle aria-hidden="true" />
-          </span>
+          <FcGoogle className="h-5 w-5" aria-hidden="true" />
           Continue with Google
         </button>
 

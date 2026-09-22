@@ -246,13 +246,9 @@ function Toast({
     >
       <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/20">
         {isSuccess ? (
-          <span className="h-4 w-4">
-            <FiCheck />
-          </span>
+          <FiCheck className="h-4 w-4" />
         ) : (
-          <span className="h-4 w-4">
-            <FiX />
-          </span>
+          <FiX className="h-4 w-4" />
         )}
       </span>
       <p className="text-sm font-medium">{toast.message}</p>
@@ -261,9 +257,7 @@ function Toast({
         aria-label="Dismiss notification"
         className="ml-1 rounded-lg p-1 hover:bg-white/20 transition-colors"
       >
-        <span className="h-3.5 w-3.5">
-          <FiX />
-        </span>
+        <FiX className="h-3.5 w-3.5" />
       </button>
     </div>
   )
@@ -303,13 +297,9 @@ function ConfirmDialog({
           }`}
         >
           {isSave ? (
-            <span className="h-7 w-7 text-ssa-red">
-              <FiSave />
-            </span>
+            <FiSave className="h-7 w-7 text-ssa-red" />
           ) : (
-            <span className="h-7 w-7 text-red-600">
-              <FiAlertTriangle />
-            </span>
+            <FiAlertTriangle className="h-7 w-7 text-red-600" />
           )}
         </div>
 
@@ -526,13 +516,9 @@ export default function ProfileClient({
             }`}
           >
             {isEditing ? (
-              <span className="h-4 w-4">
-                <FiX />
-              </span>
+              <FiX className="h-4 w-4" />
             ) : (
-              <span className="h-4 w-4">
-                <FiEdit2 />
-              </span>
+              <FiEdit2 className="h-4 w-4" />
             )}
           </button>
 
@@ -541,9 +527,7 @@ export default function ProfileClient({
             aria-label="Delete account"
             className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100 text-red-600 transition-colors hover:bg-red-200"
           >
-            <span className="h-4 w-4">
-              <FiTrash2 />
-            </span>
+            <FiTrash2 className="h-4 w-4" />
           </button>
         </div>
       </div>
@@ -734,9 +718,7 @@ export default function ProfileClient({
             onClick={() => setDialog('save')}
             className="flex w-full items-center justify-center gap-2 rounded-full bg-ssa-red py-3 text-base font-semibold text-white shadow-lg shadow-ssa-red/30 transition-opacity hover:opacity-90"
           >
-            <span className="h-5 w-5">
-              <FiSave />
-            </span>
+            <FiSave className="h-5 w-5" />
             Save Changes
           </button>
         </div>

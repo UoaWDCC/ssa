@@ -36,7 +36,9 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
 
     const data = await res.json()
     return data.docs as Sponsor[]
-  } catch {
-    return []
+  } catch (error) {
+    throw new Error(
+      `Failed to fetch sponsors: ${error instanceof Error ? error.message : String(error)}`,
+    )
   }
 }

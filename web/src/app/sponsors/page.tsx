@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
+export const dynamic = 'force-dynamic'
+
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
 import HeroSplit from '@/components/HeroSplit'
@@ -12,7 +14,6 @@ import { fetchSponsors } from '@/lib/sponsors'
 
 import SponsorsGrid, {
   type Sponsor,
-  type SponsorCategory,
   type SponsorGridItem,
 } from './components/SponsorsGrid'
 
@@ -39,22 +40,6 @@ function createSponsorMedia({
   }
 }
 
-function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') {
-    return '/sponsors/sponsorcard.png'
-  }
-
-  return logo.url?.startsWith('http') ? logo.url : '/sponsors/sponsorcard.png'
-}
-
-function getSponsorLogoAlt(sponsor: Sponsor) {
-  if (typeof sponsor.logo === 'number') {
-    return `${sponsor.name} logo`
-  }
-
-  return sponsor.logo.alt
-}
-
 const fallbackSponsorOfTheWeek: Sponsor = {
   id: 1,
   name: 'SIP N CHILL',
@@ -75,69 +60,6 @@ const fallbackSponsorOfTheWeek: Sponsor = {
   updatedAt: '2026-05-18T00:00:00.000Z',
   createdAt: '2026-05-18T00:00:00.000Z',
 }
-
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: fallbackSponsorOfTheWeek.description,
-    location: fallbackSponsorOfTheWeek.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-]
-
-const temporaryCategories: readonly SponsorCategory[] = [
-  'FOOD',
-  'RETAIL',
-  'SERVICES',
-  'ENTERTAINMENT',
-]
-
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 45 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
-
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-      category: temporaryCategories[index % temporaryCategories.length],
-    }
-  },
-)
 
 export default async function SponsorsPage() {
   const cmsSponsors = await fetchSponsors()
