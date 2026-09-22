@@ -8,6 +8,7 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import { fetchSponsors } from '@/lib/sponsors'
 
 import SponsorsGrid, {
   type Sponsor,
@@ -43,7 +44,9 @@ function getSponsorLogoUrl(logo: Sponsor['logo']) {
     return '/sponsors/sponsorcard.png'
   }
 
-  return logo.url ?? '/sponsors/sponsorcard.png'
+  return logo.url?.startsWith('http')
+    ? logo.url
+    : '/sponsors/sponsorcard.png'
 }
 
 function getSponsorLogoAlt(sponsor: Sponsor) {
@@ -54,7 +57,7 @@ function getSponsorLogoAlt(sponsor: Sponsor) {
   return sponsor.logo.alt
 }
 
-const sponsorOfTheWeekEntry: Sponsor = {
+const fallbackSponsorOfTheWeek: Sponsor = {
   id: 1,
   name: 'SIP N CHILL',
   logo: createSponsorMedia({
@@ -109,8 +112,8 @@ const sponsorSeedEntries: SponsorGridItem[] = [
     websiteUrl:
       'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
     isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
+    description: fallbackSponsorOfTheWeek.description,
+    location: fallbackSponsorOfTheWeek.location,
     memberPerks: 'Present your SSA card for 10% off',
     updatedAt: '2026-05-18T00:00:00.000Z',
     createdAt: '2026-05-18T00:00:00.000Z',
@@ -124,7 +127,6 @@ const temporaryCategories: readonly SponsorCategory[] = [
   'ENTERTAINMENT',
 ]
 
-// Remove when Payload CMS sponsors are connected.
 const sponsorEntries: SponsorGridItem[] = Array.from(
   { length: 45 },
   (_, index) => {
@@ -140,17 +142,21 @@ const sponsorEntries: SponsorGridItem[] = Array.from(
 )
 
 export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
+  const cmsSponsors = await fetchSponsors()
+  const sponsorOfTheWeekEntry =
+    cmsSponsors.find((sponsor) => sponsor.isSponsorOfTheWeek === true) ??
+    fallbackSponsorOfTheWeek
+  const sponsors: SponsorGridItem[] = cmsSponsors.map((sponsor) => ({
+    ...sponsor,
+    category: sponsor.category ?? 'FOOD',
+  }))
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
-      ? [
-          {
-            icon: FaLocationDot,
-            text: sponsorOfTheWeekEntry.location,
-          },
-        ]
-      : []
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
+    {
+      icon: FaLocationDot,
+      text: sponsorOfTheWeekEntry.location || 'Location to be confirmed',
+    },
+  ]
 
   const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
@@ -168,11 +174,15 @@ export default async function SponsorsPage() {
           title={sponsorOfTheWeekEntry.name}
           details={sponsorOfTheWeekDetails}
           badges={sponsorOfTheWeekBadges}
-          description={<p>{sponsorOfTheWeekEntry.description}</p>}
+          description={
+            <p>
+              {sponsorOfTheWeekEntry.description || 'More details coming soon.'}
+            </p>
+          }
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
+          imageSrc="/sponsors/sponsorcard.png"
+          imageAlt={`${sponsorOfTheWeekEntry.name} sponsor artwork`}
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
