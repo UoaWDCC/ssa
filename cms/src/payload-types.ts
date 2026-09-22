@@ -287,6 +287,7 @@ export interface Sponsor {
   logo: number | Media
   websiteUrl?: string | null
   isSponsorOfTheWeek?: boolean | null
+  category: 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
   description?: string | null
   location?: string | null
   memberPerks?: string | null
@@ -575,6 +576,7 @@ export interface SponsorsSelect<T extends boolean = true> {
   logo?: T
   websiteUrl?: T
   isSponsorOfTheWeek?: T
+  category?: T
   description?: T
   location?: T
   memberPerks?: T

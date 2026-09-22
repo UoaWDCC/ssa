@@ -2,6 +2,45 @@ import type { CollectionConfig } from 'payload'
 
 export const Sponsors: CollectionConfig = {
   slug: 'sponsors',
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, originalDoc, req }) => {
+        if (data.isSponsorOfTheWeek !== true) {
+          return data
+        }
+
+        const weeklySponsors = await req.payload.find({
+          collection: 'sponsors',
+          where: {
+            isSponsorOfTheWeek: {
+              equals: true,
+            },
+          },
+          limit: 0,
+          req,
+        })
+
+        const currentSponsorId = operation === 'update' ? originalDoc?.id : undefined
+
+        await Promise.all(
+          weeklySponsors.docs
+            .filter((sponsor) => sponsor.id !== currentSponsorId)
+            .map((sponsor) =>
+              req.payload.update({
+                collection: 'sponsors',
+                id: sponsor.id,
+                data: {
+                  isSponsorOfTheWeek: false,
+                },
+                req,
+              }),
+            ),
+        )
+
+        return data
+      },
+    ],
+  },
   access: {
     read: () => true,
   },
@@ -28,6 +67,18 @@ export const Sponsors: CollectionConfig = {
       name: 'isSponsorOfTheWeek',
       type: 'checkbox',
       defaultValue: false,
+    },
+    {
+      name: 'category',
+      type: 'select',
+      required: true,
+      defaultValue: 'FOOD',
+      options: [
+        { label: 'Food', value: 'FOOD' },
+        { label: 'Retail', value: 'RETAIL' },
+        { label: 'Services', value: 'SERVICES' },
+        { label: 'Entertainment', value: 'ENTERTAINMENT' },
+      ],
     },
     {
       name: 'description',

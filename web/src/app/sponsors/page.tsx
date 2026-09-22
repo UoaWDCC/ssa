@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
+export const dynamic = 'force-dynamic'
+
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
 import HeroSplit from '@/components/HeroSplit'
@@ -8,10 +10,10 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import { fetchSponsors } from '@/lib/sponsors'
 
 import SponsorsGrid, {
   type Sponsor,
-  type SponsorCategory,
   type SponsorGridItem,
 } from './components/SponsorsGrid'
 
@@ -38,23 +40,7 @@ function createSponsorMedia({
   }
 }
 
-function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') {
-    return '/sponsors/sponsorcard.png'
-  }
-
-  return logo.url ?? '/sponsors/sponsorcard.png'
-}
-
-function getSponsorLogoAlt(sponsor: Sponsor) {
-  if (typeof sponsor.logo === 'number') {
-    return `${sponsor.name} logo`
-  }
-
-  return sponsor.logo.alt
-}
-
-const sponsorOfTheWeekEntry: Sponsor = {
+const fallbackSponsorOfTheWeek: Sponsor = {
   id: 1,
   name: 'SIP N CHILL',
   logo: createSponsorMedia({
@@ -75,82 +61,22 @@ const sponsorOfTheWeekEntry: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-const sponsorSeedEntries: SponsorGridItem[] = [
-  {
-    id: 2,
-    name: 'Kompass Coffee',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 102,
-      alt: 'Kompass Coffee logo',
-      url: '/sponsors/kompass_coffee.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl: 'https://www.instagram.com/kompasscoffee/',
-    isSponsorOfTheWeek: false,
-    description: null,
-    location: null,
-    memberPerks: 'Present your SSA card for 15% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-  {
-    id: 3,
-    name: 'Sip n Chill',
-    category: 'FOOD',
-    logo: createSponsorMedia({
-      id: 103,
-      alt: 'Sip n Chill logo',
-      url: '/sponsors/sipnchill.png',
-      width: 400,
-      height: 400,
-    }),
-    websiteUrl:
-      'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-    isSponsorOfTheWeek: true,
-    description: sponsorOfTheWeekEntry.description,
-    location: sponsorOfTheWeekEntry.location,
-    memberPerks: 'Present your SSA card for 10% off',
-    updatedAt: '2026-05-18T00:00:00.000Z',
-    createdAt: '2026-05-18T00:00:00.000Z',
-  },
-]
-
-const temporaryCategories: readonly SponsorCategory[] = [
-  'FOOD',
-  'RETAIL',
-  'SERVICES',
-  'ENTERTAINMENT',
-]
-
-// Remove when Payload CMS sponsors are connected.
-const sponsorEntries: SponsorGridItem[] = Array.from(
-  { length: 45 },
-  (_, index) => {
-    const sponsor = sponsorSeedEntries[index % sponsorSeedEntries.length]
-
-    return {
-      ...sponsor,
-      id: index + 10,
-      name: `${sponsor.name} ${index + 1}`,
-      category: temporaryCategories[index % temporaryCategories.length],
-    }
-  },
-)
-
 export default async function SponsorsPage() {
-  const sponsors = sponsorEntries
+  const cmsSponsors = await fetchSponsors()
+  const sponsorOfTheWeekEntry =
+    cmsSponsors.find((sponsor) => sponsor.isSponsorOfTheWeek === true) ??
+    fallbackSponsorOfTheWeek
+  const sponsors: SponsorGridItem[] = cmsSponsors.map((sponsor) => ({
+    ...sponsor,
+    category: sponsor.category ?? 'FOOD',
+  }))
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
-      ? [
-          {
-            icon: FaLocationDot,
-            text: sponsorOfTheWeekEntry.location,
-          },
-        ]
-      : []
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
+    {
+      icon: FaLocationDot,
+      text: sponsorOfTheWeekEntry.location || 'Location to be confirmed',
+    },
+  ]
 
   const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
@@ -168,11 +94,15 @@ export default async function SponsorsPage() {
           title={sponsorOfTheWeekEntry.name}
           details={sponsorOfTheWeekDetails}
           badges={sponsorOfTheWeekBadges}
-          description={<p>{sponsorOfTheWeekEntry.description}</p>}
+          description={
+            <p>
+              {sponsorOfTheWeekEntry.description || 'More details coming soon.'}
+            </p>
+          }
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
+          imageSrc="/sponsors/sponsorcard.png"
+          imageAlt={`${sponsorOfTheWeekEntry.name} sponsor artwork`}
         />
 
         <section className="mt-12 md:mt-16 lg:mt-[89px]">
