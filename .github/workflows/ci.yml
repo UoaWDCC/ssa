@@ -8,8 +8,8 @@ on:
 jobs:
   validate:
     name: Validate branch name
-    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     steps:
       - name: Check branch name
         run: |
@@ -20,7 +20,7 @@ jobs:
             exit 1
           fi
 
-    web:
+  web:
     name: Web
     runs-on: ubuntu-latest
     steps:
