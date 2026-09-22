@@ -50,10 +50,9 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
 
           <div className="absolute inset-3 text-ssa-yellow-light sm:inset-6">
             <div className="absolute left-0 top-0 flex items-center gap-1">
-              <FaLocationDot
-                className="size-[11px] shrink-0 sm:size-[13px]"
-                aria-hidden="true"
-              />
+              <span className="size-[11px] shrink-0 sm:size-[13px]">
+                <FaLocationDot aria-hidden="true" />
+              </span>
               <span className="font-dm-mono text-[11px] font-normal uppercase leading-3 tracking-[0.04em] sm:text-[14px] sm:leading-4">
                 {location}
               </span>
@@ -61,10 +60,9 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
 
             <div className="absolute inset-x-0 bottom-0">
               <div className="flex items-center gap-1">
-                <FaClock
-                  className="size-[9px] shrink-0 sm:size-[11px]"
-                  aria-hidden="true"
-                />
+                <span className="size-[9px] shrink-0 sm:size-[11px]">
+                  <FaClock aria-hidden="true" />
+                </span>
                 <time
                   dateTime={date}
                   className="font-dm-mono text-[11px] font-normal uppercase leading-3 tracking-[0.04em] sm:text-[14px] sm:leading-4"
@@ -100,13 +98,17 @@ export default function PastEventCard({ event }: Readonly<PastEventCardProps>) {
           <span className="inline-flex h-12 w-[calc(100%_-_24px)] max-w-[178px] items-center justify-center rounded-full bg-ssa-red font-be-vietnam-pro text-base font-semibold text-ssa-white">
             <span className="relative inline-flex items-center pr-[1.8em]">
               <span className="absolute left-0 top-1/2 size-4 -translate-y-1/2 overflow-hidden">
-                <FaArrowRight className="size-4 -translate-x-full transition-transform duration-300 ease-out group-hover/card:translate-x-0 group-focus-visible/card:translate-x-0" />
+                <span className="size-4 -translate-x-full transition-transform duration-300 ease-out group-hover/card:translate-x-0 group-focus-visible/card:translate-x-0">
+                  <FaArrowRight />
+                </span>
               </span>
               <span className="transition-transform duration-300 ease-out group-hover/card:translate-x-[1.8em] group-focus-visible/card:translate-x-[1.8em]">
                 SEE PHOTOS
               </span>
               <span className="absolute right-0 top-1/2 size-4 -translate-y-1/2 overflow-hidden">
-                <FaArrowRight className="size-4 transition-transform duration-300 ease-out group-hover/card:translate-x-full group-focus-visible/card:translate-x-full" />
+                <span className="size-4 transition-transform duration-300 ease-out group-hover/card:translate-x-full group-focus-visible/card:translate-x-full">
+                  <FaArrowRight />
+                </span>
               </span>
             </span>
           </span>

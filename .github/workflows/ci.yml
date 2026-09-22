@@ -20,7 +20,7 @@ jobs:
             exit 1
           fi
 
-  web:
+    web:
     name: Web
     runs-on: ubuntu-latest
     steps:
@@ -39,6 +39,8 @@ jobs:
       - run: pnpm --filter web exec tsc --noEmit
       - run: pnpm --filter web test
       - run: pnpm --filter web build
+        env:
+          CMS_URL: ${{ secrets.CMS_URL }}
 
   cms:
     name: CMS

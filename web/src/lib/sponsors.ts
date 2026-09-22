@@ -21,7 +21,7 @@ export interface Sponsor {
 
 export async function fetchSponsors(): Promise<Sponsor[]> {
   if (CMS_URL === undefined) {
-    throw new Error('CMS_URL is not defined in the environment variables.')
+    return []
   }
 
   try {
@@ -36,9 +36,7 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
 
     const data = await res.json()
     return data.docs as Sponsor[]
-  } catch (error) {
-    throw new Error(
-      `Failed to fetch sponsors: ${error instanceof Error ? error.message : String(error)}`,
-    )
+  } catch {
+    return []
   }
 }

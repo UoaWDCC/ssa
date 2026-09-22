@@ -246,10 +246,9 @@ function SelectField({
             </option>
           ))}
         </select>
-        <FiChevronDown
-          aria-hidden="true"
-          className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[#716b63]"
-        />
+        <span className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[#716b63]">
+          <FiChevronDown aria-hidden="true" />
+        </span>
       </div>
       {error && (
         <p
@@ -591,7 +590,9 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
                 disabled={isSubmitting}
                 className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-ssa-form-border bg-transparent px-5 font-be-vietnam-pro text-sm font-semibold text-ssa-grey outline-none transition-colors duration-150 hover:bg-ssa-form-field focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <FiArrowLeft aria-hidden="true" className="size-4" />
+                <span className="size-4">
+                  <FiArrowLeft aria-hidden="true" />
+                </span>
                 Back
               </button>
             )}
@@ -607,9 +608,13 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
                   ? 'Go to Payment'
                   : 'Next'}
               {step === TOTAL_STEPS ? (
-                <FiCheck aria-hidden="true" className="size-4" />
+                <span className="size-4">
+                  <FiCheck aria-hidden="true" />
+                </span>
               ) : (
-                <FiArrowRight aria-hidden="true" className="size-4" />
+                <span className="size-4">
+                  <FiArrowRight aria-hidden="true" />
+                </span>
               )}
             </button>
           </div>
