@@ -8,8 +8,8 @@ on:
 jobs:
   validate:
     name: Validate branch name
-    runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     steps:
       - name: Check branch name
         run: |
@@ -39,6 +39,8 @@ jobs:
       - run: pnpm --filter web exec tsc --noEmit
       - run: pnpm --filter web test
       - run: pnpm --filter web build
+        env:
+          CMS_URL: ${{ secrets.CMS_URL }}
 
   cms:
     name: CMS
