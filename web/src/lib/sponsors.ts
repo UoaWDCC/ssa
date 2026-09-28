@@ -1,5 +1,3 @@
-'use server'
-
 import type { Media } from '@/types/payload-types'
 
 const CMS_URL = process.env.CMS_URL
