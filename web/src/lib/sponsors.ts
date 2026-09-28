@@ -1,6 +1,7 @@
 'use server'
 
 import type { Media } from '@/types/payload-types'
+
 const CMS_URL = process.env.CMS_URL
 
 export type SponsorCategory = 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
@@ -17,6 +18,14 @@ export interface Sponsor {
   memberPerks?: string | null
   updatedAt: string
   createdAt: string
+}
+
+export function getSponsorLogoUrl(logo: Sponsor['logo']): string {
+  if (typeof logo === 'number') {
+    return '/sponsors/sponsorcard.png'
+  }
+
+  return logo?.url || '/sponsors/sponsorcard.png'
 }
 
 export async function fetchSponsors(): Promise<Sponsor[]> {
@@ -37,8 +46,7 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
     const data = await res.json()
     return data.docs as Sponsor[]
   } catch (error) {
-    throw new Error(
-      `Failed to fetch sponsors: ${error instanceof Error ? error.message : String(error)}`,
-    )
+    console.error('Failed to fetch sponsors from CMS:', error)
+    return []
   }
 }

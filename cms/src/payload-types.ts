@@ -100,8 +100,12 @@ export interface Config {
     defaultIDType: number
   }
   fallbackLocale: null
-  globals: {}
-  globalsSelect: {}
+  globals: {
+    'site-settings': SiteSetting
+  }
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>
+  }
   locale: null
   widgets: {
     collections: CollectionsWidget
@@ -676,6 +680,60 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T
   updatedAt?: T
   createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number
+  homeJoinTitle?: string | null
+  homeJoinParagraphs?:
+    | {
+        content: string
+        id?: string | null
+      }[]
+    | null
+  aboutHeroTitle?: string | null
+  aboutHeroSubtitle?: string | null
+  aboutTeamTitle?: string | null
+  aboutTeamParagraphs?:
+    | {
+        content: string
+        id?: string | null
+      }[]
+    | null
+  eventsHeroTitle?: string | null
+  eventsHeroSubtitle?: string | null
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  homeJoinTitle?: T
+  homeJoinParagraphs?:
+    | T
+    | {
+        content?: T
+        id?: T
+      }
+  aboutHeroTitle?: T
+  aboutHeroSubtitle?: T
+  aboutTeamTitle?: T
+  aboutTeamParagraphs?:
+    | T
+    | {
+        content?: T
+        id?: T
+      }
+  eventsHeroTitle?: T
+  eventsHeroSubtitle?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

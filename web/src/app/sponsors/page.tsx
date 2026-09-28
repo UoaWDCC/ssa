@@ -10,12 +10,9 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
-import { fetchSponsors } from '@/lib/sponsors'
+import { fetchSponsors, getSponsorLogoUrl, type Sponsor } from '@/lib/sponsors'
 
-import SponsorsGrid, {
-  type Sponsor,
-  type SponsorGridItem,
-} from './components/SponsorsGrid'
+import SponsorsGrid, { type SponsorGridItem } from './components/SponsorsGrid'
 
 import type { Media } from '@/types/payload-types'
 
@@ -101,7 +98,7 @@ export default async function SponsorsPage() {
           }
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc="/sponsors/sponsorcard.png"
+          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
           imageAlt={`${sponsorOfTheWeekEntry.name} sponsor artwork`}
         />
 

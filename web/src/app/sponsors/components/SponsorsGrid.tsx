@@ -5,7 +5,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
 
-import type { Sponsor } from '@/lib/sponsors'
+import { getSponsorLogoUrl, type Sponsor } from '@/lib/sponsors'
 import SponsorLogoTile from './SponsorLogoTile'
 import SponsorPopup from './SponsorPopup'
 
@@ -34,14 +34,6 @@ const FILTER_OPTIONS: readonly SponsorFilter[] = ['ALL', ...SPONSOR_CATEGORIES]
 
 const INITIAL_VISIBLE_COUNT = 24
 const LOAD_MORE_COUNT = 24
-
-function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') {
-    return '/sponsors/sponsorcard.png'
-  }
-
-  return logo.url ?? '/sponsors/sponsorcard.png'
-}
 
 export default function SponsorsGrid({
   sponsors = [],

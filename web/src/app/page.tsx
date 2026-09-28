@@ -4,8 +4,13 @@ import HomeCarousel from '@/components/HomeCarousel'
 import InstagramFeed from '@/components/InstagramFeed'
 import JoinCard from '@/components/JoinCard'
 import UpcomingEventCard from '@/components/UpcomingEventCard'
+import { fetchSiteSettings } from '@/lib/siteSettings'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const siteSettings = await fetchSiteSettings()
+
   return (
     <main className="flex flex-col gap-10 overflow-x-hidden bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
@@ -20,7 +25,10 @@ export default function Home() {
       </section>
 
       <HomeCarousel />
-      <JoinCard />
+      <JoinCard
+        title={siteSettings.homeJoinTitle}
+        paragraphs={siteSettings.homeJoinParagraphs}
+      />
       <InstagramFeed />
       <Footer />
     </main>
