@@ -183,9 +183,6 @@ export async function POST(request: Request) {
   }
 
   const eventId = parseId(body.event)
-  const firstName = requiredText(body.firstName)
-  const lastName = requiredText(body.lastName)
-  const email = requiredText(body.email)?.toLowerCase() ?? null
   const phone = requiredText(body.phone)
   const emergencyContactName = requiredText(body.emergencyContactName)
   const emergencyContactPhone = requiredText(body.emergencyContactPhone)
@@ -196,9 +193,6 @@ export async function POST(request: Request) {
 
   if (
     !eventId ||
-    !firstName ||
-    !lastName ||
-    !email ||
     !phone ||
     !emergencyContactName ||
     !emergencyContactPhone ||
@@ -210,10 +204,6 @@ export async function POST(request: Request) {
     return Response.json({ error: 'All event registration fields are required' }, { status: 400 })
   }
 
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return Response.json({ error: 'A valid email address is required' }, { status: 400 })
-  }
-
   if (!isOneOf(gender, genderOptions)) {
     return Response.json({ error: 'Invalid gender' }, { status: 400 })
   }
@@ -223,6 +213,39 @@ export async function POST(request: Request) {
   }
 
   const payload = await getPayload({ config: configPromise })
+
+  const requestedUserId = parseId(body.userId)
+  if (!requestedUserId) {
+    return Response.json({ error: 'Sign in to register for events' }, { status: 401 })
+  }
+
+  let user
+  try {
+    user = await payload.findByID({
+      collection: 'users',
+      id: requestedUserId,
+      depth: 0,
+      overrideAccess: true,
+    })
+  } catch {
+    return Response.json({ error: 'Invalid user session' }, { status: 401 })
+  }
+
+  if (user.role !== 'member') {
+    return Response.json({ error: 'Only members can register for events' }, { status: 403 })
+  }
+
+  const [nameFirst, ...nameRest] = (user.name ?? '').trim().split(/\s+/)
+  const firstName = requiredText(user.firstName) ?? requiredText(nameFirst)
+  const lastName = requiredText(user.lastName) ?? requiredText(nameRest.join(' '))
+  const email = requiredText(user.email)?.toLowerCase() ?? null
+
+  if (!firstName || !lastName || !email) {
+    return Response.json(
+      { error: 'Add your first name and last name to your profile before registering' },
+      { status: 422 },
+    )
+  }
 
   let event
   try {
@@ -240,28 +263,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
-  const requestedUserId = body.userId === undefined ? null : parseId(body.userId)
-  if (body.userId !== undefined && !requestedUserId) {
-    return Response.json({ error: 'Invalid user session' }, { status: 401 })
-  }
-
-  let user = null
-  if (requestedUserId) {
-    try {
-      user = await payload.findByID({
-        collection: 'users',
-        id: requestedUserId,
-        depth: 0,
-        overrideAccess: true,
-      })
-    } catch {
-      return Response.json({ error: 'Invalid user session' }, { status: 401 })
-    }
-  }
-
-  const isMember =
-    user?.role === 'member' &&
-    hasCurrentMembership(user.membershipStatus, user.membershipExpiryDate)
+  const isMember = hasCurrentMembership(user.membershipStatus, user.membershipExpiryDate)
   const amount = isMember ? event.memberPrice : event.nonMemberPrice
 
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) {
@@ -280,7 +282,7 @@ export async function POST(request: Request) {
       overrideAccess: true,
       data: {
         event: eventId,
-        ...(user ? { user: user.id } : {}),
+        user: user.id,
         firstName,
         lastName,
         email,
@@ -316,7 +318,7 @@ export async function POST(request: Request) {
       {
         mode: 'payment',
         client_reference_id: String(registration.id),
-        ...(user?.stripeCustomerId
+        ...(user.stripeCustomerId
           ? { customer: user.stripeCustomerId }
           : { customer_email: email }),
         line_items: [
