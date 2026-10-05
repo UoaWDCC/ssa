@@ -13,7 +13,7 @@ const GENDER_MAP: Record<string, string> = {
 export default async function RsvpPage() {
   const session = await getSession()
 
-  if (!session?.userId || session.role !== 'member') {
+  if (!session?.userId) {
     redirect('/sign-in?next=%2Fevents%2Frsvp')
   }
 

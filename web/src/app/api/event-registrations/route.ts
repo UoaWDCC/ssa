@@ -14,9 +14,9 @@ export async function POST(request: Request) {
   }
 
   const session = await getSession()
-  if (!session?.userId || session.role !== 'member') {
+  if (!session?.userId) {
     return Response.json(
-      { error: 'Sign in as a member to register for events' },
+      { error: 'Sign in to register for events' },
       { status: 401 },
     )
   }

@@ -231,10 +231,6 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid user session' }, { status: 401 })
   }
 
-  if (user.role !== 'member') {
-    return Response.json({ error: 'Only members can register for events' }, { status: 403 })
-  }
-
   const [nameFirst, ...nameRest] = (user.name ?? '').trim().split(/\s+/)
   const firstName = requiredText(user.firstName) ?? requiredText(nameFirst)
   const lastName = requiredText(user.lastName) ?? requiredText(nameRest.join(' '))
