@@ -6,12 +6,27 @@ import { FcGoogle } from 'react-icons/fc'
 import CardSection from '@/components/CardSection'
 import InputField from '@/components/InputField'
 
+// Only allow same-site relative paths, so ?next= can't be used as an open redirect.
+function safeRedirect(next?: string) {
+  if (!next) return '/'
+  if (
+    !next.startsWith('/') ||
+    next.startsWith('//') ||
+    next.startsWith('/\\')
+  ) {
+    return '/'
+  }
+  return next
+}
+
 export default function SignInForm({
   isNewAccount,
   googleError,
+  next,
 }: Readonly<{
   isNewAccount: boolean
   googleError?: string
+  next?: string
 }>) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -36,7 +51,7 @@ export default function SignInForm({
         return
       }
 
-      globalThis.location.href = '/'
+      globalThis.location.href = safeRedirect(next)
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {

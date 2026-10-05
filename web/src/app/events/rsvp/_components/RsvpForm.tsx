@@ -16,14 +16,19 @@ import {
 
 import ProgressBar from '@/components/ProgressBar'
 
-const TOTAL_STEPS = 3
+const TOTAL_STEPS = 2
 
-type Step = 1 | 2 | 3
+type Step = 1 | 2
+
+export type Member = {
+  name: string
+  email: string
+  phone: string
+  gender: string
+  universityYear: string
+}
 
 type FormValues = {
-  firstName: string
-  lastName: string
-  email: string
   phone: string
   emergencyName: string
   emergencyPhone: string
@@ -37,9 +42,6 @@ type FieldName = keyof FormValues
 type FieldErrors = Partial<Record<FieldName, string>>
 
 const initialValues: FormValues = {
-  firstName: '',
-  lastName: '',
-  email: '',
   phone: '',
   emergencyName: '',
   emergencyPhone: '',
@@ -50,21 +52,16 @@ const initialValues: FormValues = {
 }
 
 const stepDetails: Record<Step, { label: string }> = {
-  1: { label: 'Contact information' },
-  2: { label: 'Emergency contact information' },
-  3: { label: 'Attendee details' },
+  1: { label: 'Contact & emergency information' },
+  2: { label: 'Attendee details' },
 }
 
 const stepFields: Record<Step, FieldName[]> = {
-  1: ['firstName', 'lastName', 'email', 'phone'],
-  2: ['emergencyName', 'emergencyPhone', 'relationship'],
-  3: ['gender', 'dietaryRequirements', 'universityYear'],
+  1: ['phone', 'emergencyName', 'emergencyPhone', 'relationship'],
+  2: ['gender', 'dietaryRequirements', 'universityYear'],
 }
 
 const fieldLabels: Record<FieldName, string> = {
-  firstName: 'first name',
-  lastName: 'last name',
-  email: 'email address',
   phone: 'phone number',
   emergencyName: 'emergency contact name',
   emergencyPhone: 'emergency contact phone number',
@@ -82,10 +79,6 @@ function validateField(name: FieldName, rawValue: string) {
   const value = rawValue.trim()
 
   if (!value) return `Please enter your ${fieldLabels[name]}.`
-
-  if (name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-    return 'Enter an email address in the format name@example.com.'
-  }
 
   if (
     (name === 'phone' || name === 'emergencyPhone') &&
@@ -264,9 +257,17 @@ function SelectField({
   )
 }
 
-export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
+export default function RsvpForm({
+  eventId,
+  member,
+}: Readonly<{ eventId?: number; member: Member }>) {
   const [step, setStep] = useState<Step>(1)
-  const [values, setValues] = useState<FormValues>(initialValues)
+  const [values, setValues] = useState<FormValues>({
+    ...initialValues,
+    phone: member.phone,
+    gender: member.gender,
+    universityYear: member.universityYear,
+  })
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -348,9 +349,6 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           event: eventId,
-          firstName: normalizedValues.firstName,
-          lastName: normalizedValues.lastName,
-          email: normalizedValues.email,
           phone: normalizedValues.phone,
           emergencyContactName: normalizedValues.emergencyName,
           emergencyContactPhone: normalizedValues.emergencyPhone,
@@ -401,7 +399,9 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
         >
           {currentStep.label}
         </h2>
-        <p className="shrink-0">Step {step}/3</p>
+        <p className="shrink-0">
+          Step {step}/{TOTAL_STEPS}
+        </p>
       </div>
 
       <p className="sr-only" aria-live="polite">
@@ -422,64 +422,29 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
           <legend className="sr-only">{currentStep.label}</legend>
 
           {step === 1 && (
-            <div className="grid gap-5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-6">
-              <Field
-                name="firstName"
-                label="First Name"
-                placeholder="First name"
-                value={values.firstName}
-                error={errors.firstName}
-                autoComplete="given-name"
-                maxLength={60}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Field
-                name="lastName"
-                label="Last Name"
-                placeholder="Last name"
-                value={values.lastName}
-                error={errors.lastName}
-                autoComplete="family-name"
-                maxLength={60}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <div className="sm:col-span-2">
-                <Field
-                  name="email"
-                  label="Email Address"
-                  placeholder="name@example.com"
-                  value={values.email}
-                  error={errors.email}
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  maxLength={254}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <Field
-                  name="phone"
-                  label="Phone Number"
-                  placeholder="+64 21 000 0000"
-                  value={values.phone}
-                  error={errors.phone}
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  maxLength={32}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
             <div className="grid gap-5 sm:gap-6">
+              <p className="rounded-xl border border-ssa-form-border bg-ssa-form-field px-4 py-3 font-inter text-sm leading-5 text-ssa-grey">
+                Registering as{' '}
+                <span className="font-semibold">
+                  {member.name || member.email}
+                </span>
+                {member.name && (
+                  <span className="text-[#6f6961]"> ({member.email})</span>
+                )}
+              </p>
+              <Field
+                name="phone"
+                label="Phone Number"
+                placeholder="+64 21 000 0000"
+                value={values.phone}
+                error={errors.phone}
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                maxLength={32}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
               <Field
                 name="emergencyName"
                 label="Emergency Contact Name"
@@ -493,7 +458,7 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
               />
               <Field
                 name="emergencyPhone"
-                label="Phone Number"
+                label="Emergency Contact Phone"
                 placeholder="+64 21 000 0000"
                 value={values.emergencyPhone}
                 error={errors.emergencyPhone}
@@ -518,7 +483,7 @@ export default function RsvpForm({ eventId }: Readonly<{ eventId?: number }>) {
             </div>
           )}
 
-          {step === 3 && (
+          {step === 2 && (
             <div className="grid gap-5 sm:gap-6">
               <SelectField
                 name="gender"
