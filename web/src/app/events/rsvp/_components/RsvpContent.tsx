@@ -1,6 +1,6 @@
 'use client'
 
-import RsvpForm, { type Member } from './RsvpForm' // CHANGED: imports the Member type
+import RsvpForm, { type Member } from './RsvpForm'
 import { UpcomingEventResponse } from '@/types/events'
 import { useQuery } from '@tanstack/react-query'
 import { eventDateTime, formatEventDate } from '@/lib/eventDate'
@@ -15,7 +15,6 @@ async function fetchUpcomingEvent() {
   return response.json() as Promise<UpcomingEventResponse>
 }
 
-// CHANGED: renamed from RsvpPage, and it takes a `member` prop
 export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
   const { data } = useQuery({
     queryKey: ['upcoming-event'],
@@ -77,19 +76,10 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
                 <dt className="font-dm-mono text-xs font-medium uppercase tracking-[0.06em] text-ssa-form-accent">
                   Price
                 </dt>
-                <dd className="mt-1 grid max-w-[14rem] grid-cols-[1fr_auto] gap-x-6 text-base leading-6">
-                  <span>Member</span>
-                  <span>
-                    {data?.event?.memberPrice == null
-                      ? '—'
-                      : `$${data.event.memberPrice}`}
-                  </span>
-                  <span>Non-member</span>
-                  <span>
-                    {data?.event?.nonMemberPrice == null
-                      ? '—'
-                      : `$${data.event.nonMemberPrice}`}
-                  </span>
+                <dd className="mt-1 text-base leading-6">
+                  {data?.event?.memberPrice == null
+                    ? '—'
+                    : `$${data.event.memberPrice}`}
                 </dd>
               </div>
             </dl>
@@ -97,7 +87,6 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
 
           <div aria-hidden="true" className="hidden bg-[#e9e1d5] lg:block" />
 
-          {/* CHANGED: passes member through to the form */}
           <RsvpForm eventId={data?.event?.id} member={member} />
         </div>
       </div>

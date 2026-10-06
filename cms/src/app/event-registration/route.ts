@@ -66,17 +66,6 @@ function parseId(value: unknown) {
   return Number.isInteger(id) && id > 0 ? id : null
 }
 
-function hasCurrentMembership(
-  membershipStatus?: 'active' | 'expired' | 'pending' | null,
-  membershipExpiryDate?: string | null,
-) {
-  if (membershipStatus !== 'active') return false
-  if (!membershipExpiryDate) return true
-
-  const expiry = Date.parse(membershipExpiryDate)
-  return !Number.isNaN(expiry) && expiry >= Date.now()
-}
-
 function isSuccessfulPayment(session: Stripe.Checkout.Session) {
   return session.payment_status === 'paid' || session.payment_status === 'no_payment_required'
 }
@@ -257,8 +246,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
-  const isMember = hasCurrentMembership(user.membershipStatus, user.membershipExpiryDate)
-  const amount = isMember ? event.memberPrice : event.nonMemberPrice
+  const amount = event.memberPrice
 
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) {
     return Response.json({ error: 'The event price is not configured' }, { status: 422 })
@@ -286,7 +274,7 @@ export async function POST(request: Request) {
         gender,
         dietaryRequirements,
         universityYear,
-        priceType: isMember ? 'member' : 'non-member',
+        priceType: 'member',
         amount,
         currency: 'nzd',
         status: 'pending',
@@ -322,7 +310,7 @@ export async function POST(request: Request) {
               unit_amount: amountInCents,
               product_data: {
                 name: event.title,
-                description: `${isMember ? 'Member' : 'Non-member'} event registration`,
+                description: 'Event registration',
               },
             },
           },

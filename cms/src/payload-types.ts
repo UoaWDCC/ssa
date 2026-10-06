@@ -226,10 +226,6 @@ export interface Event {
    * Price in NZD
    */
   memberPrice?: number | null
-  /**
-   * Price in NZD
-   */
-  nonMemberPrice?: number | null
   description?: string | null
   coverImage?: (number | null) | Media
   category?: ('games' | 'community' | 'food' | 'agm' | 'all') | null
@@ -525,7 +521,6 @@ export interface EventsSelect<T extends boolean = true> {
   time?: T
   location?: T
   memberPrice?: T
-  nonMemberPrice?: T
   description?: T
   coverImage?: T
   category?: T
