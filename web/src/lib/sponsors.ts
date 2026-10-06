@@ -12,6 +12,7 @@ export interface Sponsor {
   description?: string | null
   location?: string | null
   memberPerks?: string | null
+  category: 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
   updatedAt: string
   createdAt: string
 }
@@ -22,7 +23,7 @@ export async function fetchSponsors(): Promise<Sponsor[]> {
   }
 
   try {
-    const res = await fetch(`${CMS_URL}/api/sponsors?depth=2`, {
+    const res = await fetch(`${CMS_URL}/api/sponsors?depth=2&limit=100`, {
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 },
     })
