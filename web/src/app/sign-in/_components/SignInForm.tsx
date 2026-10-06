@@ -4,54 +4,12 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { FcGoogle } from 'react-icons/fc'
 import Button from '@/components/Button'
+import InputField from '@/components/InputField'
 
 type SignInFormProps = Readonly<{
   isNewAccount: boolean
   googleError?: string
 }>
-
-type FieldProps = Readonly<{
-  label: string
-  name: 'email' | 'password'
-  type: 'email' | 'password'
-  autoComplete: 'email' | 'current-password'
-  placeholder: string
-  value: string
-  onChange: (value: string) => void
-}>
-
-function SignInField({
-  label,
-  name,
-  type,
-  autoComplete,
-  placeholder,
-  value,
-  onChange,
-}: FieldProps) {
-  return (
-    <div className="flex flex-col gap-2">
-      <label
-        htmlFor={name}
-        className="font-inter text-base font-normal leading-6 text-ssa-grey"
-      >
-        {label}
-        <span className="text-ssa-red">*</span>
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        autoComplete={autoComplete}
-        placeholder={placeholder}
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        required
-        className="h-11 w-full rounded-full border-[0.8px] border-ssa-grey/30 bg-ssa-background px-5 font-inter text-base font-normal text-ssa-grey outline-none transition-colors placeholder:text-ssa-muted-grey/50 focus:border-ssa-red focus:ring-1 focus:ring-ssa-red"
-      />
-    </div>
-  )
-}
 
 export default function SignInForm({
   isNewAccount,
@@ -89,7 +47,7 @@ export default function SignInForm({
   }
 
   return (
-    <section className="flex w-full max-w-[756px] flex-col rounded-2xl bg-ssa-yellow-light px-6 py-8 shadow-md sm:px-9 lg:h-[537px]">
+    <section className="flex w-full max-w-[756px] flex-col rounded-2xl bg-ssa-yellow-light px-6 py-8 shadow-md sm:px-9 lg:min-h-[537px]">
       <h1 className="font-be-vietnam-pro text-2xl font-bold leading-7 tracking-[-1px] text-ssa-muted-taupe">
         Sign In
       </h1>
@@ -126,39 +84,37 @@ export default function SignInForm({
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
-        <SignInField
+        <InputField
           label="Email Address"
+          required
           name="email"
           type="email"
           autoComplete="email"
           placeholder="hello@gmail.com"
           value={email}
           onChange={setEmail}
+          variant="sign-in"
         />
-        <SignInField
+        <InputField
           label="Password"
+          required
           name="password"
           type="password"
           autoComplete="current-password"
           placeholder="Enter Password"
           value={password}
           onChange={setPassword}
+          error={error || undefined}
+          variant="sign-in"
         />
-
-        {error && (
-          <p role="alert" className="font-inter text-sm text-red-600">
-            {error}
-          </p>
-        )}
 
         <Button
           type="submit"
           disabled={loading}
           size="long"
           variant="filled"
-          color="red"
+          color="pink"
           arrow={false}
-          className="h-11 !bg-ssa-salmon !py-0 hover:!bg-ssa-red hover:!text-ssa-white"
         >
           {loading ? 'Signing in…' : 'SIGN IN'}
         </Button>
