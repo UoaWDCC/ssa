@@ -41,7 +41,7 @@ COPY web/ ./web/
 WORKDIR /app/web
 ENV NEXT_TELEMETRY_DISABLED=1
 # Inlined into the browser bundle at build time, so it cannot be a runtime var.
-ARG NEXT_PUBLIC_CMS_URL=https://ssa-prod.fly.dev
+ARG NEXT_PUBLIC_CMS_URL=https://ssa.wdcc.co.nz
 ENV NEXT_PUBLIC_CMS_URL=$NEXT_PUBLIC_CMS_URL
 RUN pnpm build
 
