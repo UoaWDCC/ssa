@@ -183,7 +183,6 @@ export async function POST(request: Request) {
   }
 
   const eventId = parseId(body.event)
-  const phone = requiredText(body.phone)
   const emergencyContactName = requiredText(body.emergencyContactName)
   const emergencyContactPhone = requiredText(body.emergencyContactPhone)
   const emergencyContactRelationship = requiredText(body.emergencyContactRelationship)
@@ -193,7 +192,6 @@ export async function POST(request: Request) {
 
   if (
     !eventId ||
-    !phone ||
     !emergencyContactName ||
     !emergencyContactPhone ||
     !emergencyContactRelationship ||
@@ -282,7 +280,6 @@ export async function POST(request: Request) {
         firstName,
         lastName,
         email,
-        phone,
         emergencyContactName,
         emergencyContactPhone,
         emergencyContactRelationship,

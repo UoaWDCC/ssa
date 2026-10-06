@@ -257,7 +257,7 @@ export interface EventRegistration {
   firstName: string
   lastName: string
   email: string
-  phone: string
+  phone?: string | null
   emergencyContactName: string
   emergencyContactPhone: string
   emergencyContactRelationship: string

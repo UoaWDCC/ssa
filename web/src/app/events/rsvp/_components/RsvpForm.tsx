@@ -23,13 +23,11 @@ type Step = 1 | 2
 export type Member = {
   name: string
   email: string
-  phone: string
   gender: string
   universityYear: string
 }
 
 type FormValues = {
-  phone: string
   emergencyName: string
   emergencyPhone: string
   relationship: string
@@ -42,7 +40,6 @@ type FieldName = keyof FormValues
 type FieldErrors = Partial<Record<FieldName, string>>
 
 const initialValues: FormValues = {
-  phone: '',
   emergencyName: '',
   emergencyPhone: '',
   relationship: '',
@@ -52,17 +49,16 @@ const initialValues: FormValues = {
 }
 
 const stepDetails: Record<Step, { label: string }> = {
-  1: { label: 'Contact & emergency information' },
+  1: { label: 'Emergency contact information' },
   2: { label: 'Attendee details' },
 }
 
 const stepFields: Record<Step, FieldName[]> = {
-  1: ['phone', 'emergencyName', 'emergencyPhone', 'relationship'],
+  1: ['emergencyName', 'emergencyPhone', 'relationship'],
   2: ['gender', 'dietaryRequirements', 'universityYear'],
 }
 
 const fieldLabels: Record<FieldName, string> = {
-  phone: 'phone number',
   emergencyName: 'emergency contact name',
   emergencyPhone: 'emergency contact phone number',
   relationship: 'relationship',
@@ -80,17 +76,11 @@ function validateField(name: FieldName, rawValue: string) {
 
   if (!value) return `Please enter your ${fieldLabels[name]}.`
 
-  if (
-    (name === 'phone' || name === 'emergencyPhone') &&
-    !/^\+?[\d\s().-]+$/.test(value)
-  ) {
+  if (name === 'emergencyPhone' && !/^\+?[\d\s().-]+$/.test(value)) {
     return 'Use only numbers, spaces, brackets, a leading +, or hyphens.'
   }
 
-  if (
-    (name === 'phone' || name === 'emergencyPhone') &&
-    value.replace(/\D/g, '').length < 7
-  ) {
+  if (name === 'emergencyPhone' && value.replace(/\D/g, '').length < 7) {
     return 'Enter a phone number with at least 7 digits.'
   }
 
@@ -264,7 +254,6 @@ export default function RsvpForm({
   const [step, setStep] = useState<Step>(1)
   const [values, setValues] = useState<FormValues>({
     ...initialValues,
-    phone: member.phone,
     gender: member.gender,
     universityYear: member.universityYear,
   })
@@ -349,7 +338,6 @@ export default function RsvpForm({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           event: eventId,
-          phone: normalizedValues.phone,
           emergencyContactName: normalizedValues.emergencyName,
           emergencyContactPhone: normalizedValues.emergencyPhone,
           emergencyContactRelationship: normalizedValues.relationship,
@@ -432,19 +420,6 @@ export default function RsvpForm({
                   <span className="text-[#6f6961]"> ({member.email})</span>
                 )}
               </p>
-              <Field
-                name="phone"
-                label="Phone Number"
-                placeholder="+64 21 000 0000"
-                value={values.phone}
-                error={errors.phone}
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                maxLength={32}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
               <Field
                 name="emergencyName"
                 label="Emergency Contact Name"

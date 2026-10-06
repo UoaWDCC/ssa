@@ -60,7 +60,6 @@ export const EventRegistrations: CollectionConfig = {
     {
       name: 'phone',
       type: 'text',
-      required: true,
     },
     {
       name: 'emergencyContactName',

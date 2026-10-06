@@ -22,7 +22,6 @@ export default async function RsvpPage() {
       member={{
         name: [session.firstName, session.lastName].filter(Boolean).join(' '),
         email: session.email,
-        phone: session.phone ?? '',
         gender: GENDER_MAP[session.gender ?? ''] ?? '',
         universityYear:
           session.yearOfUniversity === 'postgrad'
