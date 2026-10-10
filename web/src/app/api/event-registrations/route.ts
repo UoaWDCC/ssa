@@ -13,6 +13,14 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Server misconfigured' }, { status: 500 })
   }
 
+  const session = await getSession()
+  if (!session?.userId) {
+    return Response.json(
+      { error: 'Sign in to register for events' },
+      { status: 401 },
+    )
+  }
+
   let body: unknown
   try {
     body = await request.json()
@@ -24,16 +32,20 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  const session = await getSession()
-
   let cmsResponse: Response
   try {
     cmsResponse = await fetch(`${cmsUrl}/event-registration`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ...body,
-        userId: session?.userId,
+        event: body.event,
+        emergencyContactName: body.emergencyContactName,
+        emergencyContactPhone: body.emergencyContactPhone,
+        emergencyContactRelationship: body.emergencyContactRelationship,
+        gender: body.gender,
+        dietaryRequirements: body.dietaryRequirements,
+        universityYear: body.universityYear,
+        userId: session.userId,
         secret: internalSecret,
       }),
     })
