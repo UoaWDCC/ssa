@@ -281,6 +281,7 @@ export interface Sponsor {
   id: number
   name: string
   logo: number | Media
+  category: 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
   websiteUrl?: string | null
   isSponsorOfTheWeek?: boolean | null
   description?: string | null
@@ -568,6 +569,7 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
 export interface SponsorsSelect<T extends boolean = true> {
   name?: T
   logo?: T
+  category?: T
   websiteUrl?: T
   isSponsorOfTheWeek?: T
   description?: T
