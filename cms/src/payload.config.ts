@@ -14,6 +14,7 @@ import { Sponsors } from './collections/Sponsors'
 import { Execs } from './collections/Execs'
 import { Members } from './collections/Members'
 import { EventRegistrations } from './collections/EventRegistrations'
+import { SiteSettings } from './globals/SiteSettings'
 import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
@@ -27,6 +28,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Media, Events, EventRegistrations, Sponsors, Execs, Members],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

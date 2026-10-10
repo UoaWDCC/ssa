@@ -1,4 +1,3 @@
-'use client'
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
@@ -9,50 +8,70 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import { fetchSponsors, getSponsorLogoUrl, type Sponsor } from '@/lib/sponsors'
+import type { Media } from '@/types/payload-types'
 
 import SponsorsGrid from './components/SponsorsGrid'
-import { type Sponsor } from '@/lib/sponsors'
 
-import useSponsors from '@/hooks/useSponsors'
+export const dynamic = 'force-dynamic'
 
-function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') {
-    return '/sponsors/sponsorcard.png'
-  }
+type SponsorMediaSeedInput = Pick<
+  Media,
+  'id' | 'alt' | 'url' | 'width' | 'height'
+>
 
-  return logo.url ?? '/sponsors/sponsorcard.png'
+function createSponsorMedia({
+  id,
+  alt,
+  url,
+  width,
+  height,
+}: SponsorMediaSeedInput): Media {
+  return { id, alt, url, width, height }
 }
 
-function getSponsorLogoAlt(sponsor: Sponsor) {
-  if (typeof sponsor.logo === 'number') {
-    return `${sponsor.name} logo`
-  }
-
-  return sponsor.logo.alt
+function getSponsorLogoAlt(sponsor: Sponsor): string {
+  return typeof sponsor.logo === 'number'
+    ? `${sponsor.name} logo`
+    : sponsor.logo.alt || `${sponsor.name} logo`
 }
 
-export default function SponsorsPage() {
-  const { sponsors } = useSponsors()
+const fallbackSponsorOfTheWeek: Sponsor = {
+  id: 1,
+  name: 'SIP N CHILL',
+  logo: createSponsorMedia({
+    id: 101,
+    alt: 'Sip n Chill sponsor photo',
+    url: '/sponsors/sponsorcard.png',
+    width: 400,
+    height: 400,
+  }),
+  websiteUrl:
+    'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
+  isSponsorOfTheWeek: true,
+  description:
+    'Sip n Chill offers icy desserts, refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
+  location: 'Newmarket 432 Khyber Pass Road',
+  memberPerks: '10% OFF FOR SSA MEMBERS',
+  updatedAt: '2026-05-18T00:00:00.000Z',
+  createdAt: '2026-05-18T00:00:00.000Z',
+}
 
-  console.log('Sponsors', sponsors)
-
-  const sponsorOfTheWeekEntry = sponsors.find(
-    (sponsor) => sponsor.isSponsorOfTheWeek === true,
-  )
-
-  console.log('Sponsor of the week', sponsorOfTheWeekEntry)
+export default async function SponsorsPage() {
+  const cmsSponsors = await fetchSponsors()
+  const sponsorOfTheWeekEntry =
+    cmsSponsors.find((sponsor) => sponsor.isSponsorOfTheWeek === true) ??
+    fallbackSponsorOfTheWeek
+  const sponsors = cmsSponsors.map((sponsor) => ({
+    ...sponsor,
+    category: sponsor.category ?? 'FOOD',
+  }))
 
   const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry?.location
-      ? [
-          {
-            icon: FaLocationDot,
-            text: sponsorOfTheWeekEntry.location,
-          },
-        ]
+    sponsorOfTheWeekEntry.location
+      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
       : []
-
-  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry?.memberPerks
+  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
     : []
 
@@ -63,19 +82,21 @@ export default function SponsorsPage() {
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
       />
       <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
-        {sponsorOfTheWeekEntry && (
-          <HighlightCard
-            eyebrow="Sponsor of the Week"
-            title={sponsorOfTheWeekEntry.name}
-            details={sponsorOfTheWeekDetails}
-            badges={sponsorOfTheWeekBadges}
-            description={<p>{sponsorOfTheWeekEntry.description}</p>}
-            ctaLabel="CHECK US OUT!"
-            ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-            imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-            imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
-          />
-        )}
+        <HighlightCard
+          eyebrow="Sponsor of the Week"
+          title={sponsorOfTheWeekEntry.name}
+          details={sponsorOfTheWeekDetails}
+          badges={sponsorOfTheWeekBadges}
+          description={
+            <p>
+              {sponsorOfTheWeekEntry.description || 'More details coming soon.'}
+            </p>
+          }
+          ctaLabel="CHECK US OUT!"
+          ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
+          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
+          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
+        />
 
         <section className="mt-12 md:mt-16 lg:mt-22.5">
           <div className="mx-auto mb-4 w-full max-w-311">
