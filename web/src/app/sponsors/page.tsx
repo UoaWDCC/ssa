@@ -1,8 +1,6 @@
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
-export const dynamic = 'force-dynamic'
-
 import Button from '@/components/Button'
 import Footer from '@/components/Footer'
 import HeroSplit from '@/components/HeroSplit'
@@ -11,10 +9,11 @@ import {
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
 import { fetchSponsors, getSponsorLogoUrl, type Sponsor } from '@/lib/sponsors'
-
-import SponsorsGrid, { type SponsorGridItem } from './components/SponsorsGrid'
-
 import type { Media } from '@/types/payload-types'
+
+import SponsorsGrid from './components/SponsorsGrid'
+
+export const dynamic = 'force-dynamic'
 
 type SponsorMediaSeedInput = Pick<
   Media,
@@ -28,13 +27,13 @@ function createSponsorMedia({
   width,
   height,
 }: SponsorMediaSeedInput): Media {
-  return {
-    id,
-    alt,
-    url,
-    width,
-    height,
-  }
+  return { id, alt, url, width, height }
+}
+
+function getSponsorLogoAlt(sponsor: Sponsor): string {
+  return typeof sponsor.logo === 'number'
+    ? `${sponsor.name} logo`
+    : sponsor.logo.alt || `${sponsor.name} logo`
 }
 
 const fallbackSponsorOfTheWeek: Sponsor = {
@@ -63,18 +62,15 @@ export default async function SponsorsPage() {
   const sponsorOfTheWeekEntry =
     cmsSponsors.find((sponsor) => sponsor.isSponsorOfTheWeek === true) ??
     fallbackSponsorOfTheWeek
-  const sponsors: SponsorGridItem[] = cmsSponsors.map((sponsor) => ({
+  const sponsors = cmsSponsors.map((sponsor) => ({
     ...sponsor,
     category: sponsor.category ?? 'FOOD',
   }))
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
-    {
-      icon: FaLocationDot,
-      text: sponsorOfTheWeekEntry.location || 'Location to be confirmed',
-    },
-  ]
-
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
+    sponsorOfTheWeekEntry.location
+      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
+      : []
   const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
     ? [sponsorOfTheWeekEntry.memberPerks]
     : []
@@ -99,11 +95,11 @@ export default async function SponsorsPage() {
           ctaLabel="CHECK US OUT!"
           ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
           imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={`${sponsorOfTheWeekEntry.name} sponsor artwork`}
+          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
         />
 
-        <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-4 w-full max-w-[1244px]">
+        <section className="mt-12 md:mt-16 lg:mt-22.5">
+          <div className="mx-auto mb-4 w-full max-w-311">
             <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
               Sponsors
             </h2>
@@ -111,16 +107,16 @@ export default async function SponsorsPage() {
 
           <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-32 flex w-full max-w-[756px] flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-[184px] lg:block lg:h-[215px]">
+          <section className="relative mx-auto mt-32 flex w-full max-w-189 flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-46 lg:block lg:h-53.75">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="pointer-events-none h-auto w-[210px] select-none lg:absolute lg:bottom-[-120px] lg:left-[-45px] lg:z-0 lg:w-[300px] lg:max-w-none"
+              className="pointer-events-none h-auto w-52.5 select-none lg:absolute lg:-bottom-30 lg:-left-11.25 lg:z-0 lg:w-75 lg:max-w-none"
             />
 
-            <div className="relative z-10 flex w-full max-w-[260px] flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
+            <div className="relative z-10 flex w-full max-w-65 flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
               <p className="w-full text-center font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
                 Keen to support SSA?
               </p>

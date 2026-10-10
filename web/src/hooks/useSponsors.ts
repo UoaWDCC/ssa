@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchSponsors, Sponsor } from '@/lib/sponsors'
 
-export function useSponsors() {
+export default function useSponsors() {
   const { data, status } = useQuery<Sponsor[], Error>({
     queryKey: ['sponsors'],
     queryFn: fetchSponsors,
