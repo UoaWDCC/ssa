@@ -24,17 +24,11 @@ const POLAROID_SIZES = '(min-width: 500px) 410px, calc(100vw - 90px)'
  * Below `lg` the two panels stack, since Figma has no mobile frame for this.
  */
 type JoinCardProps = {
-  title?: string
-  paragraphs?: string[]
+  title: string
+  paragraphs: string[]
 }
 
-export default function JoinCard({
-  title = 'Join SSA',
-  paragraphs = [
-    "The Singapore Students' Association (SSA) is run by a committee of students from The University of Auckland and Auckland University of Technology. We're a home away from home for anyone looking to be part of a friendly and welcoming community.",
-    "Through social events, good food, and a shared love for Singaporean culture, we bring people together, whether you're from Singapore or simply keen to meet new people and get involved.",
-  ],
-}: JoinCardProps) {
+export default function JoinCard({ title, paragraphs }: JoinCardProps) {
   return (
     <div className="px-[21px] md:px-10 lg:px-16">
       <section className="mx-auto grid w-full max-w-[1250px] overflow-hidden rounded-xl shadow-[0px_2px_2.67px_0.67px_rgba(84,84,84,0.25)] drop-shadow-[0px_0px_2.67px_rgba(140,136,128,0.3)] lg:grid-cols-2">
@@ -44,8 +38,8 @@ export default function JoinCard({
               {title}
             </h2>
             <div className="flex flex-col gap-6 font-inter text-base leading-6 tracking-[-0.4px] text-ssa-yellow-light">
-              {paragraphs.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+              {paragraphs.map((paragraph, paragraphIndex) => (
+                <p key={paragraphIndex}>{paragraph}</p>
               ))}
             </div>
           </div>

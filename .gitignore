@@ -47,6 +47,9 @@ web_modules/
 # TypeScript cache
 *.tsbuildinfo
 
+# Local scratch files
+/.tmp/
+
 # Optional npm cache directory
 .npm
 

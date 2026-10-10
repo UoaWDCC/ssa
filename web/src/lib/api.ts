@@ -1,7 +1,11 @@
 const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'
 
-export async function fetchFromCMS<T>(path: string): Promise<T> {
+export async function fetchFromCMS<T>(
+  path: string,
+  options: RequestInit = {},
+): Promise<T> {
   const res = await fetch(`${CMS_URL}/api${path}`, {
+    ...options,
     headers: { 'Content-Type': 'application/json' },
   })
 

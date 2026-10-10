@@ -1,6 +1,5 @@
 import type { Media } from '@/types/payload-types'
-
-const CMS_URL = process.env.CMS_URL
+import { fetchFromCMS } from './api.ts'
 
 export type SponsorCategory = 'FOOD' | 'RETAIL' | 'SERVICES' | 'ENTERTAINMENT'
 
@@ -27,22 +26,12 @@ export function getSponsorLogoUrl(logo: Sponsor['logo']): string {
 }
 
 export async function fetchSponsors(): Promise<Sponsor[]> {
-  if (CMS_URL === undefined) {
-    return []
-  }
-
   try {
-    const res = await fetch(`${CMS_URL}/api/sponsors?depth=2&limit=100`, {
-      headers: { 'Content-Type': 'application/json' },
-      cache: 'no-store',
-    })
-
-    if (!res.ok) {
-      throw new Error(`CMS request failed: ${res.status} ${res.statusText}`)
-    }
-
-    const data = await res.json()
-    return data.docs as Sponsor[]
+    const data = await fetchFromCMS<{ docs: Sponsor[] }>(
+      '/sponsors?depth=2&limit=100',
+      { cache: 'no-store' },
+    )
+    return data.docs
   } catch (error) {
     console.error('Failed to fetch sponsors from CMS:', error)
     return []

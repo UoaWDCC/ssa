@@ -8,12 +8,6 @@ importers:
 
   .:
     devDependencies:
-      drizzle-kit:
-        specifier: 0.31.10
-        version: 0.31.10
-      drizzle-orm:
-        specifier: 0.44.7
-        version: 0.44.7(@types/pg@8.10.2)(pg@8.16.3)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
