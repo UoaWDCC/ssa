@@ -4,7 +4,12 @@ import { useExecs } from '@/hooks/useExecs'
 import ExecCard from './ExecCard'
 import { aboutHeadingFont, aboutParagraphFont } from './fonts'
 
-export default function ExecGrid() {
+type ExecGridProps = {
+  title: string
+  paragraphs: string[]
+}
+
+export default function ExecGrid({ title, paragraphs }: ExecGridProps) {
   const { execs, error } = useExecs()
 
   return (
@@ -18,25 +23,14 @@ export default function ExecGrid() {
             id="ssa-team-heading"
             className={`${aboutHeadingFont.className} text-[24px] font-bold leading-[31.992px] tracking-[-1px] text-[#f85b76] xl:leading-[32px]`}
           >
-            Meet the SSA Team
+            {title}
           </h2>
           <div
             className={`${aboutParagraphFont.className} mt-[32px] space-y-[24px] text-[15px] font-normal leading-[23px] tracking-[-0.3px] text-black sm:text-[16px] sm:leading-[24px] sm:tracking-[-0.4px] xl:mt-[40px]`}
           >
-            <p>
-              We started off as a relatively small gathering of students years
-              ago, for Singaporean and non-Singaporean students alike to find
-              their “home away from home” during their time in University. Our
-              club has since developed into a multicultural and diverse entity,
-              and we organise cultural and social events to keep this spirit
-              alive.
-            </p>
-            <p>
-              As a committee members, we attend weekly committee meetings to
-              plan and coordinate events with other fellow executives. We are a
-              tight knit team and our aim is in upholding the SSA spirit and
-              serving this community to the best of our ability.
-            </p>
+            {paragraphs.map((paragraph, paragraphIndex) => (
+              <p key={paragraphIndex}>{paragraph}</p>
+            ))}
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import Button from '@/components/Button'
 import { eventDateTime, formatDate, formatEventDate } from '@/lib/eventDate'
 
 interface Props {
-  searchParams: Promise<{ session_id?: string }>
+  searchParams: Promise<{ session_id?: string; free?: string }>
 }
 
 type Registration = {
@@ -25,7 +25,7 @@ type Registration = {
 
 type Confirmation =
   | { status: 'confirmed'; registration: Registration }
-  | { status: 'pending' | 'unavailable' | 'missing' }
+  | { status: 'free' | 'pending' | 'unavailable' | 'missing' }
 
 type ReceiptDetail = {
   label: string
@@ -102,7 +102,10 @@ export default async function PaymentSuccessPage({
   searchParams,
 }: Readonly<Props>) {
   const params = await searchParams
-  const confirmation = await confirmEventPayment(params.session_id)
+  // Free events skip Stripe, so there is no session to confirm.
+  const confirmation: Confirmation = params.free
+    ? { status: 'free' }
+    : await confirmEventPayment(params.session_id)
   const isConfirmed = confirmation.status === 'confirmed'
 
   const copy = {
@@ -116,6 +119,16 @@ export default async function PaymentSuccessPage({
       ),
       description:
         'Please check your email for confirmation and further instructions about our event.',
+    },
+    free: {
+      title: (
+        <>
+          You’re registered!
+          <br />
+          We’ll see you at the event.
+        </>
+      ),
+      description: 'This event is free, so there’s nothing to pay.',
     },
     pending: {
       title: 'Your payment is processing.',
@@ -181,6 +194,7 @@ export default async function PaymentSuccessPage({
         {
           label: 'Status',
           value: {
+            free: 'Registered',
             pending: 'Awaiting confirmation',
             unavailable: 'Confirmation unavailable',
             missing: 'No payment session',
@@ -213,12 +227,16 @@ export default async function PaymentSuccessPage({
           </p>
 
           <Button
-            href={isConfirmed ? '/' : '/events'}
+            href={
+              isConfirmed || confirmation.status === 'free' ? '/' : '/events'
+            }
             size="long"
             color="salmon"
             className="mt-10 min-h-12 max-w-[335px] !py-3 !text-base"
           >
-            {isConfirmed ? 'GO TO HOME' : 'GO TO EVENTS'}
+            {isConfirmed || confirmation.status === 'free'
+              ? 'GO TO HOME'
+              : 'GO TO EVENTS'}
           </Button>
         </section>
 

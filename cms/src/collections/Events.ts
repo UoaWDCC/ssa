@@ -2,6 +2,45 @@ import type { CollectionConfig } from 'payload'
 
 export const Events: CollectionConfig = {
   slug: 'events',
+  hooks: {
+    beforeChange: [
+      async ({ data, operation, originalDoc, req }) => {
+        if (data.isUpcoming !== true) {
+          return data
+        }
+
+        const upcomingEvents = await req.payload.find({
+          collection: 'events',
+          where: {
+            isUpcoming: {
+              equals: true,
+            },
+          },
+          limit: 0,
+          req,
+        })
+
+        const currentEventId = operation === 'update' ? originalDoc?.id : undefined
+
+        await Promise.all(
+          upcomingEvents.docs
+            .filter((event) => event.id !== currentEventId)
+            .map((event) =>
+              req.payload.update({
+                collection: 'events',
+                id: event.id,
+                data: {
+                  isUpcoming: false,
+                },
+                req,
+              }),
+            ),
+        )
+
+        return data
+      },
+    ],
+  },
   access: {
     read: () => true,
   },
@@ -47,7 +86,7 @@ export const Events: CollectionConfig = {
       type: 'number',
       min: 0,
       admin: {
-        description: 'Price in NZD',
+        description: 'Price in NZD. Leave empty (or 0) for a free event.',
         step: 0.01,
       },
     },

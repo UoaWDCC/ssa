@@ -23,29 +23,24 @@ const POLAROID_SIZES = '(min-width: 500px) 410px, calc(100vw - 90px)'
  * blocks share one pair of left/right edges rather than each picking its own.
  * Below `lg` the two panels stack, since Figma has no mobile frame for this.
  */
-export default function JoinCard() {
+type JoinCardProps = {
+  title: string
+  paragraphs: string[]
+}
+
+export default function JoinCard({ title, paragraphs }: JoinCardProps) {
   return (
     <div className="px-[21px] md:px-10 lg:px-16">
       <section className="mx-auto grid w-full max-w-[1250px] overflow-hidden rounded-xl shadow-[0px_2px_2.67px_0.67px_rgba(84,84,84,0.25)] drop-shadow-[0px_0px_2.67px_rgba(140,136,128,0.3)] lg:grid-cols-2">
         <div className="flex flex-col gap-8 bg-ssa-red p-6 sm:p-8 lg:min-h-[380px] lg:p-9">
           <div className="flex flex-col gap-2">
             <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-yellow-light">
-              Join SSA
+              {title}
             </h2>
             <div className="flex flex-col gap-6 font-inter text-base leading-6 tracking-[-0.4px] text-ssa-yellow-light">
-              <p>
-                The Singapore Students&apos; Association (SSA) is run by a
-                committee of students from The University of Auckland and
-                Auckland University of Technology. We&apos;re a home away from
-                home for anyone looking to be part of a friendly and welcoming
-                community.
-              </p>
-              <p>
-                Through social events, good food, and a shared love for
-                Singaporean culture, we bring people together, whether
-                you&apos;re from Singapore or simply keen to meet new people and
-                get involved.
-              </p>
+              {paragraphs.map((paragraph, paragraphIndex) => (
+                <p key={paragraphIndex}>{paragraph}</p>
+              ))}
             </div>
           </div>
 

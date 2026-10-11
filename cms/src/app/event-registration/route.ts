@@ -246,9 +246,10 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
-  const amount = event.memberPrice
+  // An empty price means the event is free.
+  const amount = event.memberPrice ?? 0
 
-  if (typeof amount !== 'number' || !Number.isFinite(amount) || amount < 0) {
+  if (!Number.isFinite(amount) || amount < 0) {
     return Response.json({ error: 'The event price is not configured' }, { status: 422 })
   }
 
@@ -256,6 +257,7 @@ export async function POST(request: Request) {
   if (!Number.isSafeInteger(amountInCents) || amountInCents < 0) {
     return Response.json({ error: 'The event price is invalid' }, { status: 422 })
   }
+  const isFree = amountInCents === 0
 
   let registration
   try {
@@ -277,12 +279,20 @@ export async function POST(request: Request) {
         priceType: 'member',
         amount,
         currency: 'nzd',
-        status: 'pending',
+        ...(isFree ? { status: 'paid', paidAt: new Date().toISOString() } : { status: 'pending' }),
       },
     })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Failed to create event registration'
     return Response.json({ error: message }, { status: 400 })
+  }
+
+  // Nothing to pay, so skip Stripe and send them straight to the success page.
+  if (isFree) {
+    return Response.json(
+      { checkoutUrl: `${webUrl}/events/rsvp/success?free=1`, registration },
+      { status: 201 },
+    )
   }
 
   const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })

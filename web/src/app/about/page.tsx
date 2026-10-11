@@ -1,14 +1,19 @@
 import Image from 'next/image'
 import HeroSplit from '@/components/HeroSplit'
 import Footer from '@/components/Footer'
+import { fetchSiteSettings } from '@/lib/siteSettings'
 import ExecGrid from './_components/ExecGrid'
 
-export default function AboutPage() {
+export const dynamic = 'force-dynamic'
+
+export default async function AboutPage() {
+  const siteSettings = await fetchSiteSettings()
+
   return (
     <main className="flex flex-col bg-[#fffbf4] text-[#434242]">
       <HeroSplit
-        title="ABOUT US"
-        subtitle="We are a community that promotes and celebrates Singapore culture and traditions through social activities (and food!)"
+        title={siteSettings.aboutHeroTitle}
+        subtitle={siteSettings.aboutHeroSubtitle}
       />
       <section className="mx-auto w-full max-w-[1440px] px-[18px] pt-[32px] sm:px-8 md:px-12 md:pt-16 lg:px-16 xl:px-[clamp(24px,6.8056vw,98px)] xl:pt-[88px]">
         <div className="relative aspect-[366/236.6457] w-full overflow-hidden rounded-[4px] md:aspect-[1244/573] md:rounded-[12px]">
@@ -28,7 +33,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <ExecGrid />
+      <ExecGrid
+        title={siteSettings.aboutTeamTitle}
+        paragraphs={siteSettings.aboutTeamParagraphs}
+      />
       <Footer />
     </main>
   )

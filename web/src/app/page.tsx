@@ -1,12 +1,16 @@
-import { FaClock, FaLocationDot } from 'react-icons/fa6'
 import Footer from '@/components/Footer'
 import Hero from '@/components/Hero'
-import { HighlightCard } from '@/components/HighlightCard'
+import HomeCarousel from '@/components/HomeCarousel'
 import InstagramFeed from '@/components/InstagramFeed'
 import JoinCard from '@/components/JoinCard'
-import HomeCarousel from '@/components/HomeCarousel'
+import UpcomingEventCard from '@/components/UpcomingEventCard'
+import { fetchSiteSettings } from '@/lib/siteSettings'
 
-export default function Home() {
+export const dynamic = 'force-dynamic'
+
+export default async function Home() {
+  const siteSettings = await fetchSiteSettings()
+
   return (
     <main className="flex flex-col gap-10 overflow-x-hidden bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
@@ -15,34 +19,16 @@ export default function Home() {
         ctaLabel="JOIN SSA!"
         ctaHref="/signup"
       />
+
       <section className="px-4 sm:px-6 lg:px-10">
-        <HighlightCard
-          eyebrow="Upcoming Event"
-          title="Ice Kachang"
-          details={[
-            {
-              icon: FaLocationDot,
-              text: '401-318 Engineering Atrium (Level 3)',
-            },
-            { icon: FaClock, text: '2nd April - 6:00 PM' },
-          ]}
-          badges={['$5 Members', { text: '$11 Non-Members', variant: 'light' }]}
-          description={
-            <>
-              Hot, stressed and over Uni already? Say less... we&apos;ve got the
-              perfect cooldown for you. Come chill with SSA at our Ice Kachang
-              Night. Sweet, icy, colourful... but there&apos;s a twist 👀
-            </>
-          }
-          ctaLabel="RSVP"
-          ctaHref="/events/rsvp"
-          imageSrc="/events/highlight_mascot.png"
-          imageAlt="Ice Kachang event artwork"
-        />
+        <UpcomingEventCard />
       </section>
-      {/* Image Carousel */}
+
       <HomeCarousel />
-      <JoinCard />
+      <JoinCard
+        title={siteSettings.homeJoinTitle}
+        paragraphs={siteSettings.homeJoinParagraphs}
+      />
       <InstagramFeed />
       <Footer />
     </main>
