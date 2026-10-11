@@ -14,7 +14,6 @@ export interface Event {
   time?: string | null
   location?: string | null
   memberPrice?: number | null
-  nonMemberPrice?: number | null
   description?: string | null
   coverImage?: number | Media | null
   category?: EventCategory | null

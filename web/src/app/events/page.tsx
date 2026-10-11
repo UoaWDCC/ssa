@@ -64,19 +64,9 @@ export default function EventsPage() {
                   text: formatEventDate(event.date, event.time),
                 },
               ]}
-              badges={[
-                ...(event.memberPrice == null
-                  ? []
-                  : [`$${event.memberPrice} MEMBERS`]),
-                ...(event.nonMemberPrice == null
-                  ? []
-                  : [
-                      {
-                        text: `$${event.nonMemberPrice} NON-MEMBERS`,
-                        variant: 'light' as const,
-                      },
-                    ]),
-              ]}
+              badges={
+                event.memberPrice == null ? [] : [`$${event.memberPrice}`]
+              }
               description={
                 <p>{event.description || 'More details coming soon.'}</p>
               }

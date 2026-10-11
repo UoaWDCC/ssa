@@ -43,17 +43,7 @@ export const Events: CollectionConfig = {
     },
     {
       name: 'memberPrice',
-      label: 'Member Price',
-      type: 'number',
-      min: 0,
-      admin: {
-        description: 'Price in NZD',
-        step: 0.01,
-      },
-    },
-    {
-      name: 'nonMemberPrice',
-      label: 'Non-member Price',
+      label: 'Price',
       type: 'number',
       min: 0,
       admin: {
