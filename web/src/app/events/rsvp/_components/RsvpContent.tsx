@@ -15,7 +15,10 @@ async function fetchUpcomingEvent() {
   return response.json() as Promise<UpcomingEventResponse>
 }
 
-export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
+export default function RsvpContent({
+  member,
+  isActiveMember,
+}: Readonly<{ member: Member; isActiveMember: boolean }>) {
   const { data } = useQuery({
     queryKey: ['upcoming-event'],
     queryFn: fetchUpcomingEvent,
@@ -79,9 +82,7 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
                 <dd className="mt-1 text-base leading-6">
                   {!data?.event
                     ? '—'
-                    : data.event.memberPrice
-                      ? `$${data.event.memberPrice}`
-                      : 'Free'}
+                    : `${data.event.memberPrice ? `$${data.event.memberPrice}` : 'Free'} · Members only`}
                 </dd>
               </div>
             </dl>
@@ -89,7 +90,18 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
 
           <div aria-hidden="true" className="hidden bg-[#e9e1d5] lg:block" />
 
-          <RsvpForm eventId={data?.event?.id} member={member} />
+          <div>
+            {!isActiveMember && (
+              <p
+                role="alert"
+                className="mb-6 rounded-xl border border-[#b4233d] bg-[#fffafa] px-4 py-3 text-sm leading-5 text-[#b4233d]"
+              >
+                Events are for active SSA members. Your membership isn&apos;t
+                active, so registration will be declined.
+              </p>
+            )}
+            <RsvpForm eventId={data?.event?.id} member={member} />
+          </div>
         </div>
       </div>
     </main>
