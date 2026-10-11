@@ -12,7 +12,7 @@ import PaymentStep from '@/app/signup/_components/PaymentStep'
 import Button from '@/components/Button'
 import CardSection from '@/components/CardSection'
 
-export default function SignupForm() {
+export default function SignupForm({ price }: { price: number | null }) {
   const searchParams = useSearchParams()
   const wasCancelled = searchParams.get('cancelled') === 'true'
   const googleStatus = searchParams.get('google')
@@ -367,6 +367,7 @@ export default function SignupForm() {
 
           {step === 5 && (
             <PaymentStep
+              price={price}
               onPay={handlePay}
               isLoading={isLoading}
               onBack={handleBack}
