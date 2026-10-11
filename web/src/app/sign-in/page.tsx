@@ -1,7 +1,7 @@
 import SignInForm from './_components/SignInForm'
 
 interface Props {
-  searchParams: Promise<{ new?: string; google?: string }>
+  searchParams: Promise<{ new?: string; google?: string; next?: string }>
 }
 
 export default async function SignInPage({ searchParams }: Readonly<Props>) {
@@ -13,8 +13,12 @@ export default async function SignInPage({ searchParams }: Readonly<Props>) {
       : undefined
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-ssa-background px-4 pt-[88px]">
-      <SignInForm isNewAccount={isNewAccount} googleError={googleError} />
+    <main className="flex min-h-[calc(100vh-88px)] items-center justify-center bg-ssa-background px-4 py-8">
+      <SignInForm
+        isNewAccount={isNewAccount}
+        googleError={googleError}
+        next={params.next}
+      />
     </main>
   )
 }

@@ -1,5 +1,4 @@
 import type { FormData } from './types'
-import CardSection from '@/components/CardSection'
 import InputField from '@/components/InputField'
 import SelectField from '@/components/SelectField'
 
@@ -13,7 +12,7 @@ export default function UniInfoStep({
   fieldErrors: Record<string, string>
 }) {
   return (
-    <CardSection title="University Information">
+    <div className="flex flex-col gap-6">
       <div className="grid grid-cols-2 gap-4">
         <InputField
           label="UPI"
@@ -55,6 +54,6 @@ export default function UniInfoStep({
           { value: 'postgrad', label: 'Postgraduate' },
         ]}
       />
-    </CardSection>
+    </div>
   )
 }

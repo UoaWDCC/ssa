@@ -3,6 +3,11 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import Stripe from 'stripe'
 import { activatePaidSignup } from '../_lib/activatePaidSignup'
+import { completePaidEventRegistration } from '../_lib/completePaidEventRegistration'
+
+function isSuccessfulPayment(session: Stripe.Checkout.Session) {
+  return session.payment_status === 'paid' || session.payment_status === 'no_payment_required'
+}
 
 export const POST = async (request: NextRequest) => {
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
@@ -30,40 +35,61 @@ export const POST = async (request: NextRequest) => {
     return Response.json({ error: message }, { status: 400 })
   }
 
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session
+  if (
+    event.type !== 'checkout.session.completed' &&
+    event.type !== 'checkout.session.async_payment_succeeded'
+  ) {
+    return Response.json({ received: true })
+  }
 
-    if (session.payment_status !== 'paid') {
-      return Response.json({ received: true })
-    }
+  const session = event.data.object as Stripe.Checkout.Session
 
-    const { memberId: rawMemberId } = session.metadata ?? {}
-    const stripeCustomerId =
-      typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null)
+  if (!isSuccessfulPayment(session)) {
+    return Response.json({ received: true })
+  }
 
-    const memberId = Number(rawMemberId)
-    if (!Number.isFinite(memberId)) {
-      console.error('Stripe webhook: invalid or missing memberId in session metadata', {
-        sessionId: session.id,
-        rawMemberId,
-      })
-      return Response.json({ received: true })
-    }
+  const payload = await getPayload({ config: configPromise })
 
-    const payload = await getPayload({ config: configPromise })
-
+  if (session.metadata?.checkoutType === 'event-registration') {
     try {
-      await activatePaidSignup({
-        memberId,
-        payload,
-        stripeCustomerId,
+      await completePaidEventRegistration({ payload, session })
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to complete event registration payment'
+      console.error('Stripe webhook: failed to complete event registration', {
+        sessionId: session.id,
+        error: message,
       })
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to activate paid signup'
-      console.error('Stripe webhook: failed to activate paid signup', { memberId, error: message })
-      // Return 500 so Stripe retries with exponential backoff
       return Response.json({ error: message }, { status: 500 })
     }
+
+    return Response.json({ received: true })
+  }
+
+  const { memberId: rawMemberId } = session.metadata ?? {}
+  const stripeCustomerId =
+    typeof session.customer === 'string' ? session.customer : (session.customer?.id ?? null)
+
+  const memberId = Number(rawMemberId)
+  if (!Number.isFinite(memberId)) {
+    console.error('Stripe webhook: invalid or missing memberId in session metadata', {
+      sessionId: session.id,
+      rawMemberId,
+    })
+    return Response.json({ received: true })
+  }
+
+  try {
+    await activatePaidSignup({
+      memberId,
+      payload,
+      stripeCustomerId,
+    })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to activate paid signup'
+    console.error('Stripe webhook: failed to activate paid signup', { memberId, error: message })
+    // Return 500 so Stripe retries with exponential backoff
+    return Response.json({ error: message }, { status: 500 })
   }
 
   return Response.json({ received: true })

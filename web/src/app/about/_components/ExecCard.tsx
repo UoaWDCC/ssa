@@ -1,10 +1,24 @@
 import Image from 'next/image'
 import { aboutParagraphFont, aboutRoleFont } from './fonts'
+import { Media } from '@/types/payload-types'
+import { Exec } from '@/lib/execs'
 
 interface ExecCardProps {
   name: string
   role: string
-  photo?: string
+  photo?: number | Media | undefined
+}
+
+function getExecPhotoUrl(photo: Exec['photo']) {
+  if (typeof photo === 'number') return '/mascot.png'
+
+  return photo.url ?? '/mascot.png'
+}
+
+function getExecPhotoAlt(photo: Exec['photo'], name: string) {
+  if (typeof photo === 'number') return `${name} logo`
+
+  return photo.alt
 }
 
 export default function ExecCard({
@@ -19,8 +33,8 @@ export default function ExecCard({
     >
       {photo ? (
         <Image
-          src={photo}
-          alt=""
+          src={getExecPhotoUrl(photo)}
+          alt={getExecPhotoAlt(photo, name)}
           fill
           className="object-cover"
           sizes="(max-width: 639px) calc((100vw - 55.35px) / 3), (max-width: 767px) calc((100vw - 84px) / 3), (max-width: 1023px) calc((100vw - 126px) / 4), (max-width: 1279px) calc((100vw - 158px) / 4), (max-width: 1439px) calc((86.3888vw - 516px) / 4), 182px"

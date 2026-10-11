@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 :root {
+  color-scheme: light;
   --background: #fffbf4;
   --foreground: #171717;
 }
@@ -12,9 +13,11 @@
   /* Darker ssa-red for white text on a red fill: #f85b76 gives white only
      3.11:1, below WCAG AA's 4.5:1 for normal text. Same hue, 5.23:1. */
   --color-ssa-red-dark: #c8324c;
+  --color-ssa-form-accent: #c72e4b;
+  --color-ssa-form-border: #968d82;
+  --color-ssa-form-field: #fffdfa;
   --color-ssa-salmon: #ff8392;
   --color-ssa-red-light: #ff879c;
-  --color-ssa-salmon-pink: #ff8392;
   --color-ssa-pink: #ffb4c1;
   --color-ssa-pink-light: #ffccd5;
   --color-ssa-red-lighter: #ffb3bf;
@@ -22,6 +25,7 @@
   --color-stripe-purple: #635bff;
   --color-ssa-yellow: #ffe6b6;
   --color-ssa-yellow-light: #fff7e9;
+  --color-ssa-cream: #f2ebdd;
   --color-ssa-white: #ffffff;
   --color-ssa-black: #0a0805;
   --color-ssa-skin-yellow: #ffe3ac;
@@ -54,24 +58,16 @@
   --color-footer-peach-3: #ffdfca;
   --color-footer-peach-4: #ffe3cc;
   --color-footer-cream: #fff1d5;
-
   --color-ssa-overlay-grey: #8c8880;
+
   --color-ssa-overlay-border: #fffbf4;
-  --color-ssa-cream: #f2ebdd;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-averia: var(--font-averia);
   --font-alegreya: var(--font-alegreya);
   --font-be-vietnam-pro: var(--font-be-vietnam-pro);
   --font-dm-mono: var(--font-dm-mono);
-  --font-inter: var(--font-inter);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-inter: var(--font-inter-source);
 }
 
 @keyframes slide-up {
@@ -86,6 +82,28 @@
 
 @utility animate-slide-up {
   animation: slide-up 0.3s ease-out;
+}
+
+@keyframes rsvp-step-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rsvp-step-enter {
+  animation: rsvp-step-in 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rsvp-step-enter {
+    animation: none;
+  }
 }
 
 body {

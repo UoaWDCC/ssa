@@ -16,7 +16,7 @@ export default function ProgressBar({
       aria-label={`Step ${step} of ${total}`}
     >
       <div
-        className="h-full rounded-full transition-all duration-300 bg-ssa-red"
+        className="h-full rounded-full bg-ssa-red transition-all duration-300 motion-reduce:transition-none"
         style={{ width: `${progress}%` }}
       />
     </div>

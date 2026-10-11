@@ -21,6 +21,12 @@ export const Sponsors: CollectionConfig = {
       required: true,
     },
     {
+      name: 'category',
+      type: 'select',
+      options: ['FOOD', 'RETAIL', 'SERVICES', 'ENTERTAINMENT'],
+      required: true,
+    },
+    {
       name: 'websiteUrl',
       type: 'text',
     },

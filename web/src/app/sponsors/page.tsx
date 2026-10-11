@@ -1,134 +1,120 @@
 'use client'
 import Image from 'next/image'
-import { FaLocationDot, FaStar } from 'react-icons/fa6'
+import { FaLocationDot } from 'react-icons/fa6'
 
-import CtaLink from '@/components/CtaLink'
+import Button from '@/components/Button'
 import Footer from '@/components/Footer'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+
 import SponsorsGrid from './components/SponsorsGrid'
-import type { Media } from '@/types/payload-types'
-import { useSponsors } from '@/hooks/useSponsors'
-import type { Sponsor } from '@/lib/sponsors'
+import { type Sponsor } from '@/lib/sponsors'
 
-type SponsorMediaSeedInput = Pick<Media, 'id' | 'alt' | 'url'>
-
-function createSponsorMedia({ id, alt, url }: SponsorMediaSeedInput): Media {
-  return {
-    id,
-    alt,
-    url,
-    width: null,
-    height: null,
-  }
-}
+import useSponsors from '@/hooks/useSponsors'
 
 function getSponsorLogoUrl(logo: Sponsor['logo']) {
-  if (typeof logo === 'number') return '/sponsors/sponsorcard.png'
+  if (typeof logo === 'number') {
+    return '/sponsors/sponsorcard.png'
+  }
 
   return logo.url ?? '/sponsors/sponsorcard.png'
 }
 
 function getSponsorLogoAlt(sponsor: Sponsor) {
-  if (typeof sponsor.logo === 'number') return `${sponsor.name} logo`
+  if (typeof sponsor.logo === 'number') {
+    return `${sponsor.name} logo`
+  }
 
   return sponsor.logo.alt
 }
 
-const sponsorOfTheWeekEntry: Sponsor = {
-  id: 1,
-  name: 'Sip N Chill',
-  logo: createSponsorMedia({
-    id: 101,
-    alt: 'Sip n Chill sponsor photo',
-    url: '/sponsors/sponsorcard.png',
-  }),
-  websiteUrl:
-    'https://www.instagram.com/sipchillnz?igsh=MW5ocnBrbnl5OXlrbQ%3D%3D',
-  isSponsorOfTheWeek: true,
-  description:
-    'Sip n Chill offers icy desserts , refreshing drinks, and a chill space to hang with your friends or just take a break from uni life.',
-  location: 'Newmarket 432 Khyber Pass Road',
-  memberPerks: '10% OFF FOR SSA MEMBERS',
-  updatedAt: '2026-05-18T00:00:00.000Z',
-  createdAt: '2026-05-18T00:00:00.000Z',
-}
-
 export default function SponsorsPage() {
-  const { sponsors, status } = useSponsors()
+  const { sponsors } = useSponsors()
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] = [
-    ...(sponsorOfTheWeekEntry.location
-      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
-      : []),
-    ...(sponsorOfTheWeekEntry.memberPerks
-      ? [{ icon: FaStar, text: sponsorOfTheWeekEntry.memberPerks }]
-      : []),
-  ]
+  console.log('Sponsors', sponsors)
+
+  const sponsorOfTheWeekEntry = sponsors.find(
+    (sponsor) => sponsor.isSponsorOfTheWeek === true,
+  )
+
+  console.log('Sponsor of the week', sponsorOfTheWeekEntry)
+
+  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
+    sponsorOfTheWeekEntry?.location
+      ? [
+          {
+            icon: FaLocationDot,
+            text: sponsorOfTheWeekEntry.location,
+          },
+        ]
+      : []
+
+  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry?.memberPerks
+    ? [sponsorOfTheWeekEntry.memberPerks]
+    : []
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
-      <Hero
-        title="Sponsors"
+      <HeroSplit
+        title="SPONSORS"
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
-        mascotImage="/ssa_nerd_merlion.svg"
-        mascotAlt="SSA Nerd Merlion mascot"
       />
-      <section className="mt-10 px-[18px] md:mt-14 md:px-10 lg:mt-[121px] lg:px-16">
-        <HighlightCard
-          eyebrow="Sponsor of the Week"
-          title={sponsorOfTheWeekEntry.name}
-          details={sponsorOfTheWeekDetails}
-          description={<p>{sponsorOfTheWeekEntry.description}</p>}
-          ctaLabel="CHECK US OUT!"
-          ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
-        />
+      <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
+        {sponsorOfTheWeekEntry && (
+          <HighlightCard
+            eyebrow="Sponsor of the Week"
+            title={sponsorOfTheWeekEntry.name}
+            details={sponsorOfTheWeekDetails}
+            badges={sponsorOfTheWeekBadges}
+            description={<p>{sponsorOfTheWeekEntry.description}</p>}
+            ctaLabel="CHECK US OUT!"
+            ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
+            imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
+            imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
+          />
+        )}
 
-        <section className="mt-12 md:mt-16 lg:mt-[89px]">
-          <div className="mx-auto mb-10 w-full max-w-[1214px] sm:mb-12">
-            <h2 className="font-averia text-3xl font-bold leading-tight text-ssa-grey sm:text-4xl md:text-5xl">
-              Our Sponsors
+        <section className="mt-12 md:mt-16 lg:mt-22.5">
+          <div className="mx-auto mb-4 w-full max-w-311">
+            <h2 className="font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
+              Sponsors
             </h2>
-            {status === 'error' ? (
-              <p className="mt-4 text-base text-ssa-grey/80 sm:text-lg">
-                Sponsor data is temporarily unavailable. Please check back soon.
-              </p>
-            ) : null}
           </div>
 
-          {status !== 'error' && <SponsorsGrid sponsors={sponsors} />}
+          <SponsorsGrid sponsors={sponsors} />
 
-          <section className="relative mx-auto mt-16 w-full max-w-[1214px] overflow-visible pb-[65px] md:mt-20 lg:mt-[143px] lg:h-[420px] lg:pb-0">
+          <section className="relative mx-auto mt-32 flex w-full max-w-189 flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-46 lg:block lg:h-53.75">
             <Image
               src="/nerdy-merlion.png"
               alt="Nerdy Merlion mascot"
               width={397}
               height={491}
-              className="hidden min-[1200px]:absolute min-[1200px]:bottom-0 min-[1200px]:left-[84px] min-[1200px]:z-0 min-[1200px]:block min-[1200px]:w-[397px] min-[1200px]:translate-y-[30%]"
+              className="pointer-events-none h-auto w-52.5 select-none lg:absolute lg:-bottom-30 lg:-left-11.25 lg:z-0 lg:w-75 lg:max-w-none"
             />
 
-            <div className="mt-[65px] flex w-full justify-center lg:absolute lg:inset-x-0 lg:bottom-[90px] lg:mt-0 lg:justify-end lg:pr-16">
-              <div className="flex h-[137px] w-full max-w-[390px] flex-col items-center">
-                <p className="font-averia text-[34px] font-light leading-tight text-ssa-red lg:text-[40px]">
-                  Keen to support SSA?
-                </p>
-                <CtaLink
-                  href="/contact"
-                  className="mt-[30px] h-[65px] w-full gap-[15px] border-[3px] border-transparent bg-ssa-contact-cta px-[35px] py-[15px] text-xl text-ssa-cta-text hover:border-ssa-contact-cta-hover hover:bg-ssa-contact-cta-hover lg:text-[25px] lg:leading-[27px]"
-                >
-                  <span>Contact Us</span>
-                  <span aria-hidden="true">→</span>
-                </CtaLink>
-              </div>
+            <div className="relative z-10 flex w-full max-w-65 flex-col items-center lg:absolute lg:right-0 lg:top-1/2 lg:-translate-y-1/2">
+              <p className="w-full text-center font-be-vietnam-pro text-2xl font-bold leading-8 tracking-[-1px] text-ssa-red">
+                Keen to support SSA?
+              </p>
+
+              <Button
+                href="/contact"
+                size="long"
+                variant="filled"
+                color="pink"
+                arrowSide="right"
+                className="mt-3 h-12 py-0 text-base uppercase"
+              >
+                Contact Us
+              </Button>
             </div>
           </section>
         </section>
       </section>
+
       <div className="relative z-10">
         <Footer />
       </div>

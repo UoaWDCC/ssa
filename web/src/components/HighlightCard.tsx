@@ -86,6 +86,9 @@ export function HighlightCard({
           src={imageSrc}
           alt={imageAlt}
           fill
+          unoptimized={
+            /^https?:\/\//.test(imageSrc) || imageSrc.startsWith('/api/')
+          }
           sizes="(min-width: 1400px) 571px, (min-width: 1280px) calc(50vw - 82px), (min-width: 768px) calc(100vw - 144px), calc(100vw - 96px)"
           className="object-cover"
         />
@@ -138,7 +141,7 @@ export function HighlightCard({
             size="long"
             variant="filled"
             color="red"
-            className="max-w-[566px] shrink-0 !bg-ssa-salmon-pink !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white md:max-w-none xl:max-w-[566px]"
+            className="max-w-[566px] shrink-0 !bg-ssa-salmon !text-ssa-white hover:!bg-ssa-red hover:!text-ssa-white md:max-w-none xl:max-w-[566px]"
           >
             {ctaLabel}
           </Button>

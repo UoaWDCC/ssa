@@ -1,52 +1,48 @@
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
+import { toExternalHref } from '@/lib/external-url'
 
 type SponsorLogoTileProps = {
   name: string
   logoUrl: string
   websiteUrl?: string
-  hoverOverlayClassName?: string
   hoverTitle: string
   hoverDescription: string
-  hoverTextClassName: string
-}
-
-function isExternalUrl(url?: string) {
-  return url ? /^https?:\/\//.test(url) : false
+  onTouchSelect?: (trigger: HTMLElement) => void
 }
 
 function SponsorTileContent({
   name,
   logoUrl,
-  hoverOverlayClassName,
   hoverTitle,
   hoverDescription,
-  hoverTextClassName,
-}: Omit<SponsorLogoTileProps, 'websiteUrl'>) {
+}: Omit<SponsorLogoTileProps, 'websiteUrl' | 'onTouchSelect'>) {
   return (
     <>
       <Image
         src={logoUrl}
         alt={`${name} logo`}
         fill
-        sizes="(min-width: 1024px) 222px, (min-width: 768px) 160px, (min-width: 640px) 120px, 83px"
+        sizes="(min-width: 1280px) 190px, (min-width: 768px) 25vw, 33vw"
         className="object-cover"
       />
+
+      {/* Always visible on mobile; hover activated from md upwards */}
       <span
         aria-hidden="true"
-        className={`absolute inset-0 rounded-md opacity-0 backdrop-blur-[3px] transition-opacity duration-500 ease-out group-hover:opacity-100 lg:rounded-[16px] ${hoverOverlayClassName}`}
+        className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/80 opacity-100 transition-opacity duration-300 ease-out md:bg-none md:bg-black/50 md:opacity-0 md:backdrop-blur-[1.8px] md:group-hover:opacity-100 md:group-focus-visible:opacity-100"
       />
-      <span
-        className={`absolute inset-0 flex flex-col justify-end gap-1 p-2 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 sm:gap-2 sm:p-4 lg:gap-3 lg:p-5 ${hoverTextClassName}`}
-      >
-        <span className="font-averia text-[8px] font-bold leading-tight sm:text-base lg:text-[21px]">
+
+      <span className="absolute inset-0 flex flex-col justify-end p-2 opacity-100 transition-opacity duration-300 ease-out md:gap-[10px] md:p-[18px] md:opacity-0 md:group-hover:opacity-100 md:group-focus-visible:opacity-100">
+        <span className="font-inter text-[10px] font-medium leading-[10px] tracking-[-0.2px] text-white sm:text-xs sm:leading-3 md:text-[18px] md:leading-[22px] md:tracking-[-0.4px]">
           {hoverTitle}
         </span>
-        <span className="flex items-center gap-[5px] self-start font-alegreya text-[6px] font-medium leading-tight sm:text-sm lg:text-[17px]">
-          <span
-            aria-hidden="true"
-            className="h-3 w-0 shrink-0 border-l border-current sm:h-6 sm:border-l-2 lg:h-[30px]"
-          />
-          <span>{hoverDescription}</span>
+
+        <span className="hidden font-dm-mono text-[9px] font-normal uppercase leading-none tracking-[0.04em] text-ssa-pink-light sm:block md:text-xs md:leading-3">
+          {hoverDescription}
         </span>
       </span>
     </>
@@ -57,25 +53,63 @@ export default function SponsorLogoTile({
   name,
   logoUrl,
   websiteUrl,
-  hoverOverlayClassName = 'bg-ssa-pink-light/60',
   hoverTitle,
   hoverDescription,
-  hoverTextClassName,
+  onTouchSelect,
 }: SponsorLogoTileProps) {
-  const opensInNewTab = isExternalUrl(websiteUrl)
-  const className =
-    'group relative block aspect-square w-full overflow-hidden rounded-lg border-2 border-ssa-pink-light bg-ssa-white lg:rounded-[20px] lg:border-4'
+  const [usesTouchPopup, setUsesTouchPopup] = useState(false)
+  const externalHref = toExternalHref(websiteUrl)
 
-  if (!opensInNewTab) {
+  useEffect(() => {
+    const touchMediaQuery = window.matchMedia(
+      '(hover: none), (pointer: coarse)',
+    )
+    const updateTouchCapability = () => {
+      setUsesTouchPopup(touchMediaQuery.matches)
+    }
+
+    updateTouchCapability()
+    touchMediaQuery.addEventListener('change', updateTouchCapability)
+
+    return () => {
+      touchMediaQuery.removeEventListener('change', updateTouchCapability)
+    }
+  }, [])
+
+  const className =
+    'group relative block aspect-square w-full overflow-hidden rounded-[6px] border-[1.6px] border-ssa-cream bg-ssa-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ssa-red focus-visible:ring-offset-2'
+
+  function handleTouchSelect(event: React.MouseEvent<HTMLButtonElement>) {
+    if (!onTouchSelect) return
+    onTouchSelect(event.currentTarget)
+  }
+
+  if (usesTouchPopup && onTouchSelect) {
+    return (
+      <button
+        type="button"
+        className={`${className} cursor-pointer`}
+        aria-label={`View ${name} details`}
+        onClick={handleTouchSelect}
+      >
+        <SponsorTileContent
+          name={name}
+          logoUrl={logoUrl}
+          hoverTitle={hoverTitle}
+          hoverDescription={hoverDescription}
+        />
+      </button>
+    )
+  }
+
+  if (!externalHref) {
     return (
       <div className={className} aria-label={name}>
         <SponsorTileContent
           name={name}
           logoUrl={logoUrl}
-          hoverOverlayClassName={hoverOverlayClassName}
           hoverTitle={hoverTitle}
           hoverDescription={hoverDescription}
-          hoverTextClassName={hoverTextClassName}
         />
       </div>
     )
@@ -83,7 +117,7 @@ export default function SponsorLogoTile({
 
   return (
     <a
-      href={websiteUrl}
+      href={externalHref}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Visit ${name}`}
@@ -92,10 +126,8 @@ export default function SponsorLogoTile({
       <SponsorTileContent
         name={name}
         logoUrl={logoUrl}
-        hoverOverlayClassName={hoverOverlayClassName}
         hoverTitle={hoverTitle}
         hoverDescription={hoverDescription}
-        hoverTextClassName={hoverTextClassName}
       />
     </a>
   )

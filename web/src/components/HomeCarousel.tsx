@@ -1,8 +1,14 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react'
+import Button from '@/components/Button'
 
 const carouselImages = [
   {
@@ -42,6 +48,14 @@ const carouselImages = [
   },
 ]
 
+// Slide frame ratio, named once instead of repeated as an arbitrary value: the
+// desktop slide is Figma's 1244x580, and below `sm` it falls back to 4:3 so the
+// frame keeps some height on narrow screens.
+const SLIDE_RATIO = {
+  '--slide-ratio': '1244 / 580',
+  '--slide-ratio-mobile': '4 / 3',
+} as CSSProperties
+
 export default function HomeCarousel() {
   const [current, setCurrent] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -51,7 +65,7 @@ export default function HomeCarousel() {
     if (intervalRef.current) clearInterval(intervalRef.current)
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => (prev + 1) % carouselImages.length)
-    }, 6000)
+    }, 5000)
   }, [])
 
   const stopTimer = useCallback(() => {
@@ -102,10 +116,11 @@ export default function HomeCarousel() {
   )
 
   return (
-    <section className="px-4 sm:px-6 md:px-10 lg:px-20">
-      <div className="relative drop-shadow-xl">
+    <section className="px-[21px] md:px-10 lg:px-16">
+      <div className="relative mx-auto w-full max-w-[1250px] drop-shadow-xl">
         <div
-          className="relative w-full aspect-4/3 sm:aspect-16/7 overflow-hidden rounded-2xl"
+          className="relative w-full aspect-(--slide-ratio-mobile) sm:aspect-(--slide-ratio) overflow-hidden rounded-[12px]"
+          style={SLIDE_RATIO}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={stopTimer}
@@ -126,35 +141,34 @@ export default function HomeCarousel() {
                   className="object-cover"
                   priority={image.id === 'vausa-mid-autumn'}
                 />
-                {/* Dark overlay at 35% opacity */}
                 <div className="absolute inset-0 bg-black/35" />
-                {/* Dark gradient on top edge for title readability */}
                 <div className="absolute inset-x-0 top-0 h-24 bg-linear-to-b from-black/50 to-transparent" />
-                {/* Title top left with more spacing */}
-                <p className="absolute top-12 left-12 text-white font-averia font-normal text-2xl md:text-3xl drop-shadow">
+                <p className="absolute top-9 left-9 text-white font-mono font-normal text-base leading-[13.33px] tracking-[-0.02em] drop-shadow">
                   {image.title}
                 </p>
-                {/* View Album bottom right - slightly thinner border, more round */}
                 <div className="absolute bottom-10 right-10">
-                  <Link
+                  <Button
                     href={image.albumHref}
-                    className="inline-flex items-center gap-2 border-2 rounded-3xl border-ssa-white bg-transparent text-ssa-white font-averia font-semibold text-sm md:text-xl px-4 py-2 md:px-8 md:py-4 transition-colors cursor-pointer hover:bg-white/20"
+                    variant="outline"
+                    color="white"
+                    size="short"
+                    arrowSide="right"
+                    className="!px-6 !py-4 !border-[1.87px] !font-semibold !text-sm md:!text-base !leading-[21.33px] tracking-[-0.02em] uppercase"
                   >
-                    View Album →
-                  </Link>
+                    View Album
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Dots - hidden on mobile, shown on sm+ */}
-          <div className="hidden sm:flex absolute bottom-6 left-0 right-0 justify-center gap-2">
+          <div className="hidden sm:flex absolute bottom-9 left-0 right-0 justify-center items-center gap-[7.76px] px-[15.52px] py-[11.64px] rounded-[18.41px] bg-black/50 mx-auto w-fit">
             {carouselImages.map((image, index) => (
               <button
                 key={image.id}
                 onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
-                className="flex items-center justify-center w-6 h-6 cursor-pointer"
+                className="flex items-center justify-center cursor-pointer"
               >
                 <span
                   className={`block w-2.5 h-2.5 rounded-full transition-all duration-200 ${index === current ? 'bg-ssa-red scale-125' : 'bg-white/70'}`}
@@ -164,7 +178,6 @@ export default function HomeCarousel() {
           </div>
         </div>
 
-        {/* Prev button */}
         <button
           onClick={goPrev}
           aria-label="Previous slide"
@@ -184,7 +197,6 @@ export default function HomeCarousel() {
           </svg>
         </button>
 
-        {/* Next button */}
         <button
           onClick={goNext}
           aria-label="Next slide"

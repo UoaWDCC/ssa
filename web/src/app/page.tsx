@@ -8,18 +8,14 @@ import HomeCarousel from '@/components/HomeCarousel'
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-10 bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
+    <main className="flex flex-col gap-10 overflow-x-hidden bg-ssa-background text-ssa-grey md:gap-14 lg:gap-30.25">
       <Hero
-        variant="fullscreen"
-        title="Singapore Students' Association"
+        title={"SINGAPORE\nSTUDENTS'\nASSOCIATION"}
         subtitle="A home for people from the Little Red Dot."
-        mascotImage="/ssa_merlion_full_body.svg"
-        mascotAlt="SSA Merlion mascot"
         ctaLabel="JOIN SSA!"
         ctaHref="/signup"
-        showSingaporeFlag
       />
-      <section className="px-[21px] md:px-10 lg:px-16">
+      <section className="px-4 sm:px-6 lg:px-10">
         <HighlightCard
           eyebrow="Upcoming Event"
           title="Ice Kachang"
@@ -39,14 +35,14 @@ export default function Home() {
             </>
           }
           ctaLabel="RSVP"
-          ctaHref="/events"
+          ctaHref="/events/rsvp"
           imageSrc="/events/highlight_mascot.png"
           imageAlt="Ice Kachang event artwork"
         />
       </section>
-      <JoinCard />
       {/* Image Carousel */}
       <HomeCarousel />
+      <JoinCard />
       <InstagramFeed />
       <Footer />
     </main>

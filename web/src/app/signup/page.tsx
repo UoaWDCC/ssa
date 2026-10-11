@@ -1,14 +1,13 @@
 import { Suspense } from 'react'
-import Hero from '@/components/Hero'
+import HeroSplit from '@/components/HeroSplit'
 import SignupForm from './_components/SignupForm'
 
 export default function SignupPage() {
   return (
-    <main>
-      <Hero
+    <main className="min-h-screen bg-ssa-background">
+      <HeroSplit
         title="Join SSA"
         subtitle="Become a member of the Singapore Students' Association."
-        mascotImage="/mascot.png"
       />
       <Suspense
         fallback={

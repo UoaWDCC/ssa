@@ -1,4 +1,9 @@
-const CMS_URL = process.env.NEXT_PUBLIC_CMS_URL ?? 'http://localhost:3001'
+// Server: runtime CMS_URL (localhost in the container). Browser: CMS_URL is
+// undefined there, so it falls through to the build-time public URL.
+const CMS_URL =
+  process.env.CMS_URL ??
+  process.env.NEXT_PUBLIC_CMS_URL ??
+  'http://localhost:3001'
 
 export async function fetchFromCMS<T>(path: string): Promise<T> {
   const res = await fetch(`${CMS_URL}/api${path}`, {
