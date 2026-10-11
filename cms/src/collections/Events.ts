@@ -86,7 +86,7 @@ export const Events: CollectionConfig = {
       type: 'number',
       min: 0,
       admin: {
-        description: 'Price in NZD',
+        description: 'Price in NZD. Leave empty (or 0) for a free event.',
         step: 0.01,
       },
     },

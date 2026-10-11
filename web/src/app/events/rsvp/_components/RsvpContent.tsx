@@ -77,9 +77,11 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
                   Price
                 </dt>
                 <dd className="mt-1 text-base leading-6">
-                  {data?.event?.memberPrice == null
+                  {!data?.event
                     ? '—'
-                    : `$${data.event.memberPrice}`}
+                    : data.event.memberPrice
+                      ? `$${data.event.memberPrice}`
+                      : 'Free'}
                 </dd>
               </div>
             </dl>

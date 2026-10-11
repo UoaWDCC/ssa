@@ -64,7 +64,7 @@ export default function UpcomingEventCard() {
           text: formatEventDate(event.date, event.time),
         },
       ]}
-      badges={event.memberPrice == null ? [] : [`$${event.memberPrice}`]}
+      badges={[event.memberPrice ? `$${event.memberPrice}` : 'Free']}
       description={<p>{event.description || 'More details coming soon.'}</p>}
       ctaLabel="RSVP"
       ctaHref="/events/rsvp"
