@@ -19,6 +19,7 @@ export default async function RsvpPage() {
 
   return (
     <RsvpContent
+      isActiveMember={session.membershipStatus === 'active'}
       member={{
         name: [session.firstName, session.lastName].filter(Boolean).join(' '),
         email: session.email,

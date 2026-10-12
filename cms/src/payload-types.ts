@@ -227,7 +227,7 @@ export interface Event {
   time?: string | null
   location?: string | null
   /**
-   * Price in NZD
+   * Price in NZD. Leave empty (or 0) for a free event.
    */
   memberPrice?: number | null
   description?: string | null
@@ -264,7 +264,6 @@ export interface EventRegistration {
   gender: 'woman' | 'man' | 'non-binary' | 'not-say'
   dietaryRequirements: string
   universityYear: '1' | '2' | '3' | '4' | '5+' | 'postgraduate' | 'not-currently-studying'
-  priceType: 'member' | 'non-member'
   /**
    * Amount charged in NZD.
    */
@@ -556,7 +555,6 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   gender?: T
   dietaryRequirements?: T
   universityYear?: T
-  priceType?: T
   amount?: T
   currency?: T
   status?: T

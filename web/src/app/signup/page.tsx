@@ -2,7 +2,26 @@ import { Suspense } from 'react'
 import HeroSplit from '@/components/HeroSplit'
 import SignupForm from './_components/SignupForm'
 
-export default function SignupPage() {
+// Render per request: the CMS isn't reachable during the Docker build.
+export const dynamic = 'force-dynamic'
+
+async function getMembershipPrice() {
+  const cmsUrl = process.env.CMS_URL ?? 'http://localhost:3001'
+  try {
+    const res = await fetch(`${cmsUrl}/stripe/checkout`, {
+      next: { revalidate: 3600 },
+    })
+    if (!res.ok) return null
+    const { amount } = (await res.json()) as { amount?: number }
+    return typeof amount === 'number' ? amount : null
+  } catch {
+    return null
+  }
+}
+
+export default async function SignupPage() {
+  const price = await getMembershipPrice()
+
   return (
     <main className="min-h-screen bg-ssa-background">
       <HeroSplit
@@ -16,7 +35,7 @@ export default function SignupPage() {
           </div>
         }
       >
-        <SignupForm />
+        <SignupForm price={price} />
       </Suspense>
     </main>
   )
