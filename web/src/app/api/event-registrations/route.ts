@@ -39,12 +39,7 @@ export async function POST(request: Request) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event: body.event,
-        emergencyContactName: body.emergencyContactName,
-        emergencyContactPhone: body.emergencyContactPhone,
-        emergencyContactRelationship: body.emergencyContactRelationship,
-        gender: body.gender,
-        dietaryRequirements: body.dietaryRequirements,
-        universityYear: body.universityYear,
+        answers: body.answers,
         userId: session.userId,
         secret: internalSecret,
       }),

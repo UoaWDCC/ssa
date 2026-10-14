@@ -2,6 +2,7 @@
 
 import RsvpForm, { type Member } from './RsvpForm'
 import { UpcomingEventResponse } from '@/types/events'
+import { DEFAULT_RSVP_QUESTIONS } from '@/lib/rsvpQuestions'
 import { useQuery } from '@tanstack/react-query'
 import { eventDateTime, formatEventDate } from '@/lib/eventDate'
 
@@ -89,7 +90,11 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
 
           <div aria-hidden="true" className="hidden bg-[#e9e1d5] lg:block" />
 
-          <RsvpForm eventId={data?.event?.id} member={member} />
+          <RsvpForm
+            eventId={data?.event?.id}
+            member={member}
+            questions={data?.event?.rsvpQuestions ?? DEFAULT_RSVP_QUESTIONS}
+          />
         </div>
       </div>
     </main>

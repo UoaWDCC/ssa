@@ -1,12 +1,6 @@
 'use client'
 
-import {
-  type FormEvent,
-  type HTMLInputTypeAttribute,
-  useEffect,
-  useRef,
-  useState,
-} from 'react'
+import { type FormEvent, useEffect, useRef, useState } from 'react'
 import {
   FiArrowLeft,
   FiArrowRight,
@@ -15,10 +9,16 @@ import {
 } from 'react-icons/fi'
 
 import ProgressBar from '@/components/ProgressBar'
+import {
+  DEFAULT_RSVP_QUESTIONS,
+  getRsvpAnswerKey,
+  type RsvpQuestion,
+} from '@/lib/rsvpQuestions'
 
-const TOTAL_STEPS = 2
-
-type Step = 1 | 2
+type RsvpStep = 'emergency' | 'attendee'
+type AnswerValue = string | boolean
+type Answers = Record<string, AnswerValue>
+type FieldErrors = Record<string, string>
 
 export type Member = {
   name: string
@@ -27,233 +27,85 @@ export type Member = {
   universityYear: string
 }
 
-type FormValues = {
-  emergencyName: string
-  emergencyPhone: string
-  relationship: string
-  gender: string
-  dietaryRequirements: string
-  universityYear: string
+type RsvpFormProps = Readonly<{
+  eventId?: number
+  member: Member
+  questions?: RsvpQuestion[] | null
+}>
+
+const stepLabels: Record<RsvpStep, string> = {
+  emergency: 'Emergency contact information',
+  attendee: 'Attendee details',
 }
 
-type FieldName = keyof FormValues
-type FieldErrors = Partial<Record<FieldName, string>>
-
-const initialValues: FormValues = {
-  emergencyName: '',
-  emergencyPhone: '',
-  relationship: '',
-  gender: '',
-  dietaryRequirements: '',
-  universityYear: '',
+function controlId(key: string) {
+  return `rsvp-${encodeURIComponent(key)}`
 }
 
-const stepDetails: Record<Step, { label: string }> = {
-  1: { label: 'Emergency contact information' },
-  2: { label: 'Attendee details' },
-}
-
-const stepFields: Record<Step, FieldName[]> = {
-  1: ['emergencyName', 'emergencyPhone', 'relationship'],
-  2: ['gender', 'dietaryRequirements', 'universityYear'],
-}
-
-const fieldLabels: Record<FieldName, string> = {
-  emergencyName: 'emergency contact name',
-  emergencyPhone: 'emergency contact phone number',
-  relationship: 'relationship',
-  gender: 'gender',
-  dietaryRequirements: 'dietary requirements',
-  universityYear: 'university year',
-}
-
-function fieldId(name: FieldName) {
-  return `rsvp-${name}`
-}
-
-function validateField(name: FieldName, rawValue: string) {
-  const value = rawValue.trim()
-
-  if (!value) return `Please enter your ${fieldLabels[name]}.`
-
-  if (name === 'emergencyPhone' && !/^\+?[\d\s().-]+$/.test(value)) {
-    return 'Use only numbers, spaces, brackets, a leading +, or hyphens.'
+function validateQuestion(
+  question: RsvpQuestion,
+  value: AnswerValue,
+): string | undefined {
+  if (question.type === 'checkbox') {
+    return question.required && value !== true
+      ? `Please confirm ${question.label.toLowerCase()}.`
+      : undefined
   }
 
-  if (name === 'emergencyPhone' && value.replace(/\D/g, '').length < 7) {
-    return 'Enter a phone number with at least 7 digits.'
+  const textValue = typeof value === 'string' ? value.trim() : ''
+  if (question.required && !textValue) {
+    return `Please enter ${question.label.toLowerCase()}.`
+  }
+  if (!textValue) return undefined
+
+  if (question.type === 'email' && !/^\S+@\S+\.\S+$/.test(textValue)) {
+    return 'Enter a valid email address.'
+  }
+  if (question.type === 'tel') {
+    if (!/^\+?[\d\s().-]+$/.test(textValue)) {
+      return 'Use only numbers, spaces, brackets, a leading +, or hyphens.'
+    }
+    if (textValue.replace(/\D/g, '').length < 7) {
+      return 'Enter a phone number with at least 7 digits.'
+    }
+  }
+  if (question.type === 'number' && !Number.isFinite(Number(textValue))) {
+    return 'Enter a valid number.'
+  }
+  if (
+    question.type === 'select' &&
+    !(question.options ?? []).some((option) => option?.value === textValue)
+  ) {
+    return 'Choose one of the available options.'
   }
 
   return undefined
 }
 
-function getStepErrors(step: Step, values: FormValues) {
-  return stepFields[step].reduce<FieldErrors>((nextErrors, field) => {
-    const message = validateField(field, values[field])
-    if (message) nextErrors[field] = message
-    return nextErrors
-  }, {})
-}
-
-type FieldProps = {
-  name: FieldName
-  label: string
-  value: string
-  placeholder: string
-  error?: string
-  onChange: (name: FieldName, value: string) => void
-  onBlur: (name: FieldName) => void
-  type?: HTMLInputTypeAttribute
-  inputMode?: 'email' | 'tel' | 'text'
-  autoComplete?: string
-  maxLength?: number
-}
-
-function Field({
-  name,
-  label,
-  value,
-  placeholder,
-  error,
-  onChange,
-  onBlur,
-  type = 'text',
-  inputMode,
-  autoComplete,
-  maxLength,
-}: FieldProps) {
-  const id = fieldId(name)
-  const errorId = `${id}-error`
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label
-        htmlFor={id}
-        className="font-inter text-sm font-medium leading-5 text-ssa-grey"
-      >
-        {label}
-        <span aria-hidden="true" className="ml-0.5 text-ssa-form-accent">
-          *
-        </span>
-      </label>
-      <input
-        id={id}
-        name={name}
-        type={type}
-        inputMode={inputMode}
-        autoComplete={autoComplete}
-        maxLength={maxLength}
-        autoCapitalize={type === 'email' ? 'none' : undefined}
-        spellCheck={type === 'email' ? false : undefined}
-        value={value}
-        placeholder={placeholder}
-        required
-        aria-invalid={Boolean(error)}
-        aria-describedby={error ? errorId : undefined}
-        onChange={(event) => onChange(name, event.target.value)}
-        onBlur={() => onBlur(name)}
-        className={`h-12 w-full rounded-full border bg-ssa-form-field px-4 font-inter text-base text-ssa-grey shadow-[inset_0_1px_0_#ffffff] outline-none transition-[border-color,box-shadow,background-color] duration-150 placeholder:text-[#6f6961] hover:border-[#6f6961] focus-visible:border-ssa-form-accent focus-visible:ring-2 focus-visible:ring-ssa-form-accent/25 ${
-          error ? 'border-[#b4233d] bg-[#fffafa]' : 'border-ssa-form-border'
-        }`}
-      />
-      {error && (
-        <p
-          id={errorId}
-          role="alert"
-          className="font-inter text-sm leading-5 text-[#a51d37]"
-        >
-          {error}
-        </p>
-      )}
-    </div>
-  )
-}
-
-type SelectFieldProps = {
-  name: FieldName
-  label: string
-  value: string
-  placeholder: string
-  options: { value: string; label: string }[]
-  error?: string
-  onChange: (name: FieldName, value: string) => void
-  onBlur: (name: FieldName) => void
-}
-
-function SelectField({
-  name,
-  label,
-  value,
-  placeholder,
-  options,
-  error,
-  onChange,
-  onBlur,
-}: SelectFieldProps) {
-  const id = fieldId(name)
-  const errorId = `${id}-error`
-
-  return (
-    <div className="flex flex-col gap-2">
-      <label
-        htmlFor={id}
-        className="font-inter text-sm font-medium leading-5 text-ssa-grey"
-      >
-        {label}
-        <span aria-hidden="true" className="ml-0.5 text-ssa-form-accent">
-          *
-        </span>
-      </label>
-      <div className="relative">
-        <select
-          id={id}
-          name={name}
-          value={value}
-          required
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? errorId : undefined}
-          onChange={(event) => onChange(name, event.target.value)}
-          onBlur={() => onBlur(name)}
-          className={`h-12 w-full appearance-none rounded-full border bg-ssa-form-field px-4 pr-12 font-inter text-base shadow-[inset_0_1px_0_#ffffff] outline-none transition-[border-color,box-shadow,background-color] duration-150 hover:border-[#aaa398] focus-visible:border-ssa-form-accent focus-visible:ring-2 focus-visible:ring-ssa-form-accent/25 ${
-            value ? 'text-ssa-grey' : 'text-[#6f6961]'
-          } ${
-            error ? 'border-[#b4233d] bg-[#fffafa]' : 'border-ssa-form-border'
-          }`}
-        >
-          <option value="" disabled>
-            {placeholder}
-          </option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-        <FiChevronDown
-          aria-hidden="true"
-          className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[#716b63]"
-        />
-      </div>
-      {error && (
-        <p
-          id={errorId}
-          role="alert"
-          className="font-inter text-sm leading-5 text-[#a51d37]"
-        >
-          {error}
-        </p>
-      )}
-    </div>
-  )
-}
-
 export default function RsvpForm({
   eventId,
   member,
-}: Readonly<{ eventId?: number; member: Member }>) {
-  const [step, setStep] = useState<Step>(1)
-  const [values, setValues] = useState<FormValues>({
-    ...initialValues,
+  questions = DEFAULT_RSVP_QUESTIONS,
+}: RsvpFormProps) {
+  const enabledQuestions = (questions ?? []).filter(
+    (question) => question.enabled !== false,
+  )
+  const steps = (['emergency', 'attendee'] as const).filter((candidate) =>
+    enabledQuestions.some((question) => question.step === candidate),
+  )
+  const activeSteps: RsvpStep[] = steps.length > 0 ? [...steps] : ['attendee']
+
+  const [step, setStep] = useState<RsvpStep>('emergency')
+  const currentStep = activeSteps.includes(step) ? step : activeSteps[0]
+  const stepIndex = activeSteps.indexOf(currentStep)
+  const visibleQuestions = enabledQuestions
+    .map((question, index) => ({
+      question,
+      index,
+      key: getRsvpAnswerKey(question, index),
+    }))
+    .filter(({ question }) => question.step === currentStep)
+  const [values, setValues] = useState<Answers>({
     gender: member.gender,
     universityYear: member.universityYear,
   })
@@ -261,68 +113,69 @@ export default function RsvpForm({
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
-  const previousStep = useRef<Step>(step)
+  const previousStep = useRef(currentStep)
 
   useEffect(() => {
-    if (previousStep.current === step) return
+    if (previousStep.current === currentStep) return
     stepHeadingRef.current?.focus()
-    previousStep.current = step
-  }, [step])
+    previousStep.current = currentStep
+  }, [currentStep])
 
-  function handleChange(name: FieldName, value: string) {
-    setValues((current) => ({ ...current, [name]: value }))
+  function handleChange(key: string, value: AnswerValue) {
+    setValues((current) => ({ ...current, [key]: value }))
     setSubmitError(null)
     setErrors((current) => {
-      if (!current[name]) return current
-      const nextErrors = { ...current }
-      delete nextErrors[name]
-      return nextErrors
+      if (!current[key]) return current
+      const next = { ...current }
+      delete next[key]
+      return next
     })
   }
 
-  function handleBlur(name: FieldName) {
-    const message = validateField(name, values[name])
+  function handleBlur(question: RsvpQuestion, key: string) {
+    const message = validateQuestion(question, values[key] ?? '')
     setErrors((current) => {
-      const nextErrors = { ...current }
-      if (message) nextErrors[name] = message
-      else delete nextErrors[name]
-      return nextErrors
+      const next = { ...current }
+      if (message) next[key] = message
+      else delete next[key]
+      return next
     })
+  }
+
+  function validateCurrentStep() {
+    const nextErrors: FieldErrors = {}
+    for (const { question, key } of visibleQuestions) {
+      const message = validateQuestion(
+        question,
+        values[key] ?? (question.type === 'checkbox' ? false : ''),
+      )
+      if (message) nextErrors[key] = message
+    }
+    return nextErrors
   }
 
   function focusFirstError(nextErrors: FieldErrors) {
-    const firstInvalidField = stepFields[step].find(
-      (field) => nextErrors[field],
+    const firstKey = visibleQuestions.find(({ key }) => nextErrors[key])?.key
+    if (!firstKey) return
+    requestAnimationFrame(() =>
+      document.getElementById(controlId(firstKey))?.focus(),
     )
-    if (!firstInvalidField) return
-
-    requestAnimationFrame(() => {
-      document.getElementById(fieldId(firstInvalidField))?.focus()
-    })
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (isSubmitting) return
 
-    const normalizedValues = { ...values }
-    for (const field of stepFields[step]) {
-      normalizedValues[field] = values[field].trim()
-    }
-    const nextErrors = getStepErrors(step, normalizedValues)
-
-    setValues(normalizedValues)
-
+    const nextErrors = validateCurrentStep()
+    setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors)
       focusFirstError(nextErrors)
       return
     }
 
-    setErrors({})
     setSubmitError(null)
-    if (step < TOTAL_STEPS) {
-      setStep((step + 1) as Step)
+    if (stepIndex < activeSteps.length - 1) {
+      setStep(activeSteps[stepIndex + 1])
       return
     }
 
@@ -331,20 +184,18 @@ export default function RsvpForm({
       return
     }
 
+    const answers: Answers = {}
+    enabledQuestions.forEach((question, index) => {
+      const key = getRsvpAnswerKey(question, index)
+      answers[key] = values[key] ?? (question.type === 'checkbox' ? false : '')
+    })
+
     setIsSubmitting(true)
     try {
       const response = await fetch('/api/event-registrations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          event: eventId,
-          emergencyContactName: normalizedValues.emergencyName,
-          emergencyContactPhone: normalizedValues.emergencyPhone,
-          emergencyContactRelationship: normalizedValues.relationship,
-          gender: normalizedValues.gender,
-          dietaryRequirements: normalizedValues.dietaryRequirements,
-          universityYear: normalizedValues.universityYear,
-        }),
+        body: JSON.stringify({ event: eventId, answers }),
       })
       const result = (await response.json().catch(() => ({}))) as {
         checkoutUrl?: string
@@ -367,33 +218,37 @@ export default function RsvpForm({
   }
 
   function handleBack() {
-    if (step === 1) return
+    if (stepIndex <= 0) return
     setErrors({})
     setSubmitError(null)
-    setStep((step - 1) as Step)
+    setStep(activeSteps[stepIndex - 1])
   }
 
-  const currentStep = stepDetails[step]
+  const currentStepLabel = stepLabels[currentStep]
+  const isLastStep = stepIndex === activeSteps.length - 1
 
   return (
-    <section aria-labelledby={`rsvp-step-title-${step}`} className="min-w-0">
-      <ProgressBar step={step} total={TOTAL_STEPS} />
+    <section
+      aria-labelledby={`rsvp-step-title-${currentStep}`}
+      className="min-w-0"
+    >
+      <ProgressBar step={stepIndex + 1} total={activeSteps.length} />
       <div className="mt-3 flex items-center justify-between gap-4 font-dm-mono text-xs font-medium uppercase tracking-[0.04em] text-ssa-form-accent">
         <h2
           ref={stepHeadingRef}
-          id={`rsvp-step-title-${step}`}
+          id={`rsvp-step-title-${currentStep}`}
           tabIndex={-1}
           className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2"
         >
-          {currentStep.label}
+          {currentStepLabel}
         </h2>
         <p className="shrink-0">
-          Step {step}/{TOTAL_STEPS}
+          Step {stepIndex + 1}/{activeSteps.length}
         </p>
       </div>
 
       <p className="sr-only" aria-live="polite">
-        Step {step} of {TOTAL_STEPS}: {currentStep.label}
+        Step {stepIndex + 1} of {activeSteps.length}: {currentStepLabel}
       </p>
 
       <form
@@ -403,112 +258,179 @@ export default function RsvpForm({
         className="mt-8 flex min-h-[440px] flex-col rounded-[18px] border border-[#e6ded1] bg-ssa-card p-5 shadow-[0_1px_2px_#6d4f2b1a,0_14px_34px_#6d4f2b0a] sm:p-8 lg:p-9"
       >
         <fieldset
-          key={step}
+          key={currentStep}
           disabled={isSubmitting}
           className="rsvp-step-enter flex min-w-0 flex-1 flex-col"
         >
-          <legend className="sr-only">{currentStep.label}</legend>
+          <legend className="sr-only">{currentStepLabel}</legend>
 
-          {step === 1 && (
-            <div className="grid gap-5 sm:gap-6">
-              <p className="rounded-xl border border-ssa-form-border bg-ssa-form-field px-4 py-3 font-inter text-sm leading-5 text-ssa-grey">
-                Registering as{' '}
-                <span className="font-semibold">
-                  {member.name || member.email}
-                </span>
-                {member.name && (
-                  <span className="text-[#6f6961]"> ({member.email})</span>
-                )}
-              </p>
-              <Field
-                name="emergencyName"
-                label="Emergency Contact Name"
-                placeholder="Full name"
-                value={values.emergencyName}
-                error={errors.emergencyName}
-                autoComplete="section-emergency name"
-                maxLength={80}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Field
-                name="emergencyPhone"
-                label="Emergency Contact Phone"
-                placeholder="+64 21 000 0000"
-                value={values.emergencyPhone}
-                error={errors.emergencyPhone}
-                type="tel"
-                inputMode="tel"
-                autoComplete="section-emergency tel"
-                maxLength={32}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <Field
-                name="relationship"
-                label="Relationship"
-                placeholder="e.g. parent, sibling, friend"
-                value={values.relationship}
-                error={errors.relationship}
-                autoComplete="off"
-                maxLength={80}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </div>
+          {currentStep === 'emergency' && (
+            <p className="mb-5 rounded-xl border border-ssa-form-border bg-ssa-form-field px-4 py-3 font-inter text-sm leading-5 text-ssa-grey">
+              Registering as{' '}
+              <span className="font-semibold">
+                {member.name || member.email}
+              </span>
+              {member.name && (
+                <span className="text-[#6f6961]"> ({member.email})</span>
+              )}
+            </p>
           )}
 
-          {step === 2 && (
-            <div className="grid gap-5 sm:gap-6">
-              <SelectField
-                name="gender"
-                label="Gender"
-                placeholder="Select gender"
-                value={values.gender}
-                error={errors.gender}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                options={[
-                  { value: 'woman', label: 'Woman' },
-                  { value: 'man', label: 'Man' },
-                  { value: 'non-binary', label: 'Non-binary' },
-                  { value: 'not-say', label: 'Prefer not to say' },
-                ]}
-              />
-              <Field
-                name="dietaryRequirements"
-                label="Dietary Requirements"
-                placeholder="e.g. vegetarian, halal, allergies, or none"
-                value={values.dietaryRequirements}
-                error={errors.dietaryRequirements}
-                autoComplete="off"
-                maxLength={200}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <SelectField
-                name="universityYear"
-                label="What Year of University are you in?"
-                placeholder="Select university year"
-                value={values.universityYear}
-                error={errors.universityYear}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                options={[
-                  { value: '1', label: 'First year' },
-                  { value: '2', label: 'Second year' },
-                  { value: '3', label: 'Third year' },
-                  { value: '4', label: 'Fourth year' },
-                  { value: '5+', label: 'Fifth year or later' },
-                  { value: 'postgraduate', label: 'Postgraduate' },
-                  {
-                    value: 'not-currently-studying',
-                    label: 'Not currently a university student',
-                  },
-                ]}
-              />
-            </div>
-          )}
+          <div className="grid gap-5 sm:gap-6">
+            {visibleQuestions.map(({ question, key, index }) => {
+              const id = controlId(key)
+              const errorId = `${id}-error`
+              const value =
+                values[key] ?? (question.type === 'checkbox' ? false : '')
+              const error = errors[key]
+              const required = question.required === true
+              const sharedClasses = `w-full border bg-ssa-form-field font-inter text-base text-ssa-grey shadow-[inset_0_1px_0_#ffffff] outline-none transition-[border-color,box-shadow,background-color] duration-150 focus-visible:border-ssa-form-accent focus-visible:ring-2 focus-visible:ring-ssa-form-accent/25 ${
+                error
+                  ? 'border-[#b4233d] bg-[#fffafa]'
+                  : 'border-ssa-form-border'
+              }`
+              const describedBy = error ? errorId : undefined
+              const options = (question.options ?? []).filter(
+                (option): option is { label: string; value: string } =>
+                  Boolean(option),
+              )
+
+              return (
+                <div key={`${key}-${index}`} className="flex flex-col gap-2">
+                  {question.type === 'checkbox' ? (
+                    <label
+                      htmlFor={id}
+                      className="flex min-h-12 items-center gap-3 font-inter text-sm font-medium leading-5 text-ssa-grey"
+                    >
+                      <input
+                        id={id}
+                        name={key}
+                        type="checkbox"
+                        checked={value === true}
+                        required={required}
+                        aria-invalid={Boolean(error)}
+                        aria-describedby={describedBy}
+                        onChange={(change) =>
+                          handleChange(key, change.target.checked)
+                        }
+                        onBlur={() => handleBlur(question, key)}
+                        className="size-5 accent-ssa-form-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ssa-form-accent"
+                      />
+                      <span>{question.label}</span>
+                      {required && (
+                        <span
+                          aria-hidden="true"
+                          className="text-ssa-form-accent"
+                        >
+                          *
+                        </span>
+                      )}
+                    </label>
+                  ) : (
+                    <>
+                      <label
+                        htmlFor={id}
+                        className="font-inter text-sm font-medium leading-5 text-ssa-grey"
+                      >
+                        {question.label}
+                        {required && (
+                          <span
+                            aria-hidden="true"
+                            className="ml-0.5 text-ssa-form-accent"
+                          >
+                            *
+                          </span>
+                        )}
+                      </label>
+                      {question.type === 'textarea' ? (
+                        <textarea
+                          id={id}
+                          name={key}
+                          value={typeof value === 'string' ? value : ''}
+                          placeholder={question.placeholder ?? ''}
+                          required={required}
+                          maxLength={2000}
+                          aria-invalid={Boolean(error)}
+                          aria-describedby={describedBy}
+                          onChange={(change) =>
+                            handleChange(key, change.target.value)
+                          }
+                          onBlur={() => handleBlur(question, key)}
+                          className={`${sharedClasses} min-h-28 resize-y rounded-2xl px-4 py-3 placeholder:text-[#6f6961] hover:border-[#6f6961]`}
+                        />
+                      ) : question.type === 'select' ? (
+                        <div className="relative">
+                          <select
+                            id={id}
+                            name={key}
+                            value={typeof value === 'string' ? value : ''}
+                            required={required}
+                            aria-invalid={Boolean(error)}
+                            aria-describedby={describedBy}
+                            onChange={(change) =>
+                              handleChange(key, change.target.value)
+                            }
+                            onBlur={() => handleBlur(question, key)}
+                            className={`${sharedClasses} h-12 appearance-none rounded-full px-4 pr-12 ${
+                              value ? '' : 'text-[#6f6961]'
+                            }`}
+                          >
+                            <option value="" disabled>
+                              {question.placeholder || 'Select an option'}
+                            </option>
+                            {options.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                          <FiChevronDown
+                            aria-hidden="true"
+                            className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-[#716b63]"
+                          />
+                        </div>
+                      ) : (
+                        <input
+                          id={id}
+                          name={key}
+                          type={question.type}
+                          inputMode={
+                            question.type === 'tel' ? 'tel' : undefined
+                          }
+                          value={typeof value === 'string' ? value : ''}
+                          placeholder={question.placeholder ?? ''}
+                          required={required}
+                          maxLength={500}
+                          autoCapitalize={
+                            question.type === 'email' ? 'none' : undefined
+                          }
+                          spellCheck={
+                            question.type === 'email' ? false : undefined
+                          }
+                          aria-invalid={Boolean(error)}
+                          aria-describedby={describedBy}
+                          onChange={(change) =>
+                            handleChange(key, change.target.value)
+                          }
+                          onBlur={() => handleBlur(question, key)}
+                          className={`${sharedClasses} h-12 rounded-full px-4 placeholder:text-[#6f6961] hover:border-[#6f6961]`}
+                        />
+                      )}
+                    </>
+                  )}
+                  {error && (
+                    <p
+                      id={errorId}
+                      role="alert"
+                      className="font-inter text-sm leading-5 text-[#a51d37]"
+                    >
+                      {error}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
 
           {submitError && (
             <p
@@ -521,10 +443,10 @@ export default function RsvpForm({
 
           <div
             className={`mt-auto flex flex-col-reverse items-stretch gap-3 pt-10 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-4 ${
-              step === 1 ? 'justify-end' : 'justify-between'
+              stepIndex === 0 ? 'justify-end' : 'justify-between'
             }`}
           >
-            {step > 1 && (
+            {stepIndex > 0 && (
               <button
                 type="button"
                 onClick={handleBack}
@@ -543,10 +465,10 @@ export default function RsvpForm({
             >
               {isSubmitting
                 ? 'Redirecting…'
-                : step === TOTAL_STEPS
+                : isLastStep
                   ? 'Go to Payment'
                   : 'Next'}
-              {step === TOTAL_STEPS ? (
+              {isLastStep ? (
                 <FiCheck aria-hidden="true" className="size-4" />
               ) : (
                 <FiArrowRight aria-hidden="true" className="size-4" />

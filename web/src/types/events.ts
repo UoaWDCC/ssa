@@ -1,4 +1,5 @@
 import type { Media } from './payload-types'
+import type { RsvpQuestion } from '@/lib/rsvpQuestions'
 
 export type EventCategory = 'games' | 'community' | 'food' | 'agm' | 'all'
 
@@ -18,6 +19,7 @@ export interface Event {
   coverImage?: number | Media | null
   category?: EventCategory | null
   isUpcoming?: boolean | null
+  rsvpQuestions?: RsvpQuestion[] | null
   images?: EventImage[] | null
   updatedAt: string
   createdAt: string

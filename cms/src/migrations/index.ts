@@ -1,7 +1,6 @@
 import * as migration_20260906_223448_baseline from './20260906_223448_baseline'
 import * as migration_20260906_223523_event_rsvps from './20260906_223523_event_rsvps'
-import * as migration_20260929_000001_sponsors_category from './20260929_000001_sponsors_category'
-import * as migration_20261008_205511 from './20261008_205511'
+import * as migration_20261013_020828 from './20261013_020828'
 
 export const migrations = [
   {
@@ -15,13 +14,8 @@ export const migrations = [
     name: '20260906_223523_event_rsvps',
   },
   {
-    up: migration_20260929_000001_sponsors_category.up,
-    down: migration_20260929_000001_sponsors_category.down,
-    name: '20260929_000001_sponsors_category',
-  },
-  {
-    up: migration_20261008_205511.up,
-    down: migration_20261008_205511.down,
-    name: '20261008_205511',
+    up: migration_20261013_020828.up,
+    down: migration_20261013_020828.down,
+    name: '20261013_020828',
   },
 ]

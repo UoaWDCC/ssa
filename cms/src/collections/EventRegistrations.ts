@@ -64,22 +64,18 @@ export const EventRegistrations: CollectionConfig = {
     {
       name: 'emergencyContactName',
       type: 'text',
-      required: true,
     },
     {
       name: 'emergencyContactPhone',
       type: 'text',
-      required: true,
     },
     {
       name: 'emergencyContactRelationship',
       type: 'text',
-      required: true,
     },
     {
       name: 'gender',
       type: 'select',
-      required: true,
       options: [
         { label: 'Woman', value: 'woman' },
         { label: 'Man', value: 'man' },
@@ -90,13 +86,11 @@ export const EventRegistrations: CollectionConfig = {
     {
       name: 'dietaryRequirements',
       type: 'textarea',
-      required: true,
     },
     {
       name: 'universityYear',
       label: 'University Year',
       type: 'select',
-      required: true,
       options: [
         { label: 'First year', value: '1' },
         { label: 'Second year', value: '2' },
@@ -104,11 +98,17 @@ export const EventRegistrations: CollectionConfig = {
         { label: 'Fourth year', value: '4' },
         { label: 'Fifth year or later', value: '5+' },
         { label: 'Postgraduate', value: 'postgraduate' },
-        {
-          label: 'Not currently a university student',
-          value: 'not-currently-studying',
-        },
+        { label: 'Not currently a university student', value: 'not-currently-studying' },
       ],
+    },
+    {
+      name: 'answers',
+      type: 'json',
+      required: true,
+      defaultValue: [],
+      admin: {
+        description: 'Snapshot of the RSVP questions and answers at registration time.',
+      },
     },
     {
       name: 'priceType',

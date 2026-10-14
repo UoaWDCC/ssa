@@ -227,10 +227,40 @@ export interface Event {
   time?: string | null
   location?: string | null
   /**
-   * Price in NZD
+   * Price in NZD. Leave empty (or 0) for a free event.
    */
   memberPrice?: number | null
+  nonMemberPrice?: number | null
   description?: string | null
+  /**
+   * Add, edit, reorder, or disable questions shown on this event’s RSVP form. Existing registrations keep a snapshot of their submitted answers.
+   */
+  rsvpQuestions?:
+    | {
+        fieldKey:
+          | 'custom'
+          | 'emergencyContactName'
+          | 'emergencyContactPhone'
+          | 'emergencyContactRelationship'
+          | 'gender'
+          | 'dietaryRequirements'
+          | 'universityYear'
+        label: string
+        type: 'text' | 'textarea' | 'email' | 'tel' | 'number' | 'select' | 'checkbox'
+        step: 'emergency' | 'attendee'
+        placeholder?: string | null
+        required?: boolean | null
+        enabled?: boolean | null
+        options?:
+          | {
+              label: string
+              value: string
+              id?: string | null
+            }[]
+          | null
+        id?: string | null
+      }[]
+    | null
   coverImage?: (number | null) | Media
   category?: ('games' | 'community' | 'food' | 'agm' | 'all') | null
   isUpcoming?: boolean | null
@@ -258,12 +288,24 @@ export interface EventRegistration {
   lastName: string
   email: string
   phone?: string | null
-  emergencyContactName: string
-  emergencyContactPhone: string
-  emergencyContactRelationship: string
-  gender: 'woman' | 'man' | 'non-binary' | 'not-say'
-  dietaryRequirements: string
-  universityYear: '1' | '2' | '3' | '4' | '5+' | 'postgraduate' | 'not-currently-studying'
+  emergencyContactName?: string | null
+  emergencyContactPhone?: string | null
+  emergencyContactRelationship?: string | null
+  gender?: ('woman' | 'man' | 'non-binary' | 'not-say') | null
+  dietaryRequirements?: string | null
+  universityYear?: ('1' | '2' | '3' | '4' | '5+' | 'postgraduate' | 'not-currently-studying') | null
+  /**
+   * Snapshot of the RSVP questions and answers at registration time.
+   */
+  answers:
+    | {
+        [k: string]: unknown
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null
   priceType: 'member' | 'non-member'
   /**
    * Amount charged in NZD.
@@ -526,7 +568,27 @@ export interface EventsSelect<T extends boolean = true> {
   time?: T
   location?: T
   memberPrice?: T
+  nonMemberPrice?: T
   description?: T
+  rsvpQuestions?:
+    | T
+    | {
+        fieldKey?: T
+        label?: T
+        type?: T
+        step?: T
+        placeholder?: T
+        required?: T
+        enabled?: T
+        options?:
+          | T
+          | {
+              label?: T
+              value?: T
+              id?: T
+            }
+        id?: T
+      }
   coverImage?: T
   category?: T
   isUpcoming?: T
@@ -556,6 +618,7 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   gender?: T
   dietaryRequirements?: T
   universityYear?: T
+  answers?: T
   priceType?: T
   amount?: T
   currency?: T
