@@ -459,212 +459,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.events_rsvp_questions_options": {
-      "name": "events_rsvp_questions_options",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "label": {
-          "name": "label",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "value": {
-          "name": "value",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {
-        "events_rsvp_questions_options_order_idx": {
-          "name": "events_rsvp_questions_options_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "events_rsvp_questions_options_parent_id_idx": {
-          "name": "events_rsvp_questions_options_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "events_rsvp_questions_options_parent_id_fk": {
-          "name": "events_rsvp_questions_options_parent_id_fk",
-          "tableFrom": "events_rsvp_questions_options",
-          "tableTo": "events_rsvp_questions",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.events_rsvp_questions": {
-      "name": "events_rsvp_questions",
-      "schema": "",
-      "columns": {
-        "_order": {
-          "name": "_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "_parent_id": {
-          "name": "_parent_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "id": {
-          "name": "id",
-          "type": "varchar",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "field_key": {
-          "name": "field_key",
-          "type": "enum_events_rsvp_questions_field_key",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'custom'"
-        },
-        "label": {
-          "name": "label",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "type": {
-          "name": "type",
-          "type": "enum_events_rsvp_questions_type",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'text'"
-        },
-        "step": {
-          "name": "step",
-          "type": "enum_events_rsvp_questions_step",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'attendee'"
-        },
-        "placeholder": {
-          "name": "placeholder",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "required": {
-          "name": "required",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        },
-        "enabled": {
-          "name": "enabled",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
-        }
-      },
-      "indexes": {
-        "events_rsvp_questions_order_idx": {
-          "name": "events_rsvp_questions_order_idx",
-          "columns": [
-            {
-              "expression": "_order",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "events_rsvp_questions_parent_id_idx": {
-          "name": "events_rsvp_questions_parent_id_idx",
-          "columns": [
-            {
-              "expression": "_parent_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "events_rsvp_questions_parent_id_fk": {
-          "name": "events_rsvp_questions_parent_id_fk",
-          "tableFrom": "events_rsvp_questions",
-          "tableTo": "events",
-          "columnsFrom": ["_parent_id"],
-          "columnsTo": ["id"],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.events_images": {
       "name": "events_images",
       "schema": "",
@@ -962,52 +756,45 @@
           "name": "phone",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "emergency_contact_name": {
           "name": "emergency_contact_name",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "emergency_contact_phone": {
           "name": "emergency_contact_phone",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "emergency_contact_relationship": {
           "name": "emergency_contact_relationship",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "gender": {
           "name": "gender",
           "type": "enum_event_registrations_gender",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "dietary_requirements": {
           "name": "dietary_requirements",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "university_year": {
           "name": "university_year",
           "type": "enum_event_registrations_university_year",
           "typeSchema": "public",
           "primaryKey": false,
-          "notNull": false
-        },
-        "answers": {
-          "name": "answers",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
+          "notNull": true
         },
         "price_type": {
           "name": "price_type",
@@ -2822,29 +2609,6 @@
       "schema": "public",
       "values": ["chinese", "malay", "indian", "eurasian", "other"]
     },
-    "public.enum_events_rsvp_questions_field_key": {
-      "name": "enum_events_rsvp_questions_field_key",
-      "schema": "public",
-      "values": [
-        "custom",
-        "emergencyContactName",
-        "emergencyContactPhone",
-        "emergencyContactRelationship",
-        "gender",
-        "dietaryRequirements",
-        "universityYear"
-      ]
-    },
-    "public.enum_events_rsvp_questions_type": {
-      "name": "enum_events_rsvp_questions_type",
-      "schema": "public",
-      "values": ["text", "textarea", "email", "tel", "number", "select", "checkbox"]
-    },
-    "public.enum_events_rsvp_questions_step": {
-      "name": "enum_events_rsvp_questions_step",
-      "schema": "public",
-      "values": ["emergency", "attendee"]
-    },
     "public.enum_events_category": {
       "name": "enum_events_category",
       "schema": "public",
@@ -2916,6 +2680,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "5c5d83f9-376d-494a-abb4-0537e55ded04",
+  "id": "4e7f89aa-8d16-4508-992d-5281c5f7de47",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

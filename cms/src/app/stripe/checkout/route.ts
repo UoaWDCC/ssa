@@ -32,6 +32,24 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase()
 }
 
+// Membership price for the signup page, so it never drifts from what Stripe charges.
+export const GET = async () => {
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+  const priceId = process.env.STRIPE_PRICE_ID
+  if (!stripeSecretKey || !priceId) {
+    return Response.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
+
+  try {
+    const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
+    const price = await stripe.prices.retrieve(priceId)
+    return Response.json({ amount: (price.unit_amount ?? 0) / 100, currency: price.currency })
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to retrieve Stripe price'
+    return Response.json({ error: message }, { status: 502 })
+  }
+}
+
 export const POST = async (request: NextRequest) => {
   let body: {
     firstName?: string

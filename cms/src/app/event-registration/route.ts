@@ -186,6 +186,14 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid user session' }, { status: 401 })
   }
 
+  // Pending (unpaid signup) and expired members can't register.
+  if (user.membershipStatus !== 'active') {
+    return Response.json(
+      { error: 'An active SSA membership is required to register for events' },
+      { status: 403 },
+    )
+  }
+
   const [nameFirst, ...nameRest] = (user.name ?? '').trim().split(/\s+/)
   const firstName = requiredText(user.firstName) ?? requiredText(nameFirst)
   const lastName = requiredText(user.lastName) ?? requiredText(nameRest.join(' '))
@@ -287,7 +295,6 @@ export async function POST(request: Request) {
         dietaryRequirements: legacyText('dietaryRequirements'),
         universityYear: legacyUniversityYear,
         answers,
-        priceType: 'member',
         amount,
         currency: 'nzd',
         ...(isFree ? { status: 'paid', paidAt: new Date().toISOString() } : { status: 'pending' }),
@@ -311,7 +318,6 @@ export async function POST(request: Request) {
     checkoutType: 'event-registration',
     registrationId: String(registration.id),
     eventId: String(event.id),
-    priceType: registration.priceType,
   }
 
   let session: Stripe.Checkout.Session

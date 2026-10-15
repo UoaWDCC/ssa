@@ -104,14 +104,6 @@ export const Events: CollectionConfig = {
       },
     },
     {
-      name: 'nonMemberPrice',
-      type: 'number',
-      min: 0,
-      admin: {
-        hidden: true,
-      },
-    },
-    {
       name: 'description',
       type: 'textarea',
     },

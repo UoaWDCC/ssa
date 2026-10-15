@@ -1,4 +1,22 @@
-import type { CollectionConfig } from 'payload'
+import type { Access, CollectionConfig, FieldAccess } from 'payload'
+
+const isAdmin = (user: unknown) => {
+  const u = user as { collection?: string; role?: string | null } | null
+
+  return u?.collection === 'users' && u.role === 'admin'
+}
+
+const adminOnly: Access = ({ req: { user } }) => isAdmin(user)
+
+const adminOrSelf: Access = ({ req: { user } }) => {
+  if (!user) return false
+  if (isAdmin(user)) return true
+
+  return { id: { equals: user.id } }
+}
+
+// Members can edit their own profile but must not grant themselves a role or membership.
+const adminOnlyField: FieldAccess = ({ req: { user } }) => isAdmin(user)
 
 export const Users: CollectionConfig = {
   slug: 'users',
@@ -6,17 +24,18 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   access: {
-    admin: ({ req }) => {
-      if (req.user?.collection !== 'users') return false
-
-      return (req.user as { role?: string | null }).role !== 'member'
-    },
+    admin: ({ req: { user } }) => isAdmin(user),
+    create: adminOnly,
+    delete: adminOnly,
+    read: adminOrSelf,
+    update: adminOrSelf,
   },
   auth: true,
   fields: [
     // Email added by default
     {
       name: 'role',
+      access: { update: adminOnlyField },
       type: 'select',
       defaultValue: 'member',
       options: [
@@ -59,6 +78,7 @@ export const Users: CollectionConfig = {
     },
     {
       name: 'membershipStatus',
+      access: { update: adminOnlyField },
       type: 'select',
       defaultValue: 'active',
       options: [
@@ -69,6 +89,7 @@ export const Users: CollectionConfig = {
     },
     {
       name: 'membershipExpiryDate',
+      access: { update: adminOnlyField },
       type: 'date',
     },
     {

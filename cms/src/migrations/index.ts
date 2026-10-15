@@ -1,6 +1,9 @@
 import * as migration_20260906_223448_baseline from './20260906_223448_baseline'
 import * as migration_20260906_223523_event_rsvps from './20260906_223523_event_rsvps'
-import * as migration_20261013_020828 from './20261013_020828'
+import * as migration_20260929_000001_sponsors_category from './20260929_000001_sponsors_category'
+import * as migration_20261008_205511 from './20261008_205511'
+import * as migration_20261011_000001_members_only_events from './20261011_000001_members_only_events'
+import * as migration_20261014_230521 from './20261014_230521'
 
 export const migrations = [
   {
@@ -14,8 +17,23 @@ export const migrations = [
     name: '20260906_223523_event_rsvps',
   },
   {
-    up: migration_20261013_020828.up,
-    down: migration_20261013_020828.down,
-    name: '20261013_020828',
+    up: migration_20260929_000001_sponsors_category.up,
+    down: migration_20260929_000001_sponsors_category.down,
+    name: '20260929_000001_sponsors_category',
+  },
+  {
+    up: migration_20261008_205511.up,
+    down: migration_20261008_205511.down,
+    name: '20261008_205511',
+  },
+  {
+    up: migration_20261011_000001_members_only_events.up,
+    down: migration_20261011_000001_members_only_events.down,
+    name: '20261011_000001_members_only_events',
+  },
+  {
+    up: migration_20261014_230521.up,
+    down: migration_20261014_230521.down,
+    name: '20261014_230521',
   },
 ]

@@ -230,7 +230,6 @@ export interface Event {
    * Price in NZD. Leave empty (or 0) for a free event.
    */
   memberPrice?: number | null
-  nonMemberPrice?: number | null
   description?: string | null
   /**
    * Add, edit, reorder, or disable questions shown on this event’s RSVP form. Existing registrations keep a snapshot of their submitted answers.
@@ -306,7 +305,6 @@ export interface EventRegistration {
     | number
     | boolean
     | null
-  priceType: 'member' | 'non-member'
   /**
    * Amount charged in NZD.
    */
@@ -568,7 +566,6 @@ export interface EventsSelect<T extends boolean = true> {
   time?: T
   location?: T
   memberPrice?: T
-  nonMemberPrice?: T
   description?: T
   rsvpQuestions?:
     | T
@@ -619,7 +616,6 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   dietaryRequirements?: T
   universityYear?: T
   answers?: T
-  priceType?: T
   amount?: T
   currency?: T
   status?: T
