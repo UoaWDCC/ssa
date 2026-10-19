@@ -2,10 +2,20 @@ import { describe, expect, it } from 'vitest'
 
 import {
   DEFAULT_RSVP_QUESTIONS,
+  validateRsvpQuestionConfiguration,
   validateRsvpAnswers,
 } from '../../src/lib/eventRegistrationQuestions'
 
 describe('validateRsvpAnswers', () => {
+  it('rejects duplicate built-in questions', () => {
+    expect(
+      validateRsvpQuestionConfiguration([
+        { ...DEFAULT_RSVP_QUESTIONS[3] },
+        { ...DEFAULT_RSVP_QUESTIONS[3], label: 'Another gender question' },
+      ]),
+    ).toBe('Each built-in or custom RSVP question can only be added once')
+  })
+
   it('accepts and snapshots the default RSVP answers', () => {
     const result = validateRsvpAnswers(DEFAULT_RSVP_QUESTIONS, {
       emergencyContactName: 'Alex Tan',
@@ -97,6 +107,26 @@ describe('validateRsvpAnswers', () => {
     )
 
     expect(result).toEqual({ error: 'Choose a valid option for Transport' })
+  })
+
+  it('rejects answers that exceed the server-side length limit', () => {
+    const result = validateRsvpAnswers(
+      [
+        {
+          fieldKey: 'custom',
+          id: 'short-answer',
+          label: 'Short answer',
+          type: 'text',
+          step: 'attendee',
+          required: true,
+        },
+      ],
+      { 'short-answer': 'x'.repeat(501) },
+    )
+
+    expect(result).toEqual({
+      error: 'Short answer must be 500 characters or fewer',
+    })
   })
 
   it('rejects duplicate question keys and non-record answers', () => {

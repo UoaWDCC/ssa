@@ -7,8 +7,10 @@ import Stripe from 'stripe'
 import { completePaidEventRegistration } from '../stripe/_lib/completePaidEventRegistration'
 import {
   DEFAULT_RSVP_QUESTIONS,
+  isOneOf,
+  RSVP_GENDER_VALUES,
+  RSVP_UNIVERSITY_YEAR_VALUES,
   type RsvpAnswerSnapshot,
-  type RsvpQuestion,
   validateRsvpAnswers,
 } from '../../lib/eventRegistrationQuestions'
 
@@ -222,7 +224,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
-  const eventQuestions = (event as typeof event & { rsvpQuestions?: RsvpQuestion[] }).rsvpQuestions
+  const eventQuestions = event.rsvpQuestions
   const questions = eventQuestions ?? [...DEFAULT_RSVP_QUESTIONS]
   const validatedAnswers = validateRsvpAnswers(questions, body.answers)
   if ('error' in validatedAnswers) {
@@ -242,26 +244,9 @@ export async function POST(request: Request) {
   }
   const genderValue = legacyText('gender')
   const universityYearValue = legacyText('universityYear')
-  const legacyGender = ['woman', 'man', 'non-binary', 'not-say'].includes(genderValue ?? '')
-    ? (genderValue as 'woman' | 'man' | 'non-binary' | 'not-say')
-    : undefined
-  const legacyUniversityYear = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5+',
-    'postgraduate',
-    'not-currently-studying',
-  ].includes(universityYearValue ?? '')
-    ? (universityYearValue as
-        | '1'
-        | '2'
-        | '3'
-        | '4'
-        | '5+'
-        | 'postgraduate'
-        | 'not-currently-studying')
+  const legacyGender = isOneOf(RSVP_GENDER_VALUES, genderValue) ? genderValue : undefined
+  const legacyUniversityYear = isOneOf(RSVP_UNIVERSITY_YEAR_VALUES, universityYearValue)
+    ? universityYearValue
     : undefined
 
   // An empty price means the event is free.

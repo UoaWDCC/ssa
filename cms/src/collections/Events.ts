@@ -1,5 +1,9 @@
 import type { CollectionConfig } from 'payload'
-import { DEFAULT_RSVP_QUESTIONS } from '../lib/eventRegistrationQuestions'
+import { randomUUID } from 'node:crypto'
+import {
+  DEFAULT_RSVP_QUESTIONS,
+  validateRsvpQuestionConfiguration,
+} from '../lib/eventRegistrationQuestions'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -8,16 +12,27 @@ export const Events: CollectionConfig = {
       ({ doc }) => ({
         ...doc,
         rsvpQuestions:
-          doc.rsvpQuestions?.length > 0
-            ? doc.rsvpQuestions
-            : DEFAULT_RSVP_QUESTIONS.map((question) => ({
-                ...question,
-                id: question.fieldKey,
-              })),
+          doc.rsvpQuestions ??
+          DEFAULT_RSVP_QUESTIONS.map((question) => ({
+            ...question,
+            id: `${doc.id}-${question.fieldKey}`,
+          })),
       }),
     ],
     beforeChange: [
       async ({ data, operation, originalDoc, req }) => {
+        if (Array.isArray(data.rsvpQuestions)) {
+          const validation = validateRsvpQuestionConfiguration(data.rsvpQuestions)
+          if (validation !== true) {
+            throw new Error(validation)
+          }
+
+          data.rsvpQuestions = data.rsvpQuestions.map((question) => ({
+            ...question,
+            ...(!question.id || question.id === question.fieldKey ? { id: randomUUID() } : {}),
+          }))
+        }
+
         if (data.isUpcoming !== true) {
           return data
         }
@@ -111,11 +126,15 @@ export const Events: CollectionConfig = {
       name: 'rsvpQuestions',
       label: 'RSVP Form Questions',
       type: 'array',
-      defaultValue: DEFAULT_RSVP_QUESTIONS,
+      defaultValue: DEFAULT_RSVP_QUESTIONS.map((question) => ({
+        ...question,
+        ...(question.fieldKey !== 'custom' ? { id: question.fieldKey } : {}),
+      })),
       admin: {
         description:
-          'Add, edit, reorder, or disable questions shown on this event’s RSVP form. Existing registrations keep a snapshot of their submitted answers.',
+          'Add, edit, reorder, or remove questions shown on this event’s RSVP form. Existing registrations keep a snapshot of their submitted answers.',
       },
+      validate: (value) => validateRsvpQuestionConfiguration(value),
       fields: [
         {
           name: 'fieldKey',

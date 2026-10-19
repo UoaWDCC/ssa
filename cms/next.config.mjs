@@ -24,4 +24,4 @@ const nextConfig = {
   },
 }
 
-export default withPayload(nextConfig, { devBundleServerPackages: true })
+export default withPayload(nextConfig, { devBundleServerPackages: false })

@@ -1,3 +1,61 @@
+export type RsvpQuestionType =
+  | 'text'
+  | 'textarea'
+  | 'email'
+  | 'tel'
+  | 'number'
+  | 'select'
+  | 'checkbox'
+
+export type RsvpQuestion = {
+  id?: string | null
+  fieldKey: string
+  label: string
+  type: RsvpQuestionType
+  step: 'emergency' | 'attendee'
+  required?: boolean | null
+  enabled?: boolean | null
+  placeholder?: string | null
+  options?: Array<{ label: string; value: string } | null> | null
+}
+
+export type RsvpAnswerValue = string | boolean
+
+export type RsvpAnswerSnapshot = {
+  questionId: string
+  fieldKey: string
+  label: string
+  type: RsvpQuestionType
+  value: RsvpAnswerValue
+}
+
+export const RSVP_GENDER_VALUES = ['woman', 'man', 'non-binary', 'not-say'] as const
+export const RSVP_GENDER_OPTIONS = [
+  { label: 'Woman', value: RSVP_GENDER_VALUES[0] },
+  { label: 'Man', value: RSVP_GENDER_VALUES[1] },
+  { label: 'Non-binary', value: RSVP_GENDER_VALUES[2] },
+  { label: 'Prefer not to say', value: RSVP_GENDER_VALUES[3] },
+] as const
+
+export const RSVP_UNIVERSITY_YEAR_VALUES = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5+',
+  'postgraduate',
+  'not-currently-studying',
+] as const
+export const RSVP_UNIVERSITY_YEAR_OPTIONS = [
+  { label: 'First year', value: RSVP_UNIVERSITY_YEAR_VALUES[0] },
+  { label: 'Second year', value: RSVP_UNIVERSITY_YEAR_VALUES[1] },
+  { label: 'Third year', value: RSVP_UNIVERSITY_YEAR_VALUES[2] },
+  { label: 'Fourth year', value: RSVP_UNIVERSITY_YEAR_VALUES[3] },
+  { label: 'Fifth year or later', value: RSVP_UNIVERSITY_YEAR_VALUES[4] },
+  { label: 'Postgraduate', value: RSVP_UNIVERSITY_YEAR_VALUES[5] },
+  { label: 'Not currently a university student', value: RSVP_UNIVERSITY_YEAR_VALUES[6] },
+] as const
+
 export const DEFAULT_RSVP_QUESTIONS = [
   {
     fieldKey: 'emergencyContactName',
@@ -34,12 +92,7 @@ export const DEFAULT_RSVP_QUESTIONS = [
     required: true,
     enabled: true,
     placeholder: 'Select gender',
-    options: [
-      { label: 'Woman', value: 'woman' },
-      { label: 'Man', value: 'man' },
-      { label: 'Non-binary', value: 'non-binary' },
-      { label: 'Prefer not to say', value: 'not-say' },
-    ],
+    options: [...RSVP_GENDER_OPTIONS],
   },
   {
     fieldKey: 'dietaryRequirements',
@@ -58,51 +111,33 @@ export const DEFAULT_RSVP_QUESTIONS = [
     required: true,
     enabled: true,
     placeholder: 'Select university year',
-    options: [
-      { label: 'First year', value: '1' },
-      { label: 'Second year', value: '2' },
-      { label: 'Third year', value: '3' },
-      { label: 'Fourth year', value: '4' },
-      { label: 'Fifth year or later', value: '5+' },
-      { label: 'Postgraduate', value: 'postgraduate' },
-      { label: 'Not currently a university student', value: 'not-currently-studying' },
-    ],
+    options: [...RSVP_UNIVERSITY_YEAR_OPTIONS],
   },
 ] satisfies RsvpQuestion[]
 
-export type RsvpQuestionType =
-  | 'text'
-  | 'textarea'
-  | 'email'
-  | 'tel'
-  | 'number'
-  | 'select'
-  | 'checkbox'
+export function validateRsvpQuestionConfiguration(value: unknown): true | string {
+  if (!Array.isArray(value)) return true
 
-export type RsvpQuestion = {
-  id?: string | null
-  fieldKey: string
-  label: string
-  type: RsvpQuestionType
-  step: 'emergency' | 'attendee'
-  required?: boolean | null
-  enabled?: boolean | null
-  placeholder?: string | null
-  options?: Array<{ label: string; value: string } | null> | null
+  const keys = new Set<string>()
+  for (const question of value as RsvpQuestion[]) {
+    const key = question.fieldKey === 'custom' ? question.id : question.fieldKey
+    if (typeof key !== 'string' || !key) continue
+    if (keys.has(key)) return 'Each built-in or custom RSVP question can only be added once'
+    keys.add(key)
+  }
+
+  return true
 }
 
-export type RsvpAnswerValue = string | boolean
-
-export type RsvpAnswerSnapshot = {
-  questionId: string
-  fieldKey: string
-  label: string
-  type: RsvpQuestionType
-  value: RsvpAnswerValue
+export function isOneOf<const T extends readonly string[]>(
+  values: T,
+  value: string | null | undefined,
+): value is T[number] {
+  return value !== null && value !== undefined && (values as readonly string[]).includes(value)
 }
 
 export function validateRsvpAnswers(
-  questions: RsvpQuestion[],
+  questions: readonly RsvpQuestion[],
   submittedAnswers: unknown,
 ): { answers: RsvpAnswerSnapshot[] } | { error: string } {
   if (
@@ -144,6 +179,11 @@ export function validateRsvpAnswers(
         return { error: `Invalid answer for ${question.label}` }
       }
       value = typeof rawValue === 'string' ? rawValue.trim() : ''
+
+      const maxLength = question.type === 'textarea' ? 2000 : 500
+      if (value.length > maxLength) {
+        return { error: `${question.label} must be ${maxLength} characters or fewer` }
+      }
 
       if (question.required && value === '') {
         return { error: `${question.label} is required` }
