@@ -5,17 +5,14 @@ import { getPayload } from 'payload'
 import Stripe from 'stripe'
 
 import { completePaidEventRegistration } from '../stripe/_lib/completePaidEventRegistration'
-
-const genderOptions = ['woman', 'man', 'non-binary', 'not-say'] as const
-const universityYearOptions = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5+',
-  'postgraduate',
-  'not-currently-studying',
-] as const
+import {
+  DEFAULT_RSVP_QUESTIONS,
+  isOneOf,
+  RSVP_GENDER_VALUES,
+  RSVP_UNIVERSITY_YEAR_VALUES,
+  type RsvpAnswerSnapshot,
+  validateRsvpAnswers,
+} from '../../lib/eventRegistrationQuestions'
 
 function getSecret() {
   return process.env.GOOGLE_OAUTH_COOKIE_SECRET || process.env.AUTH_SECRET
@@ -55,10 +52,6 @@ function secretsMatch(providedSecret?: string) {
 
 function requiredText(value: unknown) {
   return typeof value === 'string' && value.trim() ? value.trim() : null
-}
-
-function isOneOf<T extends string>(value: string, options: readonly T[]): value is T {
-  return options.some((option) => option === value)
 }
 
 function parseId(value: unknown) {
@@ -172,31 +165,8 @@ export async function POST(request: Request) {
   }
 
   const eventId = parseId(body.event)
-  const emergencyContactName = requiredText(body.emergencyContactName)
-  const emergencyContactPhone = requiredText(body.emergencyContactPhone)
-  const emergencyContactRelationship = requiredText(body.emergencyContactRelationship)
-  const gender = requiredText(body.gender)
-  const dietaryRequirements = requiredText(body.dietaryRequirements)
-  const universityYear = requiredText(body.universityYear)
-
-  if (
-    !eventId ||
-    !emergencyContactName ||
-    !emergencyContactPhone ||
-    !emergencyContactRelationship ||
-    !gender ||
-    !dietaryRequirements ||
-    !universityYear
-  ) {
-    return Response.json({ error: 'All event registration fields are required' }, { status: 400 })
-  }
-
-  if (!isOneOf(gender, genderOptions)) {
-    return Response.json({ error: 'Invalid gender' }, { status: 400 })
-  }
-
-  if (!isOneOf(universityYear, universityYearOptions)) {
-    return Response.json({ error: 'Invalid university year' }, { status: 400 })
+  if (!eventId) {
+    return Response.json({ error: 'Event is required' }, { status: 400 })
   }
 
   const payload = await getPayload({ config: configPromise })
@@ -254,6 +224,31 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
+  const eventQuestions = event.rsvpQuestions
+  const questions = eventQuestions ?? [...DEFAULT_RSVP_QUESTIONS]
+  const validatedAnswers = validateRsvpAnswers(questions, body.answers)
+  if ('error' in validatedAnswers) {
+    return Response.json({ error: validatedAnswers.error }, { status: 400 })
+  }
+  const answers: RsvpAnswerSnapshot[] = validatedAnswers.answers
+  const legacyAnswers = new Map(
+    answers
+      .filter((answer) => answer.fieldKey !== 'custom')
+      .map((answer) => [answer.fieldKey, answer.value]),
+  )
+  const legacyText = (fieldKey: string) => {
+    const value = legacyAnswers.get(fieldKey)
+    if (typeof value === 'string') return value || undefined
+    if (typeof value === 'boolean') return String(value)
+    return undefined
+  }
+  const genderValue = legacyText('gender')
+  const universityYearValue = legacyText('universityYear')
+  const legacyGender = isOneOf(RSVP_GENDER_VALUES, genderValue) ? genderValue : undefined
+  const legacyUniversityYear = isOneOf(RSVP_UNIVERSITY_YEAR_VALUES, universityYearValue)
+    ? universityYearValue
+    : undefined
+
   // An empty price means the event is free.
   const amount = event.memberPrice ?? 0
 
@@ -278,12 +273,13 @@ export async function POST(request: Request) {
         firstName,
         lastName,
         email,
-        emergencyContactName,
-        emergencyContactPhone,
-        emergencyContactRelationship,
-        gender,
-        dietaryRequirements,
-        universityYear,
+        emergencyContactName: legacyText('emergencyContactName'),
+        emergencyContactPhone: legacyText('emergencyContactPhone'),
+        emergencyContactRelationship: legacyText('emergencyContactRelationship'),
+        gender: legacyGender,
+        dietaryRequirements: legacyText('dietaryRequirements'),
+        universityYear: legacyUniversityYear,
+        answers,
         amount,
         currency: 'nzd',
         ...(isFree ? { status: 'paid', paidAt: new Date().toISOString() } : { status: 'pending' }),
