@@ -3,6 +3,7 @@
 import { useExecs } from '@/hooks/useExecs'
 import ExecCard from './ExecCard'
 import { aboutHeadingFont, aboutParagraphFont } from './fonts'
+import ExecGridSkeleton from './ExecGridSkeleton'
 
 type ExecGridProps = {
   title: string
@@ -10,8 +11,7 @@ type ExecGridProps = {
 }
 
 export default function ExecGrid({ title, paragraphs }: ExecGridProps) {
-  const { execs, error } = useExecs()
-
+  const { execs, error, isPending } = useExecs()
   return (
     <section
       aria-labelledby="ssa-team-heading"
@@ -42,14 +42,18 @@ export default function ExecGrid({ title, paragraphs }: ExecGridProps) {
 
       <div className="mt-[40px] xl:mt-0 xl:pb-[184px]">
         <div className="grid grid-cols-3 gap-[10px] md:grid-cols-4 xl:gap-x-[20px] xl:gap-y-[29px]">
-          {execs.map((exec) => (
-            <ExecCard
-              key={exec.id}
-              name={exec.name}
-              role={exec.role}
-              photo={exec?.photo}
-            />
-          ))}
+          {isPending ? (
+            <ExecGridSkeleton />
+          ) : (
+            execs.map((exec) => (
+              <ExecCard
+                key={exec.id}
+                name={exec.name}
+                role={exec.role}
+                photo={exec?.photo}
+              />
+            ))
+          )}
         </div>
         {error && (
           <p className="sr-only" role="status">
