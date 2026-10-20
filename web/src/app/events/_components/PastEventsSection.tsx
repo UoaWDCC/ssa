@@ -7,6 +7,7 @@ import CategoryFilters from '@/components/CategoryFilters'
 import SearchBar from '@/components/SearchBar'
 import { resolveMediaUrl } from '@/lib/media'
 import type { Event, EventCategory, PastEventsResponse } from '@/types/events'
+import PastEventsGridSkeleton from './PastEventsGridSkeleton'
 
 import PastEventCard from './PastEventCard'
 import {
@@ -113,14 +114,7 @@ export default function PastEventsSection() {
           className="mt-4"
         />
 
-        {isPending && (
-          <p
-            role="status"
-            className="mt-10 text-center font-inter text-base text-ssa-muted-grey"
-          >
-            Loading past events…
-          </p>
-        )}
+        {isPending && <PastEventsGridSkeleton />}
 
         {isError && (
           <p
