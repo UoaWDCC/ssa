@@ -89,7 +89,11 @@ export default function RsvpContent({ member }: Readonly<{ member: Member }>) {
 
           <div aria-hidden="true" className="hidden bg-[#e9e1d5] lg:block" />
 
-          <RsvpForm eventId={data?.event?.id} member={member} />
+          <RsvpForm
+            eventId={data?.event?.id}
+            member={member}
+            waitlistEnabled={data?.event?.waitlistEnabled === true}
+          />
         </div>
       </div>
     </main>

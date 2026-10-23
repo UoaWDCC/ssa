@@ -1,19 +1,12 @@
-import type { Access, CollectionConfig } from 'payload'
-
-const adminOnly: Access = ({ req: { user } }) => {
-  if (user?.collection !== 'users') return false
-
-  return user.role === 'admin'
-}
+import type { CollectionConfig } from 'payload'
+import { adminOnly } from '@/access/adminOnly'
+import { prepareEventRegistration, protectOfferedRegistration } from '@/hooks/eventRegistrations'
 
 export const EventRegistrations: CollectionConfig = {
   slug: 'event-registrations',
+  hooks: { beforeChange: [prepareEventRegistration], beforeDelete: [protectOfferedRegistration] },
   access: {
-    admin: ({ req: { user } }) => {
-      if (user?.collection !== 'users') return false
-
-      return user.role === 'admin'
-    },
+    admin: adminOnly,
     create: adminOnly,
     delete: adminOnly,
     read: adminOnly,
@@ -153,13 +146,53 @@ export const EventRegistrations: CollectionConfig = {
       index: true,
       options: [
         { label: 'Pending', value: 'pending' },
+        { label: 'Waitlisted', value: 'waitlisted' },
+        { label: 'Offered', value: 'offered' },
         { label: 'Paid', value: 'paid' },
         { label: 'Cancelled', value: 'cancelled' },
         { label: 'Refunded', value: 'refunded' },
       ],
       admin: {
+        description:
+          'Offer a waitlisted member a place by selecting Offered. Withdraw an unpaid offer by selecting Waitlisted or Cancelled.',
         position: 'sidebar',
       },
+    },
+    {
+      name: 'offerVersion',
+      type: 'number',
+      defaultValue: 0,
+      admin: { hidden: true },
+      access: { create: () => false, update: () => false },
+    },
+    {
+      name: 'stripeInvoiceId',
+      type: 'text',
+      unique: true,
+      admin: { readOnly: true, position: 'sidebar' },
+      access: { create: () => false, update: () => false },
+    },
+    {
+      name: 'stripeInvoiceUrl',
+      type: 'text',
+      admin: { readOnly: true, position: 'sidebar' },
+      access: { create: () => false, update: () => false },
+    },
+    {
+      name: 'offeredAt',
+      type: 'date',
+      admin: { readOnly: true, position: 'sidebar' },
+      access: { create: () => false, update: () => false },
+    },
+    {
+      name: 'offerDueAt',
+      type: 'date',
+      admin: {
+        readOnly: true,
+        position: 'sidebar',
+        description: 'Invoice due date. Execs must withdraw unpaid offers manually.',
+      },
+      access: { create: () => false, update: () => false },
     },
     {
       name: 'stripeCheckoutSessionId',

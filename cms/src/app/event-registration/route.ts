@@ -1,7 +1,7 @@
 import crypto from 'node:crypto'
 
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { APIError, getPayload } from 'payload'
 import Stripe from 'stripe'
 
 import { completePaidEventRegistration } from '../stripe/_lib/completePaidEventRegistration'
@@ -164,9 +164,6 @@ export async function POST(request: Request) {
 
   const stripeSecretKey = process.env.STRIPE_SECRET_KEY
   const webUrl = getWebUrl()
-  if (!stripeSecretKey) {
-    return Response.json({ error: 'Stripe not configured' }, { status: 500 })
-  }
   if (!webUrl) {
     return Response.json({ error: 'WEB_URL not configured' }, { status: 500 })
   }
@@ -264,6 +261,7 @@ export async function POST(request: Request) {
     registration = await payload.create({
       collection: 'event-registrations',
       overrideAccess: true,
+      context: { eventSignup: true },
       data: {
         event: eventId,
         user: user.id,
@@ -284,17 +282,35 @@ export async function POST(request: Request) {
     })
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Failed to create event registration'
-    return Response.json({ error: message }, { status: 400 })
+    return Response.json(
+      { error: message },
+      { status: error instanceof APIError ? error.status : 400 },
+    )
+  }
+
+  if (registration.status === 'waitlisted') {
+    return Response.json(
+      { status: 'waitlisted', message: "You're on the waitlist", registration },
+      { status: 201 },
+    )
   }
 
   // Nothing to pay, so skip Stripe and send them straight to the success page.
-  if (isFree) {
+  if (registration.status === 'paid') {
     return Response.json(
       { checkoutUrl: `${webUrl}/events/rsvp/success?free=1`, registration },
       { status: 201 },
     )
   }
 
+  if (!stripeSecretKey) {
+    await payload.delete({
+      collection: 'event-registrations',
+      id: registration.id,
+      overrideAccess: true,
+    })
+    return Response.json({ error: 'Stripe not configured' }, { status: 500 })
+  }
   const stripe = new Stripe(stripeSecretKey, { apiVersion: '2026-04-22.dahlia' })
   const metadata = {
     checkoutType: 'event-registration',
@@ -317,7 +333,7 @@ export async function POST(request: Request) {
             quantity: 1,
             price_data: {
               currency: 'nzd',
-              unit_amount: amountInCents,
+              unit_amount: Math.round(registration.amount * 100),
               product_data: {
                 name: event.title,
                 description: 'Event registration',

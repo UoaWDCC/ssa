@@ -1,8 +1,16 @@
 import type { CollectionConfig } from 'payload'
+import { adminOnly } from '@/access/adminOnly'
+import { getEventAvailability } from '@/lib/eventCapacity'
 
 export const Events: CollectionConfig = {
   slug: 'events',
   hooks: {
+    afterRead: [
+      async ({ doc, req }) => {
+        Object.assign(doc, await getEventAvailability(req.payload, doc.id, doc.capacity, req))
+        return doc
+      },
+    ],
     beforeChange: [
       async ({ data, operation, originalDoc, req }) => {
         if (data.isUpcoming !== true) {
@@ -42,6 +50,10 @@ export const Events: CollectionConfig = {
     ],
   },
   access: {
+    admin: adminOnly,
+    create: adminOnly,
+    update: adminOnly,
+    delete: adminOnly,
     read: () => true,
   },
   admin: {
@@ -90,6 +102,21 @@ export const Events: CollectionConfig = {
         step: 0.01,
       },
     },
+    {
+      name: 'capacity',
+      type: 'number',
+      min: 0,
+      validate: (value: number | null | undefined) =>
+        value == null ||
+        (Number.isSafeInteger(value) && value >= 0) ||
+        'Capacity must be a non-negative whole number.',
+      admin: {
+        description: 'Leave empty for unlimited places. Can be changed after signups open.',
+      },
+    },
+    { name: 'registrationCount', type: 'number', virtual: true, admin: { readOnly: true } },
+    { name: 'spotsRemaining', type: 'number', virtual: true, admin: { readOnly: true } },
+    { name: 'waitlistEnabled', type: 'checkbox', virtual: true, admin: { readOnly: true } },
     {
       name: 'description',
       type: 'textarea',

@@ -3,6 +3,8 @@ import * as migration_20260906_223523_event_rsvps from './20260906_223523_event_
 import * as migration_20260929_000001_sponsors_category from './20260929_000001_sponsors_category'
 import * as migration_20261008_205511 from './20261008_205511'
 
+import * as migration_20261012_000001_event_waitlist from './20261012_000001_event_waitlist'
+
 export const migrations = [
   {
     up: migration_20260906_223448_baseline.up,
@@ -23,5 +25,10 @@ export const migrations = [
     up: migration_20261008_205511.up,
     down: migration_20261008_205511.down,
     name: '20261008_205511',
+  },
+  {
+    up: migration_20261012_000001_event_waitlist.up,
+    down: migration_20261012_000001_event_waitlist.down,
+    name: '20261012_000001_event_waitlist',
   },
 ]
