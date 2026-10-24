@@ -33,7 +33,7 @@ export async function completePaidEventRegistration({
     overrideAccess: true,
   })
 
-  if (registration.stripeCheckoutSessionId && registration.stripeCheckoutSessionId !== session.id) {
+  if (registration.stripeCheckoutSessionId !== session.id) {
     throw new Error('Stripe session does not match the event registration')
   }
 

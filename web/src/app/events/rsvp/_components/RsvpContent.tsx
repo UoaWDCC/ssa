@@ -100,7 +100,11 @@ export default function RsvpContent({
                 active, so registration will be declined.
               </p>
             )}
-            <RsvpForm eventId={data?.event?.id} member={member} />
+            <RsvpForm
+              eventId={data?.event?.id}
+              member={member}
+              waitlistEnabled={data?.event?.waitlistEnabled === true}
+            />
           </div>
         </div>
       </div>
