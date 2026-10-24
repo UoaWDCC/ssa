@@ -1,10 +1,12 @@
 import Button from '@/components/Button'
 
 export default function PaymentStep({
+  price,
   onPay,
   onBack,
   isLoading,
 }: {
+  price: number | null
   onPay: () => void
   onBack: () => void
   isLoading: boolean
@@ -34,7 +36,9 @@ export default function PaymentStep({
         </label>
         <div className="flex items-center justify-between text-ssa-grey">
           <p className="text-md font-inter">SSA Membership</p>
-          <p className="text-md font-inter">$6.00</p>
+          <p className="text-md font-inter">
+            {price === null ? '—' : `$${price.toFixed(2)}`}
+          </p>
         </div>
         <hr className="border-ssa-grey/10 border" />
         <Button
@@ -43,7 +47,11 @@ export default function PaymentStep({
           arrow={false}
           className="w-full rounded-[42px] tracking-wide mt-auto font-be-vietnam-pro bg-ssa-red font-semibold text-ssa-white text-sm transition-opacity disabled:opacity-60"
         >
-          {isLoading ? 'PROCESSING...' : 'PAY $6'}
+          {isLoading
+            ? 'PROCESSING...'
+            : price === null
+              ? 'PAY'
+              : `PAY $${price}`}
         </Button>
       </div>
       <Button

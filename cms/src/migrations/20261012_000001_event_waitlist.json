@@ -601,12 +601,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "non_member_price": {
-          "name": "non_member_price",
-          "type": "numeric",
-          "primaryKey": false,
-          "notNull": false
-        },
         "description": {
           "name": "description",
           "type": "varchar",
@@ -762,7 +756,7 @@
           "name": "phone",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "emergency_contact_name": {
           "name": "emergency_contact_name",
@@ -798,13 +792,6 @@
         "university_year": {
           "name": "university_year",
           "type": "enum_event_registrations_university_year",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "price_type": {
-          "name": "price_type",
-          "type": "enum_event_registrations_price_type",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
@@ -2675,11 +2662,6 @@
       "name": "enum_event_registrations_university_year",
       "schema": "public",
       "values": ["1", "2", "3", "4", "5+", "postgraduate", "not-currently-studying"]
-    },
-    "public.enum_event_registrations_price_type": {
-      "name": "enum_event_registrations_price_type",
-      "schema": "public",
-      "values": ["member", "non-member"]
     },
     "public.enum_event_registrations_currency": {
       "name": "enum_event_registrations_currency",

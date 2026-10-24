@@ -271,12 +271,14 @@ export interface EventRegistration {
   gender: 'woman' | 'man' | 'non-binary' | 'not-say'
   dietaryRequirements: string
   universityYear: '1' | '2' | '3' | '4' | '5+' | 'postgraduate' | 'not-currently-studying'
-  priceType: 'member' | 'non-member'
   /**
    * Amount charged in NZD.
    */
   amount: number
   currency: 'nzd'
+  /**
+   * Offer a waitlisted member a place by selecting Offered. Withdraw an unpaid offer by selecting Waitlisted or Cancelled.
+   */
   status: 'pending' | 'waitlisted' | 'offered' | 'paid' | 'cancelled' | 'refunded'
   offerVersion?: number | null
   stripeInvoiceId?: string | null
@@ -575,7 +577,6 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   gender?: T
   dietaryRequirements?: T
   universityYear?: T
-  priceType?: T
   amount?: T
   currency?: T
   status?: T

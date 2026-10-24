@@ -35,6 +35,9 @@ export default buildConfig({
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   db: postgresAdapter({
+    // Never auto-push schema in dev: it writes a `dev` migration row that makes
+    // prodMigrations block on an interactive prompt. Use `pnpm migrate:create`.
+    push: false,
     // Bundle migrations into the standalone server and apply them before
     // Payload serves database requests in production.
     prodMigrations: process.env.PAYLOAD_MIGRATING === 'true' ? undefined : migrations,

@@ -70,7 +70,13 @@ beforeEach(() => {
   mock.findByID.mockImplementation(({ collection }) =>
     Promise.resolve(
       collection === 'users'
-        ? { id: 3, firstName: 'Test', lastName: 'Member', email: 'member@example.com' }
+        ? {
+            id: 3,
+            membershipStatus: 'active',
+            firstName: 'Test',
+            lastName: 'Member',
+            email: 'member@example.com',
+          }
         : { id: 1, title: 'Dinner', isUpcoming: true, memberPrice: 15 },
     ),
   )
@@ -104,6 +110,17 @@ describe('waitlist backend routes', () => {
     )
     expect(mock.getPayload).not.toHaveBeenCalled()
   })
+
+  it.each(['pending', 'expired'])(
+    'rejects %s memberships before joining a waitlist',
+    async (membershipStatus) => {
+      mock.findByID.mockResolvedValue({ id: 3, membershipStatus })
+      const response = await register(registrationRequest())
+      expect(response.status).toBe(403)
+      expect(mock.create).not.toHaveBeenCalled()
+      expect(mock.checkout).not.toHaveBeenCalled()
+    },
+  )
 
   it('preserves the free event confirmation response', async () => {
     vi.stubEnv('STRIPE_SECRET_KEY', '')

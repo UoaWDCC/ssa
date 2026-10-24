@@ -14,7 +14,7 @@ export const EventRegistrations: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['event', 'email', 'status', 'priceType', 'amount', 'createdAt'],
+    defaultColumns: ['event', 'email', 'status', 'amount', 'createdAt'],
   },
   fields: [
     {
@@ -102,19 +102,6 @@ export const EventRegistrations: CollectionConfig = {
           value: 'not-currently-studying',
         },
       ],
-    },
-    {
-      name: 'priceType',
-      label: 'Price Type',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Member', value: 'member' },
-        { label: 'Non-member', value: 'non-member' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
     },
     {
       name: 'amount',
