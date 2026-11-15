@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Image from 'next/image'
 import { FaLocationDot } from 'react-icons/fa6'
 
@@ -8,10 +9,12 @@ import {
   HighlightCard,
   type HighlightCardDetail,
 } from '@/components/HighlightCard'
+import HighlightCardSkeleton from '@/components/HighlightCardSkeleton'
 import { fetchSponsors, getSponsorLogoUrl, type Sponsor } from '@/lib/sponsors'
 import type { Media } from '@/types/payload-types'
 
 import SponsorsGrid from './components/SponsorsGrid'
+import SponsorsGridSkeleton from './components/SponsorsGridSkeleton'
 
 export const dynamic = 'force-dynamic'
 
@@ -57,23 +60,49 @@ const fallbackSponsorOfTheWeek: Sponsor = {
   createdAt: '2026-05-18T00:00:00.000Z',
 }
 
-export default async function SponsorsPage() {
-  const cmsSponsors = await fetchSponsors()
-  const sponsorOfTheWeekEntry =
+type SponsorsPromiseProps = {
+  sponsorsPromise: Promise<Sponsor[]>
+}
+
+async function SponsorOfTheWeek({ sponsorsPromise }: SponsorsPromiseProps) {
+  const cmsSponsors = await sponsorsPromise
+  const entry =
     cmsSponsors.find((sponsor) => sponsor.isSponsorOfTheWeek === true) ??
     fallbackSponsorOfTheWeek
+
+  const details: HighlightCardDetail[] = entry.location
+    ? [{ icon: FaLocationDot, text: entry.location }]
+    : []
+  const badges = entry.memberPerks ? [entry.memberPerks] : []
+
+  return (
+    <HighlightCard
+      eyebrow="Sponsor of the Week"
+      title={entry.name}
+      details={details}
+      badges={badges}
+      description={<p>{entry.description || 'More details coming soon.'}</p>}
+      ctaLabel="CHECK US OUT!"
+      ctaHref={entry.websiteUrl ?? '/sponsors'}
+      imageSrc={getSponsorLogoUrl(entry.logo)}
+      imageAlt={getSponsorLogoAlt(entry)}
+    />
+  )
+}
+
+async function SponsorsGridSection({ sponsorsPromise }: SponsorsPromiseProps) {
+  const cmsSponsors = await sponsorsPromise
   const sponsors = cmsSponsors.map((sponsor) => ({
     ...sponsor,
     category: sponsor.category ?? 'FOOD',
   }))
 
-  const sponsorOfTheWeekDetails: HighlightCardDetail[] =
-    sponsorOfTheWeekEntry.location
-      ? [{ icon: FaLocationDot, text: sponsorOfTheWeekEntry.location }]
-      : []
-  const sponsorOfTheWeekBadges = sponsorOfTheWeekEntry.memberPerks
-    ? [sponsorOfTheWeekEntry.memberPerks]
-    : []
+  return <SponsorsGrid sponsors={sponsors} />
+}
+
+export default function SponsorsPage() {
+  // Fetch once, shared by both sections. fetchSponsors returns [] on error.
+  const sponsorsPromise = fetchSponsors()
 
   return (
     <main className="flex flex-col bg-ssa-background text-ssa-grey">
@@ -82,21 +111,9 @@ export default async function SponsorsPage() {
         subtitle="Thank you to our amazing sponsors who make our events and activities possible."
       />
       <section className="mt-10 px-4.5 md:mt-14 md:px-10 lg:mt-30.25 lg:px-16">
-        <HighlightCard
-          eyebrow="Sponsor of the Week"
-          title={sponsorOfTheWeekEntry.name}
-          details={sponsorOfTheWeekDetails}
-          badges={sponsorOfTheWeekBadges}
-          description={
-            <p>
-              {sponsorOfTheWeekEntry.description || 'More details coming soon.'}
-            </p>
-          }
-          ctaLabel="CHECK US OUT!"
-          ctaHref={sponsorOfTheWeekEntry.websiteUrl ?? '/sponsors'}
-          imageSrc={getSponsorLogoUrl(sponsorOfTheWeekEntry.logo)}
-          imageAlt={getSponsorLogoAlt(sponsorOfTheWeekEntry)}
-        />
+        <Suspense fallback={<HighlightCardSkeleton variant="sponsor" />}>
+          <SponsorOfTheWeek sponsorsPromise={sponsorsPromise} />
+        </Suspense>
 
         <section className="mt-12 md:mt-16 lg:mt-22.5">
           <div className="mx-auto mb-4 w-full max-w-311">
@@ -105,7 +122,15 @@ export default async function SponsorsPage() {
             </h2>
           </div>
 
-          <SponsorsGrid sponsors={sponsors} />
+          <Suspense
+            fallback={
+              <div className="mx-auto w-full max-w-311">
+                <SponsorsGridSkeleton />
+              </div>
+            }
+          >
+            <SponsorsGridSection sponsorsPromise={sponsorsPromise} />
+          </Suspense>
 
           <section className="relative mx-auto mt-32 flex w-full max-w-189 flex-col items-center gap-8 overflow-visible md:mt-40 lg:mt-46 lg:block lg:h-53.75">
             <Image

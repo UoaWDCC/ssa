@@ -7,6 +7,7 @@ import { HighlightCard } from '@/components/HighlightCard'
 import { formatEventDate } from '@/lib/eventDate'
 import { resolveMediaUrl } from '@/lib/media'
 import type { UpcomingEventResponse } from '@/types/events'
+import HighlightCardSkeleton from '@/components/HighlightCardSkeleton'
 
 async function fetchUpcomingEvent(): Promise<UpcomingEventResponse> {
   const response = await fetch('/api/events/upcoming')
@@ -24,12 +25,14 @@ export default function UpcomingEventCard() {
     queryFn: fetchUpcomingEvent,
   })
 
-  if (isPending || isError || !data?.event) {
-    const message = isPending
-      ? 'Loading upcoming event...'
-      : isError
-        ? 'Upcoming event information is unavailable right now.'
-        : 'No upcoming events right now.'
+  if (isPending) {
+    return <HighlightCardSkeleton variant="event" />
+  }
+
+  if (isError || !data?.event) {
+    const message = isError
+      ? 'Upcoming event information is unavailable right now.'
+      : 'No upcoming events right now.'
 
     return (
       <div
