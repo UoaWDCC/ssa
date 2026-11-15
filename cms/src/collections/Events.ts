@@ -7,6 +7,10 @@ export const Events: CollectionConfig = {
   hooks: {
     afterRead: [
       async ({ doc, req }) => {
+        if (doc.capacity == null || doc.isUpcoming !== true) {
+          return doc
+        }
+
         Object.assign(doc, await getEventAvailability(req.payload, doc.id, doc.capacity, req))
         return doc
       },

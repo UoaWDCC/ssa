@@ -68,6 +68,35 @@ beforeEach(() => {
 
 describe('event capacity and waitlist', () => {
   it.each([
+    ['an unlimited event', { ...event, capacity: null }],
+    ['a past event', { ...event, isUpcoming: false }],
+  ])('skips the availability query for %s', async (_description, doc) => {
+    const afterRead = Events.hooks?.afterRead?.[0]
+    if (typeof afterRead !== 'function') throw new Error('Events afterRead hook is missing')
+
+    const result = await afterRead({ doc, req } as never)
+
+    expect(result).toBe(doc)
+    expect(payload.count).not.toHaveBeenCalled()
+  })
+
+  it('adds availability to an upcoming capacity-limited event', async () => {
+    const afterRead = Events.hooks?.afterRead?.[0]
+    if (typeof afterRead !== 'function') throw new Error('Events afterRead hook is missing')
+    payload.count.mockResolvedValue({ totalDocs: 1 })
+    const doc = { ...event, capacity: 2 }
+
+    const result = await afterRead({ doc, req } as never)
+
+    expect(result).toMatchObject({
+      registrationCount: 1,
+      spotsRemaining: 1,
+      waitlistEnabled: false,
+    })
+    expect(payload.count).toHaveBeenCalledOnce()
+  })
+
+  it.each([
     [null, 100, false, null],
     [0, 0, true, 0],
     [2, 1, false, 1],

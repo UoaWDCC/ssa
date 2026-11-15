@@ -133,6 +133,33 @@ describe('waitlist backend routes', () => {
     expect(mock.checkout).not.toHaveBeenCalled()
   })
 
+  it('expires paid-event checkout sessions after 30 minutes', async () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-11-15T00:00:00.000Z'))
+    mock.create.mockResolvedValue({
+      id: 2,
+      status: 'pending',
+      amount: 15,
+      currency: 'nzd',
+    })
+    mock.checkout.mockResolvedValue({ id: 'cs_test', url: 'https://checkout.stripe.com/test' })
+    mock.update.mockResolvedValue({ id: 2, status: 'pending', stripeCheckoutSessionId: 'cs_test' })
+
+    try {
+      const response = await register(registrationRequest())
+
+      expect(response.status).toBe(201)
+      expect(mock.checkout).toHaveBeenCalledWith(
+        expect.objectContaining({
+          expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+        }),
+        expect.any(Object),
+      )
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('requires a verified signature before processing invoice payment', async () => {
     expect((await webhook(webhookRequest())).status).toBe(400)
     mock.constructEvent.mockImplementation(() => {

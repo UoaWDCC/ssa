@@ -349,6 +349,7 @@ export async function POST(request: Request) {
         ],
         metadata,
         payment_intent_data: { metadata },
+        expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
         success_url: `${webUrl}/events/rsvp/success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${webUrl}/events/rsvp?cancelled=true`,
       },
