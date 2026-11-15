@@ -14,6 +14,8 @@ import {
   FiChevronDown,
 } from 'react-icons/fi'
 
+import { HiInformationCircle } from 'react-icons/hi'
+
 import ProgressBar from '@/components/ProgressBar'
 
 const TOTAL_STEPS = 2
@@ -250,7 +252,8 @@ function SelectField({
 export default function RsvpForm({
   eventId,
   member,
-}: Readonly<{ eventId?: number; member: Member }>) {
+  waitlistEnabled = false,
+}: Readonly<{ eventId?: number; member: Member; waitlistEnabled?: boolean }>) {
   const [step, setStep] = useState<Step>(1)
   const [values, setValues] = useState<FormValues>({
     ...initialValues,
@@ -260,6 +263,7 @@ export default function RsvpForm({
   const [errors, setErrors] = useState<FieldErrors>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [hasJoinedWaitlist, setHasJoinedWaitlist] = useState(false)
   const stepHeadingRef = useRef<HTMLHeadingElement>(null)
   const previousStep = useRef<Step>(step)
 
@@ -348,19 +352,26 @@ export default function RsvpForm({
       })
       const result = (await response.json().catch(() => ({}))) as {
         checkoutUrl?: string
+        status?: string
         error?: string
       }
 
+      // Capacity can change while the form is open; trust the signup response.
+      if (response.ok && result.status === 'waitlisted') {
+        setHasJoinedWaitlist(true)
+        return
+      }
+
       if (!response.ok || !result.checkoutUrl) {
-        setSubmitError(
-          result.error ?? 'Unable to start payment. Please try again.',
-        )
+        setSubmitError(result.error ?? 'Unable to register. Please try again.')
         return
       }
 
       globalThis.location.assign(result.checkoutUrl)
     } catch {
-      setSubmitError('Unable to reach the payment service. Please try again.')
+      setSubmitError(
+        'Unable to reach the registration service. Please try again.',
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -374,6 +385,22 @@ export default function RsvpForm({
   }
 
   const currentStep = stepDetails[step]
+
+  if (hasJoinedWaitlist) {
+    return (
+      <section aria-labelledby="rsvp-waitlist-confirmation" className="min-w-0">
+        <div
+          role="status"
+          className="rounded-[10px] bg-ssa-pink-light p-4 font-be-vietnam-pro text-[15px] font-semibold leading-5 tracking-[-0.02em] text-[#ff526f]"
+        >
+          <h2 id="rsvp-waitlist-confirmation">You’re on the waitlist.</h2>
+          <p className="mt-2">
+            If you’re offered a place, we’ll email you with the next steps.
+          </p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section aria-labelledby={`rsvp-step-title-${step}`} className="min-w-0">
@@ -396,11 +423,27 @@ export default function RsvpForm({
         Step {step} of {TOTAL_STEPS}: {currentStep.label}
       </p>
 
+      {waitlistEnabled && (
+        <div
+          role="note"
+          className="mt-6 flex min-h-[86px] w-full items-center gap-1.5 rounded-[10px] bg-ssa-pink-light px-4 py-3 font-be-vietnam-pro text-[15px] font-semibold leading-5 tracking-[-0.02em] text-[#ff526f] lg:min-h-10 lg:justify-center lg:py-2.5"
+        >
+          <HiInformationCircle
+            aria-hidden="true"
+            className="hidden size-4 shrink-0 lg:block"
+          />
+          <p>
+            NOTE: This event is currently at full capacity - enter your details
+            and we’ll add you to our waitlist.
+          </p>
+        </div>
+      )}
+
       <form
         noValidate
         onSubmit={handleSubmit}
         aria-busy={isSubmitting}
-        className="mt-8 flex min-h-[440px] flex-col rounded-[18px] border border-[#e6ded1] bg-ssa-card p-5 shadow-[0_1px_2px_#6d4f2b1a,0_14px_34px_#6d4f2b0a] sm:p-8 lg:p-9"
+        className={`${waitlistEnabled ? 'mt-6' : 'mt-8'} flex min-h-[440px] flex-col rounded-[18px] border border-[#e6ded1] bg-ssa-card p-5 shadow-[0_1px_2px_#6d4f2b1a,0_14px_34px_#6d4f2b0a] sm:p-8 lg:p-9`}
       >
         <fieldset
           key={step}
@@ -542,9 +585,13 @@ export default function RsvpForm({
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-ssa-form-accent px-6 font-be-vietnam-pro text-sm font-semibold uppercase tracking-[0.02em] text-white outline-none transition-[background-color,transform] duration-150 hover:-translate-y-0.5 hover:bg-[#bd2f4c] focus-visible:ring-2 focus-visible:ring-ssa-form-accent focus-visible:ring-offset-2 active:translate-y-0 disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0"
             >
               {isSubmitting
-                ? 'Redirecting…'
+                ? waitlistEnabled
+                  ? 'Joining waitlist…'
+                  : 'Submitting…'
                 : step === TOTAL_STEPS
-                  ? 'Go to Payment'
+                  ? waitlistEnabled
+                    ? 'Join Waitlist'
+                    : 'Go to Payment'
                   : 'Next'}
               {step === TOTAL_STEPS ? (
                 <FiCheck aria-hidden="true" className="size-4" />

@@ -14,6 +14,10 @@ export interface Event {
   time?: string | null
   location?: string | null
   memberPrice?: number | null
+  capacity?: number | null
+  registrationCount?: number | null
+  spotsRemaining?: number | null
+  waitlistEnabled?: boolean | null
   description?: string | null
   coverImage?: number | Media | null
   category?: EventCategory | null

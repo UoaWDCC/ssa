@@ -230,6 +230,13 @@ export interface Event {
    * Price in NZD. Leave empty (or 0) for a free event.
    */
   memberPrice?: number | null
+  /**
+   * Leave empty for unlimited places. Can be changed after signups open.
+   */
+  capacity?: number | null
+  registrationCount?: number | null
+  spotsRemaining?: number | null
+  waitlistEnabled?: boolean | null
   description?: string | null
   coverImage?: (number | null) | Media
   category?: ('games' | 'community' | 'food' | 'agm' | 'all') | null
@@ -269,7 +276,18 @@ export interface EventRegistration {
    */
   amount: number
   currency: 'nzd'
-  status: 'pending' | 'paid' | 'cancelled' | 'refunded'
+  /**
+   * Offer a waitlisted member a place by selecting Offered. Withdraw an unpaid offer by selecting Waitlisted or Cancelled.
+   */
+  status: 'pending' | 'waitlisted' | 'offered' | 'paid' | 'cancelled' | 'refunded'
+  offerVersion?: number | null
+  stripeInvoiceId?: string | null
+  stripeInvoiceUrl?: string | null
+  offeredAt?: string | null
+  /**
+   * Invoice due date. Execs must withdraw unpaid offers manually.
+   */
+  offerDueAt?: string | null
   stripeCheckoutSessionId?: string | null
   stripePaymentIntentId?: string | null
   paidAt?: string | null
@@ -525,6 +543,10 @@ export interface EventsSelect<T extends boolean = true> {
   time?: T
   location?: T
   memberPrice?: T
+  capacity?: T
+  registrationCount?: T
+  spotsRemaining?: T
+  waitlistEnabled?: T
   description?: T
   coverImage?: T
   category?: T
@@ -558,6 +580,11 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
   amount?: T
   currency?: T
   status?: T
+  offerVersion?: T
+  stripeInvoiceId?: T
+  stripeInvoiceUrl?: T
+  offeredAt?: T
+  offerDueAt?: T
   stripeCheckoutSessionId?: T
   stripePaymentIntentId?: T
   paidAt?: T

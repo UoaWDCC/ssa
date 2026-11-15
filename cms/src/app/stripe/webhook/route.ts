@@ -3,6 +3,7 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import Stripe from 'stripe'
 import { activatePaidSignup } from '../_lib/activatePaidSignup'
+import { completeEventOfferInvoice } from '../_lib/completeEventOfferInvoice'
 import { completePaidEventRegistration } from '../_lib/completePaidEventRegistration'
 
 function isSuccessfulPayment(session: Stripe.Checkout.Session) {
@@ -33,6 +34,51 @@ export const POST = async (request: NextRequest) => {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Webhook signature verification failed'
     return Response.json({ error: message }, { status: 400 })
+  }
+
+  if (event.type === 'invoice.paid') {
+    const invoice = event.data.object
+    if (invoice.metadata?.checkoutType !== 'event-waitlist-offer') {
+      return Response.json({ received: true })
+    }
+    try {
+      const payload = await getPayload({ config: configPromise })
+      await completeEventOfferInvoice({ payload, invoice })
+      return Response.json({ received: true })
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Failed to complete event offer payment'
+      console.error('Stripe webhook: failed to complete event offer', {
+        invoiceId: invoice.id,
+        error: message,
+      })
+      return Response.json({ error: message }, { status: 500 })
+    }
+  }
+
+  if (event.type === 'checkout.session.expired') {
+    const session = event.data.object
+    if (session.metadata?.checkoutType !== 'event-registration')
+      return Response.json({ received: true })
+    try {
+      const payload = await getPayload({ config: configPromise })
+      await payload.update({
+        collection: 'event-registrations',
+        where: {
+          and: [
+            { stripeCheckoutSessionId: { equals: session.id } },
+            { status: { equals: 'pending' } },
+          ],
+        },
+        overrideAccess: true,
+        context: { eventCheckoutExpired: true },
+        data: { status: 'cancelled' },
+      })
+      return Response.json({ received: true })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to release expired checkout'
+      return Response.json({ error: message }, { status: 500 })
+    }
   }
 
   if (
