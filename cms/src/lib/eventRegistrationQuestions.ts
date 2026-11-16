@@ -115,6 +115,12 @@ export const DEFAULT_RSVP_QUESTIONS = [
   },
 ] satisfies RsvpQuestion[]
 
+export function getRsvpQuestionsOrDefault(
+  questions: readonly RsvpQuestion[] | null | undefined,
+): readonly RsvpQuestion[] {
+  return questions?.length ? questions : DEFAULT_RSVP_QUESTIONS
+}
+
 export function validateRsvpQuestionConfiguration(value: unknown): true | string {
   if (!Array.isArray(value)) return true
 

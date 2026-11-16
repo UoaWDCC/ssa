@@ -6,7 +6,7 @@ import Stripe from 'stripe'
 
 import { completePaidEventRegistration } from '../stripe/_lib/completePaidEventRegistration'
 import {
-  DEFAULT_RSVP_QUESTIONS,
+  getRsvpQuestionsOrDefault,
   isOneOf,
   RSVP_GENDER_VALUES,
   RSVP_UNIVERSITY_YEAR_VALUES,
@@ -224,8 +224,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'This event is not open for registration' }, { status: 409 })
   }
 
-  const eventQuestions = event.rsvpQuestions
-  const questions = eventQuestions ?? [...DEFAULT_RSVP_QUESTIONS]
+  const questions = getRsvpQuestionsOrDefault(event.rsvpQuestions)
   const validatedAnswers = validateRsvpAnswers(questions, body.answers)
   if ('error' in validatedAnswers) {
     return Response.json({ error: validatedAnswers.error }, { status: 400 })

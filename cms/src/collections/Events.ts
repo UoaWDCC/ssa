@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { randomUUID } from 'node:crypto'
 import {
   DEFAULT_RSVP_QUESTIONS,
+  getRsvpQuestionsOrDefault,
   validateRsvpQuestionConfiguration,
 } from '../lib/eventRegistrationQuestions'
 
@@ -11,12 +12,10 @@ export const Events: CollectionConfig = {
     afterRead: [
       ({ doc }) => ({
         ...doc,
-        rsvpQuestions:
-          doc.rsvpQuestions ??
-          DEFAULT_RSVP_QUESTIONS.map((question) => ({
-            ...question,
-            id: `${doc.id}-${question.fieldKey}`,
-          })),
+        rsvpQuestions: getRsvpQuestionsOrDefault(doc.rsvpQuestions).map((question) => ({
+          ...question,
+          id: `${doc.id}-${question.fieldKey}`,
+        })),
       }),
     ],
     beforeChange: [

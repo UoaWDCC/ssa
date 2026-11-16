@@ -2,7 +2,6 @@
 
 import RsvpForm, { type Member } from './RsvpForm'
 import { UpcomingEventResponse } from '@/types/events'
-import { DEFAULT_RSVP_QUESTIONS } from '@/lib/rsvpQuestions'
 import { useQuery } from '@tanstack/react-query'
 import { eventDateTime, formatEventDate } from '@/lib/eventDate'
 
@@ -101,11 +100,13 @@ export default function RsvpContent({
                 active, so registration will be declined.
               </p>
             )}
-            <RsvpForm
-              eventId={data?.event?.id}
-              member={member}
-              questions={data?.event?.rsvpQuestions ?? DEFAULT_RSVP_QUESTIONS}
-            />
+            {data?.event && (
+              <RsvpForm
+                eventId={data.event.id}
+                member={member}
+                questions={data.event.rsvpQuestions}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -9,11 +9,7 @@ import {
 } from 'react-icons/fi'
 
 import ProgressBar from '@/components/ProgressBar'
-import {
-  DEFAULT_RSVP_QUESTIONS,
-  getRsvpAnswerKey,
-  type RsvpQuestion,
-} from '@/lib/rsvpQuestions'
+import { getRsvpAnswerKey, type RsvpQuestion } from '@/lib/rsvpQuestions'
 
 type RsvpStep = 'emergency' | 'attendee'
 type AnswerValue = string | boolean
@@ -85,7 +81,7 @@ function validateQuestion(
 export default function RsvpForm({
   eventId,
   member,
-  questions = DEFAULT_RSVP_QUESTIONS,
+  questions = [],
 }: RsvpFormProps) {
   const enabledQuestions = (questions ?? []).filter(
     (question) => question.enabled !== false,

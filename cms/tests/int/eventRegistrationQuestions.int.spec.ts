@@ -2,11 +2,23 @@ import { describe, expect, it } from 'vitest'
 
 import {
   DEFAULT_RSVP_QUESTIONS,
+  getRsvpQuestionsOrDefault,
   validateRsvpQuestionConfiguration,
   validateRsvpAnswers,
 } from '../../src/lib/eventRegistrationQuestions'
 
 describe('validateRsvpAnswers', () => {
+  it('uses the default questions for missing or empty event configuration', () => {
+    expect(getRsvpQuestionsOrDefault(undefined)).toEqual(DEFAULT_RSVP_QUESTIONS)
+    expect(getRsvpQuestionsOrDefault([])).toEqual(DEFAULT_RSVP_QUESTIONS)
+  })
+
+  it('preserves a non-empty event question configuration', () => {
+    const questions = [{ ...DEFAULT_RSVP_QUESTIONS[0], label: 'Custom label' }]
+
+    expect(getRsvpQuestionsOrDefault(questions)).toBe(questions)
+  })
+
   it('rejects duplicate built-in questions', () => {
     expect(
       validateRsvpQuestionConfiguration([
