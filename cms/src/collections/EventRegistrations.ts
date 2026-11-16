@@ -1,4 +1,8 @@
 import type { Access, CollectionConfig } from 'payload'
+import {
+  RSVP_GENDER_OPTIONS,
+  RSVP_UNIVERSITY_YEAR_OPTIONS,
+} from '../lib/eventRegistrationQuestions'
 
 const adminOnly: Access = ({ req: { user } }) => {
   if (user?.collection !== 'users') return false
@@ -64,51 +68,38 @@ export const EventRegistrations: CollectionConfig = {
     {
       name: 'emergencyContactName',
       type: 'text',
-      required: true,
     },
     {
       name: 'emergencyContactPhone',
       type: 'text',
-      required: true,
     },
     {
       name: 'emergencyContactRelationship',
       type: 'text',
-      required: true,
     },
     {
       name: 'gender',
       type: 'select',
-      required: true,
-      options: [
-        { label: 'Woman', value: 'woman' },
-        { label: 'Man', value: 'man' },
-        { label: 'Non-binary', value: 'non-binary' },
-        { label: 'Prefer not to say', value: 'not-say' },
-      ],
+      options: [...RSVP_GENDER_OPTIONS],
     },
     {
       name: 'dietaryRequirements',
       type: 'textarea',
-      required: true,
     },
     {
       name: 'universityYear',
       label: 'University Year',
       type: 'select',
+      options: [...RSVP_UNIVERSITY_YEAR_OPTIONS],
+    },
+    {
+      name: 'answers',
+      type: 'json',
       required: true,
-      options: [
-        { label: 'First year', value: '1' },
-        { label: 'Second year', value: '2' },
-        { label: 'Third year', value: '3' },
-        { label: 'Fourth year', value: '4' },
-        { label: 'Fifth year or later', value: '5+' },
-        { label: 'Postgraduate', value: 'postgraduate' },
-        {
-          label: 'Not currently a university student',
-          value: 'not-currently-studying',
-        },
-      ],
+      defaultValue: [],
+      admin: {
+        description: 'Snapshot of the RSVP questions and answers at registration time.',
+      },
     },
     {
       name: 'amount',

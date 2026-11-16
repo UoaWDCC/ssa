@@ -100,7 +100,13 @@ export default function RsvpContent({
                 active, so registration will be declined.
               </p>
             )}
-            <RsvpForm eventId={data?.event?.id} member={member} />
+            {data?.event && (
+              <RsvpForm
+                eventId={data.event.id}
+                member={member}
+                questions={data.event.rsvpQuestions}
+              />
+            )}
           </div>
         </div>
       </div>
